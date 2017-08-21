@@ -52,14 +52,14 @@ default.language = en_US
 ##### Database settings #####
 
 # URL for connecting to database
-db.url = jdbc:postgresql://dspace-dbdev:5432/dspacedev
+db.url = jdbc:postgresql://dspace-dbdev:5432/dspacetst
 
 # JDBC Driver
 db.driver = org.postgresql.Driver
 
 # Database username and password
-db.username = dspace6dba
-db.password = dspace6D5vops-G5tt62
+db.username = dspacedba
+db.password = dspaceD5vops-G5tt62
 
 ##### Email settings ######
 
