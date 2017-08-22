@@ -1,5 +1,22 @@
 #!/bin/bash
 
+# Which OS and commands to use:
+case "`uname`" in
+    Linux*)
+        GETUID="getent passwd";
+        GETGID="perl -e '$gid = getgrnam("dspace"); print $gid'";
+        break;;
+    Darwin*)    machine=Mac;;
+        GETUID="dscl . -search /Users UniqueID";
+        GETGID="dscl . -search /Groups UniqueID";
+        break;;
+    CYGWIN*)
+    MINGW*)
+        *)
+        echo "ERROR: unsupported host operating system. Existing"
+        exit 1;;    
+esac
+
 cat << EOF
 
 ************* SECTION 1: UofA Library Dspace Development ***************
@@ -66,6 +83,105 @@ if [ "$OUT" == "" ]; then
     exit 1;
 else
     echo "CHECK: '$CMD' returned '$OUT'"
+fi
+
+echo
+echo "CHECK: Does the dspace group, id=800 exist ?"
+CMD="perl -e '$gid = getgrnam(\"dspace\"); print $gid'"; OUT=`perl -e '$gid = getgrnam("dspace"); print $gid'`
+
+if [ "$OUT" != "800" ]; then
+    echo >&2 "ERROR: '$CMD' failed"
+    echo >&2
+    echo >&2 "Your system needs the group dspace to exist with id=800"
+    echo >&2 "On linux try running the command:"
+    echo >&2 "sudo groupadd dspace --gid 800"
+    echo >&2
+    exit 1;
+else
+    echo "CHECK: '$CMD' returned '$OUT'"
+fi
+
+echo
+echo
+echo "CHECK: Does the dspace user, id=800 exist ?"
+CMD="perl -e '$uid = getpwnam(\"dspace\"); print $uid'"; OUT=`perl -e '$uid = getpwnam("dspace"); print $uid'`
+
+if [ "$OUT" != "800" ]; then
+    echo >&2 "ERROR: '$CMD' failed"
+    echo >&2
+    echo >&2 "Your system needs the user dspace to exist with id=800"
+    echo >&2 "On linux try running the command:"
+    echo >&2 "sudo useradd dspace --uid 800 --gid 800"
+    echo >&2
+    exit 1;
+else
+    echo "CHECK: '$CMD' returned '$OUT'"
+fi
+
+echo
+echo "CHECK: Does your system user belong to the 'dspace' group ?"
+CMD="id | grep dspace"; OUT="`id | grep dspace`"
+
+if [ "$OUT" == "" ]; then
+    echo >&2 "ERROR: '$CMD' failed"
+    echo >&2
+    echo >&2 "Your system user needs to belong to the 'dspace' group"
+    echo >&2 "Try running the command:"
+    echo >&2 "sudo usermod -a -G dspace <your_unix_userid>"
+    echo >&2
+    exit 1;
+else
+    echo "CHECK: '$CMD' returned '$OUT'"
+fi
+
+echo
+echo "CHECK: Does the host dspace development directory exist ?"
+CMD="test -f $SRC_DIR/dspace/config/local.cfg-dev && echo -n 'Good'"; OUT="`$CMD`"
+CMD="id | grep dspace"; OUT="`id | grep dspace`"
+
+if [ "$OUT" == "" ]; then
+    echo >&2 "ERROR: '$CMD' failed"
+    echo >&2
+    echo >&2 "Your system user needs to belong to the 'dspace' group"
+    echo >&2 "Try running the command:"
+    echo >&2 "sudo usermod -a -G dspace <your_unix_userid>"
+    echo >&2
+    exit 1;
+else
+    echo "CHECK: '$CMD' returned '$OUT'"
+fi
+
+echo
+echo "CHECK: Has the dspace src code been checked out on the host system ?"
+CMD="test -f $SRC_DIR/dspace/config/local.cfg-dev && echo -n 'Good'"; OUT="`$CMD`"
+
+if [ "$OUT" != "Good" ]; then
+
+   while [ ! -d "$SRC_DIR" ]; do
+    
+      read -p "EXEC: Need to checkout the dspace src code locally. Please enter the directory to put the src if different from $SRC_DIR (otherwise just hit the [enter] key): " CUSTOM_DIR
+
+      if [ "$CUSTOM_DIR" != ""; ] then
+         SRC_DIR="$CUSTOM_DIR"
+      fi
+       
+   mkdir -p "$SRC_DIR" 2>/dev/null;
+   done
+
+   CURRENT_DIR="`pwd`"
+   cd "$SRC_DIR"
+   echo "EXEC: Checking out the dspace src code repository"
+   echo "EXEC: ssh vitae \"cat /data1/vitae/repos/$DSPACE_TAR\" | tar -xzv"
+   ssh vitae "cat /data1/vitae/repos/$DSPACE_TAR.tar.gz" | tar -xzv
+   mv $DSPACE_TAR/* .
+   rmdir $DSPACE_TAR
+   echo "EXEC: git clone ssh://vitae:/data1/vitae/repos/campusrepo.git"
+   git clone ssh://vitae:/data1/vitae/repos/campusrepo.git
+   cp -a campusrepo/* .
+   mv campusrepo/.git .
+   rmdir campusrepo
+   
+
 fi
 
 #echo
@@ -145,39 +261,6 @@ if [ "$OUT" == "" ]; then
 else
     echo "CHECK: '$CMD' returned '$OUT'"
 fi
-fi
-
-echo
-echo "CHECK: Has the dspace src code been checked out on the host system ?"
-CMD="test -f $SRC_DIR/dspace/config/local.cfg-dev && echo -n 'Good'"; OUT="`$CMD`"
-
-if [ "$OUT" != "Good" ]; then
-
-   while [ ! -d "$SRC_DIR" ]; do
-    
-      read -p "EXEC: Need to checkout the dspace src code locally. Please enter the directory to put the src if different from $SRC_DIR (otherwise just hit the [enter] key): " CUSTOM_DIR
-
-      if [ "$CUSTOM_DIR" != ""; ] then
-         SRC_DIR="$CUSTOM_DIR"
-      fi
-       
-   mkdir -p "$SRC_DIR" 2>/dev/null;
-   done
-
-   CURRENT_DIR="`pwd`"
-   cd "$SRC_DIR"
-   echo "EXEC: Checking out the dspace src code repository"
-   echo "EXEC: ssh vitae \"cat /data1/vitae/repos/$DSPACE_TAR\" | tar -xzv"
-   ssh vitae "cat /data1/vitae/repos/$DSPACE_TAR.tar.gz" | tar -xzv
-   mv $DSPACE_TAR/* .
-   rmdir $DSPACE_TAR
-   echo "EXEC: git clone ssh://vitae:/data1/vitae/repos/campusrepo.git"
-   git clone ssh://vitae:/data1/vitae/repos/campusrepo.git
-   cp -a campusrepo/* .
-   mv campusrepo/.git .
-   rmdir campusrepo
-   
-
 fi
 
 
