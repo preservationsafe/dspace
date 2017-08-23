@@ -30,7 +30,7 @@ https://wiki.duraspace.org/display/DSDOC6x/Installing+DSpace
 EOF
 
   while ( ! defined( $DEVSTYLE ) ) {
-    print "Which development style would you prefer ?\n";
+    print "Which development style would you prefer ? ";
     chomp( $DEVSTYLE = <STDIN> );
     for ( $DEVSTYLE ) {
       /1/ && do { $HOST_TYPE="runtime"; $HOST_DIR="/opt/tomcat/dspace/run"; last; };
@@ -61,72 +61,72 @@ sub check_cmd {
 
 sub check_env {
 
-  print "************* SECTION 2: Environment check ***************\n";
+  print "\n************* SECTION 2: Environment check ***************\n";
 
   &check_cmd( 'Is docker installed', '',
               'docker -v',
-              'Docker CE is required. Please install for your system via:\n'.
-              '   https://docs.docker.com/engine/installation/' );
+              "Docker CE is required. Please install for your system via:\n".
+              "   https://docs.docker.com/engine/installation/" );
 
   &check_cmd( 'Does your system user belong to the "docker" group', '',
               'id | grep docker',
-              'Your system user needs to belong to the "docker" group\n'.
-              'Try running the command:\n'.
-              'sudo usermod -a -G docker <your_unix_userid>' );
+              "Your system user needs to belong to the \"docker\" group\n".
+              "Try running the command:\n".
+              "sudo usermod -a -G docker <your_unix_userid>" );
 
-  &check_cmd( 'Does the dspace group, id=800 exist', '800',
+  &check_cmd( 'Does the dspace group, gid=800 exist', '800',
               'perl -e \'$gid = getgrnam("dspace"); print $gid\'',
-              'Your system needs the group dspace to exist with id=800\n'.
-              'On linux try running the command:\n'.
-              'sudo groupadd dspace --gid 800' );
+              "Your system needs the group dspace to exist with id=800\n".
+              "On linux try running the command:\n".
+              "sudo groupadd dspace --gid 800" );
 
-  &check_cmd( 'Does the dspace user, id=800 exist', '800',
+  &check_cmd( 'Does the dspace user, uid=800 exist', '800',
               'perl -e \'$gid = getgrnam("dspace"); print $gid\'',
-              'Your system needs the user dspace to exist with id=800\n'.
-              'On linux try running the command:\n'.
-              'sudo useradd dspace --uid --gid 800' );
+              "Your system needs the user dspace to exist with id=800\n".
+              "On linux try running the command:\n".
+              "sudo useradd dspace --uid --gid 800" );
 
   &check_cmd( 'Does your system user belong to the "dspace" group', '',
               'id | grep dspace',
-              'Your system user needs to belong to the "dspace" group\n'.
-              'Try running the command:\n'.
-              'sudo usermod -a -G dspace <your_unix_userid>' );
+              "Your system user needs to belong to the \"dspace\" group\n".
+              "Try running the command:\n".
+              "sudo usermod -a -G dspace <your_unix_userid>" );
 
   &check_cmd( 'Does /opt/tomcat exist with proper permissions', 'success',
               'touch /opt/tomcat/dspace-tst && rm /opt/tomcat/dspace-tst && echo -n "success"',
               "The directory /opt/tomcat needs to exist with rw permissions.\n".
               "Run 'sudo mkdir -p /opt/tomcat; sudo chown $ENV{USER}.$ENV{USER} /opt/tomcat'" );
 
-  &check_cmd( 'Have you mounted //dspace-nfsdev/dspace-assetstore-dev', 'NE',
+  &check_cmd( 'Have you mounted //dspace-nfsdev/dspace-assetstore-dev', '',
               'mount | grep dspace-assetstore',
-              'The nfs dspace assetstore needs to be mounted. Try running the commands (on linux):\n'.
-              'sudo cp /etc/fstab /etc/fstab.bak\n'.
-              'sudo mkdir -p /mnt/dspace-assetstore\n'.
-              'sudo chown dspace.dspace /mnt/dspace-assetstore\n'.
-              'sudo echo \'dspace-nfsdev:/dspace-assetstore-dev /mnt/dspace-assetstore nfs nfsvers=4,proto=tcp,hard 0 0\' >> /etc/fstab\n'.
-              'sudo mount /mnt/dspace-assetstore' );
+              "The nfs dspace assetstore needs to be mounted. Try running the commands (on linux):\n".
+              "sudo cp /etc/fstab /etc/fstab.bak\n".
+              "sudo mkdir -p /mnt/dspace-assetstore\n".
+              "sudo chown dspace.dspace /mnt/dspace-assetstore\n".
+              "sudo echo \"dspace-nfsdev:/dspace-assetstore-dev /mnt/dspace-assetstore nfs nfsvers=4,proto=tcp,hard 0 0\" >> /etc/fstab\n".
+              "sudo mount /mnt/dspace-assetstore" );
 
   &check_cmd( 'Is the pipe progress utility "pv" installed', '',
               'pv --version | head -1',
-              'The pv command line utility needs to be installed' );
+              "The pv command line utility needs to be installed" );
 
   &check_cmd( 'Is netstat installed', '',
               'netstat -i 2>/dev/null',
-              'The netstat command line utility needs to be installed' );
+              "The netstat command line utility needs to be installed" );
 
   &check_cmd( 'Is a service listening at 8080', 'NE',
               'netstat -l --numeric | grep 8080',
-              'A service is already listening at port 8080, tomcat will not'.
-              'be able to start correctly. Please disable the service running at port 8080.' );
+              "A service is already listening at port 8080, tomcat will not".
+              "be able to start correctly. Please disable the service running at port 8080." );
 
   if ( $DEVSTYLE eq '4' ) {
     &check_cmd( 'Is X running', '',
                 '$DISPLAY',
-                'The IDE docker requires X to be running\n'.
-                'debian/ubuntu: \'sudo apt-get install x-windows-system\'\n'.
-                'redhat: yum groupinstall \'X Window System\'\n'.
-                'macos: install XQuartz\n'.
-                'mswin: install Xming\n' );
+                "The IDE docker requires X to be running\n".
+                "debian/ubuntu: \'sudo apt-get install x-windows-system\'\n".
+                "redhat: yum groupinstall \'X Window System\'\n".
+                "macos: install XQuartz\n".
+                "mswin: install Xming\n" );
   }
 }
 
@@ -135,19 +135,24 @@ sub checkout_src {
   my $cmd = "";
   my $out = "";
 
-  print "************* SECTION 3: Checkout src ***************\n";
+  print "\n************* SECTION 3: Checkout src ***************\n";
 
   while ( ! -d $SRC_DIR ) {
 
     my $GOOD_DIR = 'b';
     while ( $GOOD_DIR ne '' ) {
-      print "EXEC: What directory should contain your dspace code, [enter] defaults to $SRC_DIR ?\n";
+      print "EXEC: What directory should contain your dspace code, [enter] defaults to $SRC_DIR.\n".
+        "Path values not prefixed with / will be added under your $ENV{HOME} directory ? ";
       my $NEW_DIR = <STDIN>;
       chomp( $NEW_DIR );
       if ( length( $NEW_DIR ) ) {
-        $SRC_DIR = $NEW_DIR;
+        $SRC_DIR = $ENV{HOME}.'/'.$NEW_DIR;
+        if ( '/' eq substr( $NEW_DIR, 0, 1 ) ) {
+          $SRC_DIR = $NEW_DIR;
+        }
       }
-      print "EXEC: About to create $SRC_DIR, hit [enter] to proceed, anything else to restart.\n";
+      print "EXEC: About to create $SRC_DIR, hit [enter] to proceed, ".
+        "anything else to restart.\n";
       chomp( $GOOD_DIR = <STDIN> );
     }
 
@@ -175,44 +180,55 @@ sub checkout_src {
     `$cmd`;
 
     my @srcdir_cmds =
-      [
+      (
        "campusrepo/bin/overlay-softlink.sh campusrepo src",
        "mkdir run",
+       "mkdir .oracle_jre_usage",
        "ln -fs campusrepo/bin bin",
-       "cp ide/dot.bashrc .bashrc",
-       "cp -R -ide/dot.m2 .m2",
-       "cp ide/dot.profile .profile",
-      ];
+       "cp campusrepo/ide/dot.bashrc .bashrc",
+       "cp campusrepo/ide/dot.profile .profile",
+       "cp -R campusrepo/ide/dot.m2 .m2",
+      );
 
     foreach my $src_cmd ( @srcdir_cmds ) {
       $cmd = "cd $SRC_DIR; $src_cmd; cd -";
       print "EXEC: $cmd\n";
       `$cmd`;
     }
+
+    if ( ! -f "$SRC_DIR/src/dspace/config/local.cfg" ) {
+      $cmd = "cd $SRC_DIR/src/dspace/config; cp local.cfg-dev local.cfg; cd -";
+      print "EXEC: $cmd\n"; $out = `$cmd`;
+    }
+
+    $cmd = "find $SRC_DIR -type f -exec chmod 664 {} \\;";
+    print "EXEC: $cmd\n"; $out = `$cmd`;
+    $cmd = "find $SRC_DIR -type d -exec chmod 2775 {} \\;";
+    print "EXEC: $cmd\n"; $out = `$cmd`;
+    $cmd = "find $SRC_DIR/campusrepo/bin -type f -exec chmod 775 {} \\;";
+    print "EXEC: $cmd\n"; $out = `$cmd`;
   }
   else { print "VERIFIED: $SRC_DIR/campusrepo\n"; }
 
-  if ( ! -l "/opt/tomcat/dspace" ) {
-    print "EXEC: creating /opt/tomcat/dspace softlink\n";
-    $cmd = "ln -s $SRC_DIR /opt/tomcat/dspace";
-    $out = `$cmd`;
-    print "EXEC: '$cmd' returned '$out'\n";
-  }
-  else { print "VERIFIED: /opt/tomcat/dspace\n"; }
+  # Force recreating softlink of /opt/tomcat/dspace to just created dspace $SRC_DIR
+  $cmd = "ln -fs $SRC_DIR /opt/tomcat/dspace";
+  $out = `$cmd`;
+  print "EXEC: '$cmd' returned '$out'\n";
 }
 
 sub create_docker_container {
 
-  print "************* SECTION 3: Create docker container ***************\n";
+  print "\n************* SECTION 3: Create docker container ***************\n";
 
-  my $cmd = "docker ps -a | grep $DOCKER_IMAGE | awk '{ printf $1 }'";
+  my $cmd = "docker ps -a | grep $DOCKER_IMAGE | awk '{ printf \$1 }'";
   my $out = undef;
   my $docker_id = `$cmd`;
+  print "EXEC: $cmd returned '$docker_id'\n";
 
   if ( length( $docker_id ) ) {
     my $YESNO = undef;
     while ( ! defined( $YESNO ) ) {
-      print "EXISTS: A docker container exists using $DOCKER_IMAGE. Do you want to delete it along with any changes you've made, and recreate a new one ?\n";
+      print "EXISTS: A docker container exists using $DOCKER_IMAGE. Do you want to delete it along with any changes you've made, and recreate a new one ? ";
       chomp( $YESNO = <STDIN> );
       for ( $YESNO ) {
         /[Yy].*/ && do { last; };
@@ -221,8 +237,8 @@ sub create_docker_container {
         print "Please answer yes or no.\n";
       }
     }
-    $cmd="docker stop $docker_id"; print "EXEC: $cmd\n"; $out="`$cmd`";
-    $cmd="docker rm $docker_id"; print "EXEC: $cmd\n"; $out="`$cmd`";
+    $cmd="docker stop $docker_id"; print "EXEC: $cmd\n"; $out=`$cmd`;
+    $cmd="docker rm $docker_id"; print "EXEC: $cmd\n"; $out=`$cmd`;
   }
 
   my $download_image = 1;
@@ -232,7 +248,7 @@ sub create_docker_container {
   if ( length( $out ) ) {
     my $YESNO = undef;
     while ( ! defined( $YESNO ) ) {
-      print "EXISTS: The docker image $DOCKER_IMAGE is present. Do you want to delete it and download the latest one ?\n";
+      print "EXISTS: The docker image $DOCKER_IMAGE is present. Do you want to delete it and download the latest one ? ";
       chomp( $YESNO = <STDIN> );
       for ( $YESNO ) {
         /[Yy].*/ && do {
@@ -245,7 +261,6 @@ sub create_docker_container {
         print "Please answer yes or no.\n";
       }
     }
-    $cmd="docker image rm $DOCKER_IMAGE"; print "EXEC: $cmd\n"; $out="`$cmd`";
   }
 
   if ( $download_image ) {
@@ -256,16 +271,16 @@ sub create_docker_container {
 
   if ( $DOCKER_IMAGE eq "dspace6-ide" ) {
 
-    $cmd="docker run -d \
-    --net=host \
-    -p 2200:2200 \
-    -p 8000:8000 \
-    -p 8080:8080 \
-    -p 8443:8443 \
-    -v $SRC_DIR:/opt/tomcat/dspace \
-    -v /mnt/dspace-assetstore:/opt/tomcat/assetstore \
-    --name my-$DOCKER_IMAGE \
-    $DOCKER_IMAGE:latest";
+    $cmd="docker run -d ".
+    "--net=host ".
+    "-p 2200:2200 ".
+    "-p 8000:8000 ".
+    "-p 8080:8080 ".
+    "-p 8443:8443 ".
+    "-v $SRC_DIR:/opt/tomcat/dspace ".
+    "-v /mnt/dspace-assetstore:/opt/tomcat/assetstore ".
+    "--name my-$DOCKER_IMAGE ".
+    "$DOCKER_IMAGE:latest";
 
     print "EXEC: $cmd\n\n"; $out=`$cmd`;
     print "FINISHED: To access the container, type the command below. The ssh password is 'asdf'\n";
@@ -273,15 +288,15 @@ sub create_docker_container {
   }
   else {
 
-    $cmd="docker run -d \
-    --net=host \
-    -p 8000:8000 \
-    -p 8080:8080 \
-    -p 8443:8443 \
-    -v $SRC_DIR:/opt/tomcat/dspace \
-    -v /mnt/dspace-assetstore:/opt/tomcat/assetstore \
-    --name my-$DOCKER_IMAGE \
-    $DOCKER_IMAGE:latest";
+    $cmd="docker run -d ".
+    "--net=host ".
+    "-p 8000:8000 ".
+    "-p 8080:8080 ".
+    "-p 8443:8443 ".
+    "-v $SRC_DIR:/opt/tomcat/dspace ".
+    "-v /mnt/dspace-assetstore:/opt/tomcat/assetstore ".
+    "--name my-$DOCKER_IMAGE ".
+    "$DOCKER_IMAGE:latest";
 
     print "EXEC: $cmd\n\n"; $out=`$cmd`;
     print "FINISHED: To access the container, type the command:\n";
