@@ -137,30 +137,29 @@ sub checkout_src {
 
   print "\n************* SECTION 3: Checkout src ***************\n";
 
-  while ( ! -d $SRC_DIR ) {
-
-    my $GOOD_DIR = 'b';
-    while ( $GOOD_DIR ne '' ) {
-      print "EXEC: What directory should contain your dspace code, [enter] defaults to $SRC_DIR.\n".
-        "Path values not prefixed with / will be added under your $ENV{HOME} directory ? ";
-      my $NEW_DIR = <STDIN>;
-      chomp( $NEW_DIR );
-      if ( length( $NEW_DIR ) ) {
-        $SRC_DIR = $ENV{HOME}.'/'.$NEW_DIR;
-        if ( '/' eq substr( $NEW_DIR, 0, 1 ) ) {
-          $SRC_DIR = $NEW_DIR;
-        }
+  # Always ask where the source directory should be, even if it already exists
+  my $GOOD_DIR = 'b';
+  while ( $GOOD_DIR ne '' ) {
+    print "EXEC: What directory should contain your dspace code, [enter] defaults to $SRC_DIR.\n".
+      "Path values not prefixed with / will be added under your $ENV{HOME} directory ? ";
+    my $NEW_DIR = <STDIN>;
+    chomp( $NEW_DIR );
+    if ( length( $NEW_DIR ) ) {
+      $SRC_DIR = $ENV{HOME}.'/'.$NEW_DIR;
+      if ( '/' eq substr( $NEW_DIR, 0, 1 ) ) {
+        $SRC_DIR = $NEW_DIR;
       }
-      print "EXEC: About to create $SRC_DIR, hit [enter] to proceed, ".
-        "anything else to restart.\n";
-      chomp( $GOOD_DIR = <STDIN> );
     }
+    last if ( -d $SRC_DIR );
+    print "EXEC: About to create $SRC_DIR, hit [enter] to proceed, ".
+      "anything else to restart.\n";
+    chomp( $GOOD_DIR = <STDIN> );
+  }
 
-    if ( ! -d $SRC_DIR ) {
-      $cmd = "mkdir -p $SRC_DIR && chgrp dspace $SRC_DIR && chmod 2775 $SRC_DIR";
+  if ( ! -d $SRC_DIR ) {
+      $cmd = "mkdir -p $SRC_DIR";
       $out = `$cmd`;
       print "EXEC: '$cmd' returned '$out'\n";
-    }
   }
 
   if ( ! -d "$SRC_DIR/src" ) {
@@ -217,15 +216,18 @@ sub checkout_src {
       $cmd = "cd $SRC_DIR/src/dspace/config; cp local.cfg-dev local.cfg; cd -";
       print "EXEC: $cmd\n"; $out = `$cmd`;
     }
-
-    $cmd = "find $SRC_DIR -type f -exec chmod 664 {} \\;";
-    print "EXEC: $cmd\n"; $out = `$cmd`;
-    $cmd = "find $SRC_DIR -type d -exec chmod 2775 {} \\;";
-    print "EXEC: $cmd\n"; $out = `$cmd`;
-    $cmd = "find $SRC_DIR/campusrepo/bin -type f -exec chmod 775 {} \\;";
-    print "EXEC: $cmd\n"; $out = `$cmd`;
   }
   else { print "VERIFIED: $SRC_DIR/campusrepo\n"; }
+
+  # Force group, file permissions
+  $cmd = "chgrp -R dspace $SRC_DIR 2>/dev/null";
+  print "EXEC: $cmd\n"; $out = `$cmd`;
+  $cmd = "find $SRC_DIR -type f -exec chmod 664 {} \\;";
+  print "EXEC: $cmd\n"; $out = `$cmd`;
+  $cmd = "find $SRC_DIR -type d -exec chmod 2775 {} \\;";
+  print "EXEC: $cmd\n"; $out = `$cmd`;
+  $cmd = "find $SRC_DIR/campusrepo/bin -type f -exec chmod 775 {} \\;";
+  print "EXEC: $cmd\n"; $out = `$cmd`;
 
   # Force recreating softlink of /opt/tomcat/dspace to just created dspace $SRC_DIR
   $cmd = "ln -fs $SRC_DIR /opt/tomcat/dspace";
