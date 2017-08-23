@@ -97,6 +97,15 @@ sub check_env {
               "The directory /opt/tomcat needs to exist with rw permissions.\n".
               "Run 'sudo mkdir -p /opt/tomcat; sudo chown $ENV{USER}.$ENV{USER} /opt/tomcat'" );
 
+  &check_cmd( 'Have you mounted //dspace-nfsdev/dspace-assetstore-dev', 'NE',
+              'mount | grep dspace-assetstore',
+              'The nfs dspace assetstore needs to be mounted. Try running the commands (on linux):\n'.
+              'sudo cp /etc/fstab /etc/fstab.bak\n'.
+              'sudo mkdir -p /mnt/dspace-assetstore\n'.
+              'sudo chown dspace.dspace /mnt/dspace-assetstore\n'.
+              'sudo echo \'dspace-nfsdev:/dspace-assetstore-dev /mnt/dspace-assetstore nfs nfsvers=4,proto=tcp,hard 0 0\' >> /etc/fstab\n'.
+              'sudo mount /mnt/dspace-assetstore' );
+
   &check_cmd( 'Is the pipe progress utility "pv" installed', '',
               'pv --version | head -1',
               'The pv command line utility needs to be installed' );
@@ -149,15 +158,6 @@ sub checkout_src {
     }
   }
 
-  if ( ! -d "$SRC_DIR/campusrepo" ) {
-    print "EXEC: cloning the git campusrepo from vitae.\n";
-
-    $cmd = "cd $SRC_DIR; git clone $ENV{'USER'}\@vitae:/data1/vitae/repos/campusrepo.git; cd -";
-    print "EXEC: '$cmd'\n";
-    `$cmd`;
-  }
-  else { print "VERIFIED: $SRC_DIR/campusrepo\n"; }
-
   if ( ! -d "$SRC_DIR/src" ) {
     print "EXEC: exploding the dspace src tarball\n";
 
@@ -167,13 +167,30 @@ sub checkout_src {
   }
   else { print "VERIFIED: $SRC_DIR/src\n"; }
 
-  if ( ! -d "$SRC_DIR/run" ) {
-    print "EXEC: creating the dspace run directory\n";
-    $cmd = "mkdir $SRC_DIR/run";
-    $out = `$cmd`;
-    print "EXEC: '$cmd' returned '$out'\n";
+  if ( ! -d "$SRC_DIR/campusrepo" ) {
+    print "EXEC: cloning the git campusrepo from vitae.\n";
+
+    $cmd = "cd $SRC_DIR; git clone $ENV{'USER'}\@vitae:/data1/vitae/repos/campusrepo.git; cd -";
+    print "EXEC: '$cmd'\n";
+    `$cmd`;
+
+    my @srcdir_cmds =
+      [
+       "campusrepo/bin/overlay-softlink.sh campusrepo src",
+       "mkdir run",
+       "ln -fs campusrepo/bin bin",
+       "cp ide/dot.bashrc .bashrc",
+       "cp -R -ide/dot.m2 .m2",
+       "cp ide/dot.profile .profile",
+      ];
+
+    foreach my $src_cmd ( @srcdir_cmds ) {
+      $cmd = "cd $SRC_DIR; $src_cmd; cd -";
+      print "EXEC: $cmd\n";
+      `$cmd`;
+    }
   }
-  else { print "VERIFIED: $SRC_DIR/run\n"; }
+  else { print "VERIFIED: $SRC_DIR/campusrepo\n"; }
 
   if ( ! -l "/opt/tomcat/dspace" ) {
     print "EXEC: creating /opt/tomcat/dspace softlink\n";
@@ -182,10 +199,94 @@ sub checkout_src {
     print "EXEC: '$cmd' returned '$out'\n";
   }
   else { print "VERIFIED: /opt/tomcat/dspace\n"; }
+}
 
-  $cmd = "cd $SRC_DIR; campusrepo/bin/overlay-softlink.sh campusrepo src; cd -";
-  print "EXEC: $cmd\n";
-  `$cmd`;
+sub create_docker_container {
+
+  print "************* SECTION 3: Create docker container ***************\n";
+
+  my $cmd = "docker ps -a | grep $DOCKER_IMAGE | awk '{ printf $1 }'";
+  my $out = undef;
+  my $docker_id = `$cmd`;
+
+  if ( length( $docker_id ) ) {
+    my $YESNO = undef;
+    while ( ! defined( $YESNO ) ) {
+      print "EXISTS: A docker container exists using $DOCKER_IMAGE. Do you want to delete it along with any changes you've made, and recreate a new one ?\n";
+      chomp( $YESNO = <STDIN> );
+      for ( $YESNO ) {
+        /[Yy].*/ && do { last; };
+        /[Nn].*/ && do { die "Exiting installer...\n"; last; };
+        $YESNO = undef;
+        print "Please answer yes or no.\n";
+      }
+    }
+    $cmd="docker stop $docker_id"; print "EXEC: $cmd\n"; $out="`$cmd`";
+    $cmd="docker rm $docker_id"; print "EXEC: $cmd\n"; $out="`$cmd`";
+  }
+
+  my $download_image = 1;
+  $cmd = "docker image list | grep $DOCKER_IMAGE";
+  $out = `$cmd`;
+
+  if ( length( $out ) ) {
+    my $YESNO = undef;
+    while ( ! defined( $YESNO ) ) {
+      print "EXISTS: The docker image $DOCKER_IMAGE is present. Do you want to delete it and download the latest one ?\n";
+      chomp( $YESNO = <STDIN> );
+      for ( $YESNO ) {
+        /[Yy].*/ && do {
+          $cmd = "docker image rm $DOCKER_IMAGE";
+          print "EXEC: $cmd\n";
+          $out = `$cmd`;
+          last };
+        /[Nn].*/ && do { $download_image=0; last; };
+        $YESNO = undef;
+        print "Please answer yes or no.\n";
+      }
+    }
+    $cmd="docker image rm $DOCKER_IMAGE"; print "EXEC: $cmd\n"; $out="`$cmd`";
+  }
+
+  if ( $download_image ) {
+    $cmd = "ssh vitae \"cat /data1/vitae/repos/$DOCKER_IMAGE.gz\" | gunzip | pv | docker load";
+    print "EXEC: $cmd\n";
+    `$cmd`;
+  }
+
+  if ( $DOCKER_IMAGE eq "dspace6-ide" ) {
+
+    $cmd="docker run -d \
+    --net=host \
+    -p 2200:2200 \
+    -p 8000:8000 \
+    -p 8080:8080 \
+    -p 8443:8443 \
+    -v $SRC_DIR:/opt/tomcat/dspace \
+    -v /mnt/dspace-assetstore:/opt/tomcat/assetstore \
+    --name my-$DOCKER_IMAGE \
+    $DOCKER_IMAGE:latest";
+
+    print "EXEC: $cmd\n\n"; $out=`$cmd`;
+    print "FINISHED: To access the container, type the command below. The ssh password is 'asdf'\n";
+    print "ssh -p 2200 -X dspace\@localhost\n\n";
+  }
+  else {
+
+    $cmd="docker run -d \
+    --net=host \
+    -p 8000:8000 \
+    -p 8080:8080 \
+    -p 8443:8443 \
+    -v $SRC_DIR:/opt/tomcat/dspace \
+    -v /mnt/dspace-assetstore:/opt/tomcat/assetstore \
+    --name my-$DOCKER_IMAGE \
+    $DOCKER_IMAGE:latest";
+
+    print "EXEC: $cmd\n\n"; $out=`$cmd`;
+    print "FINISHED: To access the container, type the command:\n";
+    print "docker start my-$DOCKER_IMAGE; docker exec -it my-$DOCKER_IMAGE bash\n\n";
+  }
 }
 
 &get_dev_style();
@@ -194,4 +295,4 @@ sub checkout_src {
 
 &checkout_src();
 
-#&create_docker_container();
+&create_docker_container();
