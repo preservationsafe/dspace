@@ -157,7 +157,7 @@ sub checkout_src {
   }
 
   if ( ! -d $SRC_DIR ) {
-      $cmd = "mkdir -p $SRC_DIR";
+      $cmd = "mkdir -p $SRC_DIR && chgrp dspace $SRC_DIR && chmod 2775 $SRC_DIR";
       $out = `$cmd`;
       print "EXEC: '$cmd' returned '$out'\n";
   }
@@ -228,9 +228,11 @@ sub checkout_src {
   print "EXEC: $cmd\n"; $out = `$cmd`;
   $cmd = "find $SRC_DIR/campusrepo/bin -type f -exec chmod 775 {} \\;";
   print "EXEC: $cmd\n"; $out = `$cmd`;
+  $cmd = "find $SRC_DIR/src/dspace/bin -type f -exec chmod 775 {} \\;";
+  print "EXEC: $cmd\n"; $out = `$cmd`;
 
   # Force recreating softlink of /opt/tomcat/dspace to just created dspace $SRC_DIR
-  $cmd = "ln -fs $SRC_DIR /opt/tomcat/dspace";
+  $cmd = "rm -f /opt/tomcat/dspace; ln -fs $SRC_DIR /opt/tomcat/dspace";
   $out = `$cmd`;
   print "EXEC: '$cmd' returned '$out'\n";
 }
@@ -263,6 +265,7 @@ sub create_docker_container {
   my $download_image = 1;
   $cmd = "docker image list | grep $DOCKER_IMAGE";
   $out = `$cmd`;
+  print "EXEC: '$cmd' returned '$out'\n";
 
   if ( length( $out ) ) {
     my $YESNO = undef;
