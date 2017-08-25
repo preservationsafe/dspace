@@ -200,7 +200,7 @@ sub checkout_src {
        "campusrepo/bin/overlay-softlink.sh campusrepo src",
        "mkdir run",
        "mkdir .oracle_jre_usage",
-       "ln -fs campusrepo/bin bin",
+       "cp -a campusrepo/bin bin",
        "cp campusrepo/ide/dot.bashrc .bashrc",
        "cp campusrepo/ide/dot.profile .profile",
        "cp -R campusrepo/ide/dot.m2 .m2",
