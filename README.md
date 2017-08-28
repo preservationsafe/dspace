@@ -15,3 +15,4 @@ bin/campusrepo-install-dev.pl
 bin/build-dspace.sh
 ```
 8. After the script runs you should be able to get to the DSpace JSPUI hime page by going to `http://localhost:8080/jspui` on your host machine
+**Note:** If you are getting an internal error message in JSPUI make sure tomcat is owned by dspace:dspace
