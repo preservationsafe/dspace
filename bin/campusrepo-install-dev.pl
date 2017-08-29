@@ -120,7 +120,7 @@ sub check_env {
               "be able to start correctly. Please disable the service running at port 8080." );
 
   if ( $DEVSTYLE eq '4' ) {
-    &check_cmd( 'Is X running', 'NE',
+    &check_cmd( 'Is X running', '',
                 '$DISPLAY',
                 "The IDE docker requires X to be running\n".
                 "debian/ubuntu: \'sudo apt-get install x-windows-system\'\n".
@@ -134,6 +134,7 @@ sub checkout_src {
 
   my $cmd = "";
   my $out = "";
+  my $old_umask = umask( 002 );
 
   print "\n************* SECTION 3: Checkout src ***************\n";
 
@@ -168,6 +169,13 @@ sub checkout_src {
     $cmd = "cd $SRC_DIR; ssh vitae 'cat /data1/vitae/repos/$DSPACE_SRC.tar.gz' | pv | tar -xzf -; mv $DSPACE_SRC src; cd -";
     print "EXEC: '$cmd'\n";
     `$cmd`;
+
+    $cmd = "find $SRC_DIR/src -type f -print0 | xargs -0 chmod 664";
+    print "EXEC: $cmd\n"; $out = `$cmd`;
+    $cmd = "find $SRC_DIR/src -type d -print0 | xargs -0 chmod 2775";
+    print "EXEC: $cmd\n"; $out = `$cmd`;
+    $cmd = "find $SRC_DIR/src/dspace/bin -type f -print0 | xargs -0 chmod 775";
+    print "EXEC: $cmd\n"; $out = `$cmd`;
   }
   else { print "VERIFIED: $SRC_DIR/src\n"; }
 
@@ -219,18 +227,8 @@ sub checkout_src {
   }
   else { print "VERIFIED: $SRC_DIR/campusrepo\n"; }
 
-  # Force group, file permissions
-  $cmd = "chgrp -R dspace $SRC_DIR 2>/dev/null";
-  print "EXEC: $cmd\n"; $out = `$cmd`;
-  $cmd = "find $SRC_DIR -type f -exec chmod 664 {} \\;";
-  print "EXEC: $cmd\n"; $out = `$cmd`;
-  $cmd = "find $SRC_DIR -type d -exec chmod 2775 {} \\;";
-  print "EXEC: $cmd\n"; $out = `$cmd`;
-  $cmd = "find $SRC_DIR/campusrepo/bin -type f -exec chmod 775 {} \\;";
-  print "EXEC: $cmd\n"; $out = `$cmd`;
-  $cmd = "find $SRC_DIR/src/dspace/bin -type f -exec chmod 775 {} \\;";
-  print "EXEC: $cmd\n"; $out = `$cmd`;
-
+  umask( $old_umask );
+  
   # Force recreating softlink of /opt/tomcat/dspace to just created dspace $SRC_DIR
   $cmd = "rm -f /opt/tomcat/dspace; ln -fs $SRC_DIR /opt/tomcat/dspace";
   $out = `$cmd`;
