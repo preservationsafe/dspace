@@ -45,12 +45,12 @@ EOF
 
 sub check_cmd {
   my ( $env, $val, $cmd, $err_info ) = @_;
-  
+
   print "CHECK: $env ?\n";
   my $out = `$cmd`;
   chomp( $out );
   #print "DEBUG: '$out'\n";
-  
+
   my $success = 1;
   if ( ! length( $val ) ) { if ( ! length( $out ) ) { $success = 0; } }
   elsif ( $val eq 'NE' ) { if ( length( $out ) > 0 ) { $success = 0; } }
@@ -249,7 +249,7 @@ sub create_docker_container {
   if ( length( $docker_id ) ) {
     my $YESNO = undef;
     while ( ! defined( $YESNO ) ) {
-      print "EXISTS: A docker container exists using $DOCKER_IMAGE. Do you want to delete it along with any changes you've made, and recreate a new one ? ";
+      print "EXISTS: A docker container exists using $DOCKER_IMAGE. Do you want to delete it along with any changes you've made, and recreate a new one [y/n]? ";
       chomp( $YESNO = <STDIN> );
       for ( $YESNO ) {
         /[Yy].*/ && do { last; };
@@ -270,7 +270,7 @@ sub create_docker_container {
   if ( length( $out ) ) {
     my $YESNO = undef;
     while ( ! defined( $YESNO ) ) {
-      print "EXISTS: The docker image $DOCKER_IMAGE is present. Do you want to delete it and download the latest one ? ";
+      print "EXISTS: The docker image $DOCKER_IMAGE is present. Do you want to delete it and download the latest one [y/n]? ";
       chomp( $YESNO = <STDIN> );
       for ( $YESNO ) {
         /[Yy].*/ && do {
