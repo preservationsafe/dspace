@@ -120,7 +120,7 @@ sub check_env {
               "be able to start correctly. Please disable the service running at port 8080." );
 
   if ( $DEVSTYLE eq '4' ) {
-    &check_cmd( 'Is X running', '',
+    &check_cmd( 'Is X running', 'NE',
                 '$DISPLAY',
                 "The IDE docker requires X to be running\n".
                 "debian/ubuntu: \'sudo apt-get install x-windows-system\'\n".
