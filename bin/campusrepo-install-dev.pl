@@ -315,6 +315,7 @@ sub create_docker_container {
     "-p 8443:8443 ".
     "-v $SRC_DIR:/opt/tomcat/dspace ".
     "-v /mnt/dspace-assetstore:/opt/tomcat/assetstore ".
+    "-it --entrypoint /bin/bash ".
     "--name my-$DOCKER_IMAGE ".
     "$DOCKER_IMAGE:latest";
 
