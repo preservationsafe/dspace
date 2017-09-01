@@ -5,7 +5,7 @@ if [ "$HOME" == "/opt/tomcat/dspace" ]; then
 else
   SHELL_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
   DSPACE_HOME_DIR="$( cd $SHELL_SCRIPT_DIR/.. && pwd )"
-  while [ ! -d "$DSPACE_HOME_DIR/campusrepo" ]; do
+  while [ ! -d "$DSPACE_HOME_DIR/overlay" ]; do
       DSPACE_HOME_DIR="$( cd $DSPACE_HOME_DIR/.. && pwd )"
   done
 fi
@@ -13,7 +13,7 @@ fi
 DSPACE_SRC="$DSPACE_HOME_DIR/src"
 
 # Pickup latest overlays
-cd $DSPACE_HOME_DIR && campusrepo/bin/overlay-softlink.sh campusrepo src
+cd $DSPACE_HOME_DIR && bin/overlay-softlink.sh overlay src
 
 # Default to a dev build
 if [ ! -f "$DSPACE_SRC/dspace/config/local.cfg" ]; then

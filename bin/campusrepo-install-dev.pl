@@ -158,28 +158,6 @@ sub checkout_src {
   }
 
   if ( ! -d $SRC_DIR ) {
-      $cmd = "mkdir -p $SRC_DIR && chgrp dspace $SRC_DIR && chmod 2775 $SRC_DIR";
-      $out = `$cmd`;
-      print "EXEC: '$cmd' returned '$out'\n";
-  }
-
-  if ( ! -d "$SRC_DIR/src" ) {
-    print "EXEC: exploding the dspace src tarball\n";
-
-    $cmd = "cd $SRC_DIR; ssh vitae 'cat /data1/vitae/repos/$DSPACE_SRC.tar.gz' | pv | tar -xzf -; mv $DSPACE_SRC src; cd -";
-    print "EXEC: '$cmd'\n";
-    `$cmd`;
-
-    $cmd = "find $SRC_DIR/src -type f -print0 | xargs -0 chmod 664";
-    print "EXEC: $cmd\n"; $out = `$cmd`;
-    $cmd = "find $SRC_DIR/src -type d -print0 | xargs -0 chmod 2775";
-    print "EXEC: $cmd\n"; $out = `$cmd`;
-    $cmd = "find $SRC_DIR/src/dspace/bin -type f -print0 | xargs -0 chmod 775";
-    print "EXEC: $cmd\n"; $out = `$cmd`;
-  }
-  else { print "VERIFIED: $SRC_DIR/src\n"; }
-
-  if ( ! -d "$SRC_DIR/campusrepo" ) {
     print "EXEC: cloning the git campusrepo from vitae.\n";
 
     my $git_user = undef;
@@ -198,20 +176,24 @@ sub checkout_src {
         $git_user = undef;
       }
     }
-
-    $cmd = "cd $SRC_DIR; git clone $git_user\@vitae:/data1/vitae/repos/campusrepo.git; cd -";
+    $cmd = "git clone -b develop $git_user\@vitae:/data1/vitae/repos/campusrepo.git $SRC_DIR";
     print "EXEC: '$cmd'\n";
     `$cmd`;
+  }
 
-    my @srcdir_cmds =
+  if ( ! -d "$SRC_DIR/src/dspace" ) {
+    print "EXEC: exploding the dspace src tarball\n";
+
+    $cmd = "cd $SRC_DIR; ssh vitae 'cat /data1/vitae/repos/$DSPACE_SRC.tar.gz' | pv | tar -xzf -; mv $DSPACE_SRC src; cd -";
+    print "EXEC: '$cmd'\n";
+    `$cmd`;
+  }
+  else { print "VERIFIED: $SRC_DIR/src\n"; }
+
+  my @srcdir_cmds =
       (
-       "campusrepo/bin/overlay-softlink.sh campusrepo src",
-       "mkdir run",
-       "mkdir .oracle_jre_usage",
-       "cp -a campusrepo/bin bin",
-       "cp campusrepo/ide/dot.bashrc .bashrc",
-       "cp campusrepo/ide/dot.profile .profile",
-       "cp -R campusrepo/ide/dot.m2 .m2",
+       "bin/fix-permissions.sh",
+       "bin/overlay-softlink.sh overlay src",
       );
 
     foreach my $src_cmd ( @srcdir_cmds ) {
@@ -224,7 +206,6 @@ sub checkout_src {
       $cmd = "cd $SRC_DIR/src/dspace/config; cp local.cfg-dev local.cfg; cd -";
       print "EXEC: $cmd\n"; $out = `$cmd`;
     }
-  }
   else { print "VERIFIED: $SRC_DIR/campusrepo\n"; }
 
   umask( $old_umask );

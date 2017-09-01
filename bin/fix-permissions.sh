@@ -5,7 +5,7 @@ if [ "$HOME" == "/opt/tomcat/dspace" ]; then
 else
   SHELL_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
   DSPACE_HOME_DIR="$( cd $SHELL_SCRIPT_DIR/.. && pwd )"
-  while [ ! -d "$DSPACE_HOME_DIR/campusrepo" ]; do
+  while [ ! -d "$DSPACE_HOME_DIR/overlay" ]; do
       DSPACE_HOME_DIR="$( cd $DSPACE_HOME_DIR/.. && pwd )"
   done
 fi
@@ -22,5 +22,5 @@ function exec_cmd() {
 exec_cmd "chgrp -R dspace $DSPACE_HOME_DIR 2>/dev/null"
 exec_cmd "find $DSPACE_HOME_DIR -type f -print0 | xargs -0 chmod 664 2>/dev/null"
 exec_cmd "find $DSPACE_HOME_DIR -type d -print0 | xargs -0 chmod 2775 2>/dev/null"
-exec_cmd "find $DSPACE_HOME_DIR/campusrepo/bin -type f -print0 | xargs -0 chmod 775 2>/dev/null"
+exec_cmd "find $DSPACE_HOME_DIR/bin -type f -print0 | xargs -0 chmod 775 2>/dev/null"
 exec_cmd "find $DSPACE_HOME_DIR/src/dspace/bin -type f -print0 | xargs -0 chmod 775 2>/dev/null"
