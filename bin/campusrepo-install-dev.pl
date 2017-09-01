@@ -152,20 +152,20 @@ sub checkout_src {
       }
     }
 
-    if ( ! -d $SRC_DIR ) {
-      print "EXEC: cloning the git campusrepo from vitae into $SRC_DIR.\n";
-      print "EXEC: What git user should be used to checkout campusrepo.git on vitae ? [enter] defaults to $ENV{USER} ? ";
-      my $new_user = <STDIN>;
-      chomp( $new_user );
-      $git_user = $ENV{USER};
-      if ( length( $new_user ) ) {
-        $git_user = $new_user;
-      }
-      print "EXEC: About to git clone $git_user\@vitae into $SRC_DIR, hit [enter] to proceed, anything else to restart.\n";
-      chomp( $new_user = <STDIN> );
-      if ( length( $new_user ) ) {
-        $git_user = undef;
-      }
+    last if ( -d $SRC_DIR );
+    
+    print "EXEC: cloning the git campusrepo from vitae into $SRC_DIR.\n";
+    print "EXEC: What git user should be used to checkout campusrepo.git on vitae ? [enter] defaults to $ENV{USER} ? ";
+    my $new_user = <STDIN>;
+    chomp( $new_user );
+    $git_user = $ENV{USER};
+    if ( length( $new_user ) ) {
+      $git_user = $new_user;
+    }
+    print "EXEC: About to git clone $git_user\@vitae into $SRC_DIR, hit [enter] to proceed, anything else to restart.\n";
+    chomp( $new_user = <STDIN> );
+    if ( length( $new_user ) ) {
+      $git_user = undef;
     }
     if ( defined( $git_user ) ) {
       $cmd = "git clone -b develop $git_user\@vitae:/data1/vitae/repos/campusrepo.git $SRC_DIR";
