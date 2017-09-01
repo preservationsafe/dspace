@@ -135,12 +135,12 @@ sub checkout_src {
   my $cmd = "";
   my $out = "";
   my $old_umask = umask( 002 );
+  my $git_user = undef;
 
   print "\n************* SECTION 3: Checkout src ***************\n";
 
   # Always ask where the source directory should be, even if it already exists
-  my $GOOD_DIR = 'b';
-  while ( $GOOD_DIR ne '' ) {
+  while ( ! defined( $git_user ) ) {
     print "EXEC: What directory should contain your dspace code, [enter] defaults to $SRC_DIR.\n".
       "Path values not prefixed with / will be added under your $ENV{HOME} directory ? ";
     my $NEW_DIR = <STDIN>;
@@ -151,17 +151,9 @@ sub checkout_src {
         $SRC_DIR = $NEW_DIR;
       }
     }
-    last if ( -d $SRC_DIR );
-    print "EXEC: About to create $SRC_DIR, hit [enter] to proceed, ".
-      "anything else to restart.\n";
-    chomp( $GOOD_DIR = <STDIN> );
-  }
 
-  if ( ! -d $SRC_DIR ) {
-    print "EXEC: cloning the git campusrepo from vitae.\n";
-
-    my $git_user = undef;
-    while ( ! defined( $git_user ) ) {
+    if ( ! -d $SRC_DIR ) {
+      print "EXEC: cloning the git campusrepo from vitae into $SRC_DIR.\n";
       print "EXEC: What git user should be used to checkout campusrepo.git on vitae ? [enter] defaults to $ENV{USER} ? ";
       my $new_user = <STDIN>;
       chomp( $new_user );
@@ -169,26 +161,27 @@ sub checkout_src {
       if ( length( $new_user ) ) {
         $git_user = $new_user;
       }
-      print "EXEC: About to git clone $git_user\@vitae, hit [enter] to proceed, ".
-        "anything else to restart.\n";
+      print "EXEC: About to git clone $git_user\@vitae into $SRC_DIR, hit [enter] to proceed, anything else to restart.\n";
       chomp( $new_user = <STDIN> );
       if ( length( $new_user ) ) {
         $git_user = undef;
       }
     }
-    $cmd = "git clone -b develop $git_user\@vitae:/data1/vitae/repos/campusrepo.git $SRC_DIR";
-    print "EXEC: '$cmd'\n";
-    `$cmd`;
+    if ( defined( $git_user ) ) {
+      $cmd = "git clone -b develop $git_user\@vitae:/data1/vitae/repos/campusrepo.git $SRC_DIR";
+      print "EXEC: '$cmd'\n";
+      `$cmd`;
+    }
   }
 
   if ( ! -d "$SRC_DIR/src/dspace" ) {
     print "EXEC: exploding the dspace src tarball\n";
 
-    $cmd = "cd $SRC_DIR; ssh vitae 'cat /data1/vitae/repos/$DSPACE_SRC.tar.gz' | pv | tar -xzf -; mv $DSPACE_SRC src; cd -";
+    $cmd = "cd $SRC_DIR; ssh vitae 'cat /data1/vitae/repos/$DSPACE_SRC.tar.gz' | pv | tar -xzf -; mv $DSPACE_SRC/* src; rmdir $DSPACE_SRC; cd -";
     print "EXEC: '$cmd'\n";
     `$cmd`;
   }
-  else { print "VERIFIED: $SRC_DIR/src\n"; }
+  else { print "VERIFIED: $SRC_DIR/src/dspace\n"; }
 
   my @srcdir_cmds =
       (
