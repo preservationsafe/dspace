@@ -28,23 +28,23 @@
 dspace.dir = /opt/tomcat/dspace/run
 
 # DSpace host name - should match base URL.  Do not include port number.
-dspace.hostname = localhost
+dspace.hostname = dspace-webdev.library.arizona.edu
 
 # DSpace base host URL.  Include port number etc.
-dspace.baseUrl = http://localhost:8080
+dspace.baseUrl = http://dspace-webdev.library.arizona.edu
 
 # DSpace base URL.  Include port number etc., but NOT trailing slash
 # Change to xmlui if you wish to use the xmlui as the default, or remove
 # "/jspui" and set webapp of your choice as the "ROOT" webapp in
 # the servlet engine.
-dspace.url = http://localhost:8080/jspui
+dspace.url = http://dspace-webdev.library.arizona.edu/jspui
 
 # Optional: DSpace URL for mobile access
 # This 
 #dspace.mobileUrl = http://mobile.example.com
 
 # Name of the site
-dspace.name = University of Arizona Library TESS
+dspace.name = University of Arizona Library
 
 # Default language for metadata values
 default.language = en_US
@@ -64,8 +64,8 @@ db.password = dspaceD5vops-G5tt62
 ##### Email settings ######
 
 # SMTP mail server
-#mail.server = localhost
-mail.server = smtpgate.email.arizona.edu
+#mail.server = dspace-webdev.library.arizona.edu
+mail.server = localhost
 
 # SMTP mail server authentication username and password (if required)
 mail.server.username =
