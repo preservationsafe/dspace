@@ -297,6 +297,7 @@ sub create_docker_container {
     print "FINISHED: To access the container, type the command:\n";
     print "docker start my-$DOCKER_IMAGE; docker exec -it my-$DOCKER_IMAGE bash\n\n";
   }
+  print "\nNOTE: to start tomcat, within the docker container run 'debug-tomcat.sh'\n";
 }
 
 &get_dev_style();
