@@ -74,17 +74,17 @@ sub check_env {
               "Try running the command:\n".
               "sudo usermod -a -G docker <your_unix_userid>" );
 
+  &check_cmd( 'Does the dspace user, uid=800 exist', '800',
+              'perl -e \'$uid = getpwnam("dspace"); print $uid\'',
+              "Your system needs the user dspace to exist with id=800\n".
+              "On linux try running the command:\n".
+              "sudo useradd dspace --uid 800 --gid 800" );
+
   &check_cmd( 'Does the dspace group, gid=800 exist', '800',
               'perl -e \'$gid = getgrnam("dspace"); print $gid\'',
               "Your system needs the group dspace to exist with id=800\n".
               "On linux try running the command:\n".
               "sudo groupadd dspace --gid 800" );
-
-  &check_cmd( 'Does the dspace user, uid=800 exist', '800',
-              'perl -e \'$gid = getgrnam("dspace"); print $gid\'',
-              "Your system needs the user dspace to exist with id=800\n".
-              "On linux try running the command:\n".
-              "sudo useradd dspace --uid --gid 800" );
 
   &check_cmd( 'Does your system user belong to the "dspace" group', '',
               "id $ENV{USER} | grep dspace",
@@ -99,7 +99,9 @@ sub check_env {
 
   &check_cmd( 'Have you mounted //dspace-nfsdev/dspace-assetstore-dev', '',
               'mount | grep dspace-assetstore',
-              "The nfs dspace assetstore needs to be mounted. Try running the commands (on linux):\n".
+              "The nfs dspace assetstore needs to be mounted. \n" .
+              "Make sure you have an NFS client installed (\"sudo apt-get install nfs-common\" on Ubuntu-based systems), \n" .
+              "then try running the commands (on linux):\n".
               "sudo cp /etc/fstab /etc/fstab.bak\n".
               "sudo mkdir -p /mnt/dspace-assetstore\n".
               "sudo chown dspace.dspace /mnt/dspace-assetstore\n".
