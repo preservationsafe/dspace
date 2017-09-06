@@ -8,6 +8,7 @@ my $DEVSTYLE      = undef;
 my $HOST_TYPE     = undef;
 my $HOST_DIR      = undef;
 
+# git command outputs the absolute path to root of the repository
 my $out = `git rev-parse --show-toplevel`;
 chomp($out);
 my $SRC_DIR       = $out;
