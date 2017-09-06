@@ -4,50 +4,11 @@ use warnings;
 
 my $DOCKER_IMAGE  = "dspace6-dev";
 my $DSPACE_SRC    = "dspace-6.1-src-release";
-my $DEVSTYLE      = undef;
-my $HOST_TYPE     = undef;
-my $HOST_DIR      = undef;
 
 # git command outputs the absolute path to root of the repository
 my $out = `git rev-parse --show-toplevel`;
 chomp($out);
-my $SRC_DIR       = $out;
-
-
-
-sub get_dev_style {
-
-print <<EOF;
-
-************* SECTION 1: UofA Library Dspace Development ***************
-
-Please select how you would like to develop with dspace. Note: all options integrate with docker at some point. The following options were derived from:
-
-https://wiki.duraspace.org/display/DSDOC6x/Installing+DSpace
-
-1. Host development - the developer is responsible for setting up their host machine with the development environment needed to build dspace as described in the link above. Docker will be used to run tomcat for runtime debugging. Docker image is 1.1GB.
-
-2. Host editing - the developer will edit the dspace src code on the host machine. Within docker the code will be built through the command line and run within tomcat. Debugging can happen outside docker in an ide. Docker image is 1.1GB.
-
-3. Docker cmdline development. All src code editing, building, and debugging is done through the cmdline within docker. Provided editors include emacs-nox, vim, nano. Building and debugging is also done within docker, it is assumed the developer knows how to runtime debug java code through the commandline. Docker image is 1.1GB.
-
-4. Docker ide development. All src code editing, building, and debugging is done through an ide within docker, opened via ssh X11 forwarding. In addition to command line editors, included ide are Intellij, Netbeans, Eclipse, emacs (windowed), Atom, MS Code. The host machine must be running X11. Docker image is 4.8GB
-
-EOF
-
-  while ( ! defined( $DEVSTYLE ) ) {
-    print "Which development style would you prefer ? ";
-    chomp( $DEVSTYLE = <STDIN> );
-    for ( $DEVSTYLE ) {
-      /1/ && do { $HOST_TYPE="runtime"; $HOST_DIR="/opt/tomcat/dspace/run"; last; };
-      /2/ && do { $HOST_TYPE="source"; $HOST_DIR="$SRC_DIR"; last; };
-      /3/ && last;
-      /4/ && do { $DOCKER_IMAGE="dspace6-ide"; last; };
-      $DEVSTYLE = undef;
-      print "Please enter 1-4, or hold Ctrl-C to cancel\n";
-    }
-  }
-}
+my $SRC_DIR = $out;
 
 sub check_cmd {
   my ( $env, $val, $cmd, $err_info ) = @_;
@@ -130,15 +91,6 @@ sub check_env {
               "A service is already listening at port 8080, tomcat will not".
               "be able to start correctly. Please disable the service running at port 8080." );
 
-  if ( $DEVSTYLE eq '4' ) {
-    &check_cmd( 'Is X running', 'NE',
-                '$DISPLAY',
-                "The IDE docker requires X to be running\n".
-                "debian/ubuntu: \'sudo apt-get install x-windows-system\'\n".
-                "redhat: yum groupinstall \'X Window System\'\n".
-                "macos: install XQuartz\n".
-                "mswin: install Xming\n" );
-  }
 }
 
 sub checkout_src {
@@ -239,44 +191,24 @@ sub create_docker_container {
     `$cmd`;
   }
 
-  if ( $DOCKER_IMAGE eq "dspace6-ide" ) {
+  $cmd="docker run -d ".
+  "--net=host ".
+  "-p 8000:8000 ".
+  "-p 8080:8080 ".
+  "-p 8443:8443 ".
+  "-v $SRC_DIR:/opt/tomcat/dspace ".
+  "-v /mnt/dspace-assetstore:/opt/tomcat/assetstore ".
+  "-it --entrypoint /bin/bash ".
+  "--name my-$DOCKER_IMAGE ".
+  "$DOCKER_IMAGE:latest";
 
-    $cmd="docker run -d ".
-    "--net=host ".
-    "-p 2200:2200 ".
-    "-p 8000:8000 ".
-    "-p 8080:8080 ".
-    "-p 8443:8443 ".
-    "-v $SRC_DIR:/opt/tomcat/dspace ".
-    "-v /mnt/dspace-assetstore:/opt/tomcat/assetstore ".
-    "--name my-$DOCKER_IMAGE ".
-    "$DOCKER_IMAGE:latest";
+  print "EXEC: $cmd\n\n"; $out=`$cmd`;
+  print "FINISHED: To access the container, type the command:\n";
+  print "docker start my-$DOCKER_IMAGE; docker exec -it my-$DOCKER_IMAGE bash\n\n";
 
-    print "EXEC: $cmd\n\n"; $out=`$cmd`;
-    print "FINISHED: To access the container, type the command below. The ssh password is 'asdf'\n";
-    print "ssh -p 2200 -X dspace\@localhost\n\n";
-  }
-  else {
-
-    $cmd="docker run -d ".
-    "--net=host ".
-    "-p 8000:8000 ".
-    "-p 8080:8080 ".
-    "-p 8443:8443 ".
-    "-v $SRC_DIR:/opt/tomcat/dspace ".
-    "-v /mnt/dspace-assetstore:/opt/tomcat/assetstore ".
-    "-it --entrypoint /bin/bash ".
-    "--name my-$DOCKER_IMAGE ".
-    "$DOCKER_IMAGE:latest";
-
-    print "EXEC: $cmd\n\n"; $out=`$cmd`;
-    print "FINISHED: To access the container, type the command:\n";
-    print "docker start my-$DOCKER_IMAGE; docker exec -it my-$DOCKER_IMAGE bash\n\n";
-  }
   print "\nNOTE: to start tomcat, within the docker container run 'debug-tomcat.sh'\n";
 }
 
-&get_dev_style();
 
 &check_env();
 
