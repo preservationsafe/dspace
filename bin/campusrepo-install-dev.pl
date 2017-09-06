@@ -1,10 +1,11 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Cwd qw(getcwd);
 
 my $DOCKER_IMAGE  = "dspace6-dev";
 my $DSPACE_SRC    = "dspace-6.1-src-release";
-my $SRC_DIR       = "$ENV{HOME}/dspace";
+my $SRC_DIR       = getcwd;
 my $DEVSTYLE      = undef;
 my $HOST_TYPE     = undef;
 my $HOST_DIR      = undef;
@@ -55,6 +56,7 @@ sub check_cmd {
   if ( ! length( $val ) ) { if ( ! length( $out ) ) { $success = 0; } }
   elsif ( $val eq 'NE' ) { if ( length( $out ) > 0 ) { $success = 0; } }
   elsif ( $out ne $val ) { $success = 0; }
+
   if ( ! $success ) { die "ERROR: \"$cmd\" failed\n\n$err_info\n\n" }
   print "CHECK: \"$cmd\" returned '$out'\n"
 }
@@ -62,6 +64,10 @@ sub check_cmd {
 sub check_env {
 
   print "\n************* SECTION 2: Environment check ***************\n";
+
+  &check_cmd('Are you running campusrepo-install-dev.pl from the campusrepo repository', '',
+                'git remote -v | grep vitae | grep "/data1/vitae/repos/campusrepo.git"',
+                "You need to run campusrepo-install-dev.pl from the root of the campusrepo repository");
 
   &check_cmd( 'Is docker installed', '',
               'docker -v',
@@ -140,41 +146,6 @@ sub checkout_src {
   my $git_user = undef;
 
   print "\n************* SECTION 3: Checkout src ***************\n";
-
-  # Always ask where the source directory should be, even if it already exists
-  while ( ! defined( $git_user ) ) {
-    print "EXEC: What directory should contain your dspace code, [enter] defaults to $SRC_DIR.\n".
-      "Path values not prefixed with / will be added under your $ENV{HOME} directory ? ";
-    my $NEW_DIR = <STDIN>;
-    chomp( $NEW_DIR );
-    if ( length( $NEW_DIR ) ) {
-      $SRC_DIR = $ENV{HOME}.'/'.$NEW_DIR;
-      if ( '/' eq substr( $NEW_DIR, 0, 1 ) ) {
-        $SRC_DIR = $NEW_DIR;
-      }
-    }
-
-    last if ( -d $SRC_DIR );
-    
-    print "EXEC: cloning the git campusrepo from vitae into $SRC_DIR.\n";
-    print "EXEC: What git user should be used to checkout campusrepo.git on vitae ? [enter] defaults to $ENV{USER} ? ";
-    my $new_user = <STDIN>;
-    chomp( $new_user );
-    $git_user = $ENV{USER};
-    if ( length( $new_user ) ) {
-      $git_user = $new_user;
-    }
-    print "EXEC: About to git clone $git_user\@vitae into $SRC_DIR, hit [enter] to proceed, anything else to restart.\n";
-    chomp( $new_user = <STDIN> );
-    if ( length( $new_user ) ) {
-      $git_user = undef;
-    }
-    if ( defined( $git_user ) ) {
-      $cmd = "git clone -b develop $git_user\@vitae:/data1/vitae/repos/campusrepo.git $SRC_DIR";
-      print "EXEC: '$cmd'\n";
-      `$cmd`;
-    }
-  }
 
   if ( ! -d "$SRC_DIR/src/dspace" ) {
     print "EXEC: exploding the dspace src tarball\n";
