@@ -4,10 +4,15 @@ use warnings;
 
 my $DOCKER_IMAGE  = "dspace6-dev";
 my $DSPACE_SRC    = "dspace-6.1-src-release";
-my $SRC_DIR       = `git rev-parse --show-toplevel`;
 my $DEVSTYLE      = undef;
 my $HOST_TYPE     = undef;
 my $HOST_DIR      = undef;
+
+my $out = `git rev-parse --show-toplevel`;
+chomp($out);
+my $SRC_DIR       = $out;
+
+
 
 sub get_dev_style {
 
