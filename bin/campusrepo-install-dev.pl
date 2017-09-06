@@ -1,11 +1,10 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use Cwd qw(getcwd);
 
 my $DOCKER_IMAGE  = "dspace6-dev";
 my $DSPACE_SRC    = "dspace-6.1-src-release";
-my $SRC_DIR       = getcwd;
+my $SRC_DIR       = `git rev-parse --show-toplevel`;
 my $DEVSTYLE      = undef;
 my $HOST_TYPE     = undef;
 my $HOST_DIR      = undef;
