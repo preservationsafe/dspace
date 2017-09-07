@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 
+# set DOCKER_IMAGE to  dspace6-ide for an option 4 (described in print_help) developer enviroment
 my $DOCKER_IMAGE  = "dspace6-dev";
 my $DSPACE_SRC    = "dspace-6.1-src-release";
 
@@ -9,6 +10,27 @@ my $DSPACE_SRC    = "dspace-6.1-src-release";
 my $out = `git rev-parse --show-toplevel`;
 chomp($out);
 my $SRC_DIR = $out;
+
+
+sub print_help {
+
+print <<EOF;
+
+************* SECTION 0: UofA Library Dspace Development ***************
+
+Please select how you would like to develop with dspace. Note: all options integrate with docker at some point. The following options were derived from:
+
+https://wiki.duraspace.org/display/DSDOC6x/Installing+DSpace
+
+1. Host development - the developer is responsible for setting up their host machine with the development environment needed to build dspace as described in the link above. Docker will be used to run tomcat for runtime debugging. Docker image is 1.1GB.
+
+2. Host editing - the developer will edit the dspace src code on the host machine. Within docker the code will be built through the command line and run within tomcat. Debugging can happen outside docker in an ide. Docker image is 1.1GB.
+
+3. Docker cmdline development. All src code editing, building, and debugging is done through the cmdline within docker. Provided editors include emacs-nox, vim, nano. Building and debugging is also done within docker, it is assumed the developer knows how to runtime debug java code through the commandline. Docker image is 1.1GB.
+
+4. Docker ide development. All src code editing, building, and debugging is done through an ide within docker, opened via ssh X11 forwarding. In addition to command line editors, included ide are Intellij, Netbeans, Eclipse, emacs (windowed), Atom, MS Code. The host machine must be running X11. Docker image is 4.8GB
+
+}
 
 sub check_cmd {
   my ( $env, $val, $cmd, $err_info ) = @_;
@@ -29,7 +51,7 @@ sub check_cmd {
 
 sub check_env {
 
-  print "\n************* SECTION 2: Environment check ***************\n";
+  print "\n************* SECTION 1: Environment check ***************\n";
 
   &check_cmd('Are you running campusrepo-install-dev.pl from the campusrepo repository', '',
                 'git remote -v | grep vitae | grep "/data1/vitae/repos/campusrepo.git"',
@@ -92,7 +114,15 @@ sub check_env {
               'netstat -l --numeric | grep 8080',
               "A service is already listening at port 8080, tomcat will not".
               "be able to start correctly. Please disable the service running at port 8080." );
-
+  if ( $DOCKER_IMAGE eq "dspace6-ide" ) {
+    &check_cmd( 'Is X running', 'NE',
+                '$DISPLAY',
+                "The IDE docker requires X to be running\n".
+                "debian/ubuntu: \'sudo apt-get install x-windows-system\'\n".
+                "redhat: yum groupinstall \'X Window System\'\n".
+                "macos: install XQuartz\n".
+                "mswin: install Xming\n" );
+  }
 }
 
 sub checkout_src {
@@ -102,7 +132,7 @@ sub checkout_src {
   my $old_umask = umask( 002 );
   my $git_user = undef;
 
-  print "\n************* SECTION 3: Checkout src ***************\n";
+  print "\n************* SECTION 2: Checkout src ***************\n";
 
   if ( ! -d "$SRC_DIR/src/dspace" ) {
     print "EXEC: exploding the dspace src tarball\n";
@@ -193,24 +223,42 @@ sub create_docker_container {
     `$cmd`;
   }
 
-  $cmd="docker run -d ".
-  "--net=host ".
-  "-p 8000:8000 ".
-  "-p 8080:8080 ".
-  "-p 8443:8443 ".
-  "-v $SRC_DIR:/opt/tomcat/dspace ".
-  "-v /mnt/dspace-assetstore:/opt/tomcat/assetstore ".
-  "-it --entrypoint /bin/bash ".
-  "--name my-$DOCKER_IMAGE ".
-  "$DOCKER_IMAGE:latest";
+  if ( $DOCKER_IMAGE eq "dspace6-ide" ) {
 
-  print "EXEC: $cmd\n\n"; $out=`$cmd`;
-  print "FINISHED: To access the container, type the command:\n";
-  print "docker start my-$DOCKER_IMAGE; docker exec -it my-$DOCKER_IMAGE bash\n\n";
+    $cmd="docker run -d ".
+    "--net=host ".
+    "-p 2200:2200 ".
+    "-p 8000:8000 ".
+    "-p 8080:8080 ".
+    "-p 8443:8443 ".
+    "-v $SRC_DIR:/opt/tomcat/dspace ".
+    "-v /mnt/dspace-assetstore:/opt/tomcat/assetstore ".
+    "--name my-$DOCKER_IMAGE ".
+    "$DOCKER_IMAGE:latest";
 
+    print "EXEC: $cmd\n\n"; $out=`$cmd`;
+    print "FINISHED: To access the container, type the command below. The ssh password is 'asdf'\n";
+    print "ssh -p 2200 -X dspace\@localhost\n\n";
+  }
+  else {
+
+    $cmd="docker run -d ".
+    "--net=host ".
+    "-p 8000:8000 ".
+    "-p 8080:8080 ".
+    "-p 8443:8443 ".
+    "-v $SRC_DIR:/opt/tomcat/dspace ".
+    "-v /mnt/dspace-assetstore:/opt/tomcat/assetstore ".
+    "-it --entrypoint /bin/bash ".
+    "--name my-$DOCKER_IMAGE ".
+    "$DOCKER_IMAGE:latest";
+
+    print "EXEC: $cmd\n\n"; $out=`$cmd`;
+    print "FINISHED: To access the container, type the command:\n";
+    print "docker start my-$DOCKER_IMAGE; docker exec -it my-$DOCKER_IMAGE bash\n\n";
+  }
   print "\nNOTE: to start tomcat, within the docker container run 'debug-tomcat.sh'\n";
 }
-
 
 &check_env();
 
