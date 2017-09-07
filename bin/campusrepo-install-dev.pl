@@ -30,6 +30,7 @@ https://wiki.duraspace.org/display/DSDOC6x/Installing+DSpace
 
 4. Docker ide development. All src code editing, building, and debugging is done through an ide within docker, opened via ssh X11 forwarding. In addition to command line editors, included ide are Intellij, Netbeans, Eclipse, emacs (windowed), Atom, MS Code. The host machine must be running X11. Docker image is 4.8GB
 
+EOF
 }
 
 sub check_cmd {
