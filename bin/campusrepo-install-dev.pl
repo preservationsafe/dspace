@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 my $DOCKER_IMAGE  = "dspace6-dev";
-my $DSPACE_SRC    = "dspace-6.1-src-release";
+my $DSPACE_SRC    = "dspace-6.2-src-release";
 my $SRC_DIR       = "$ENV{HOME}/dspace";
 my $DEVSTYLE      = undef;
 my $HOST_TYPE     = undef;
