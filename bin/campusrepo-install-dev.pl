@@ -2,18 +2,21 @@
 use strict;
 use warnings;
 
+# set DOCKER_IMAGE to  dspace6-ide for an option 4 (described in print_help) developer enviroment
 my $DOCKER_IMAGE  = "dspace6-dev";
-my $DSPACE_SRC    = "dspace-6.1-src-release";
-my $SRC_DIR       = "$ENV{HOME}/dspace";
-my $DEVSTYLE      = undef;
-my $HOST_TYPE     = undef;
-my $HOST_DIR      = undef;
+my $DSPACE_SRC    = "dspace-6.2-src-release";
 
-sub get_dev_style {
+# git command outputs the absolute path to root of the repository
+my $out = `git rev-parse --show-toplevel`;
+chomp($out);
+my $SRC_DIR = $out;
+
+
+sub print_help {
 
 print <<EOF;
 
-************* SECTION 1: UofA Library Dspace Development ***************
+************* SECTION 0: UofA Library Dspace Development ***************
 
 Please select how you would like to develop with dspace. Note: all options integrate with docker at some point. The following options were derived from:
 
@@ -28,19 +31,6 @@ https://wiki.duraspace.org/display/DSDOC6x/Installing+DSpace
 4. Docker ide development. All src code editing, building, and debugging is done through an ide within docker, opened via ssh X11 forwarding. In addition to command line editors, included ide are Intellij, Netbeans, Eclipse, emacs (windowed), Atom, MS Code. The host machine must be running X11. Docker image is 4.8GB
 
 EOF
-
-  while ( ! defined( $DEVSTYLE ) ) {
-    print "Which development style would you prefer ? ";
-    chomp( $DEVSTYLE = <STDIN> );
-    for ( $DEVSTYLE ) {
-      /1/ && do { $HOST_TYPE="runtime"; $HOST_DIR="/opt/tomcat/dspace/run"; last; };
-      /2/ && do { $HOST_TYPE="source"; $HOST_DIR="$SRC_DIR"; last; };
-      /3/ && last;
-      /4/ && do { $DOCKER_IMAGE="dspace6-ide"; last; };
-      $DEVSTYLE = undef;
-      print "Please enter 1-4, or hold Ctrl-C to cancel\n";
-    }
-  }
 }
 
 sub check_cmd {
@@ -55,13 +45,18 @@ sub check_cmd {
   if ( ! length( $val ) ) { if ( ! length( $out ) ) { $success = 0; } }
   elsif ( $val eq 'NE' ) { if ( length( $out ) > 0 ) { $success = 0; } }
   elsif ( $out ne $val ) { $success = 0; }
+
   if ( ! $success ) { die "ERROR: \"$cmd\" failed\n\n$err_info\n\n" }
   print "CHECK: \"$cmd\" returned '$out'\n"
 }
 
 sub check_env {
 
-  print "\n************* SECTION 2: Environment check ***************\n";
+  print "\n************* SECTION 1: Environment check ***************\n";
+
+  &check_cmd('Are you running campusrepo-install-dev.pl from the campusrepo repository', '',
+                'git remote -v | grep vitae | grep "/data1/vitae/repos/campusrepo.git"',
+                "You need to run campusrepo-install-dev.pl from the root of the campusrepo repository");
 
   &check_cmd( 'Is docker installed', '',
               'docker -v',
@@ -74,17 +69,17 @@ sub check_env {
               "Try running the command:\n".
               "sudo usermod -a -G docker <your_unix_userid>" );
 
+  &check_cmd( 'Does the dspace user, uid=800 exist', '800',
+              'perl -e \'$uid = getpwnam("dspace"); print $uid\'',
+              "Your system needs the user dspace to exist with id=800\n".
+              "On linux try running the command:\n".
+              "sudo useradd dspace --uid 800 --gid 800" );
+
   &check_cmd( 'Does the dspace group, gid=800 exist', '800',
               'perl -e \'$gid = getgrnam("dspace"); print $gid\'',
               "Your system needs the group dspace to exist with id=800\n".
               "On linux try running the command:\n".
               "sudo groupadd dspace --gid 800" );
-
-  &check_cmd( 'Does the dspace user, uid=800 exist', '800',
-              'perl -e \'$gid = getgrnam("dspace"); print $gid\'',
-              "Your system needs the user dspace to exist with id=800\n".
-              "On linux try running the command:\n".
-              "sudo useradd dspace --uid --gid 800" );
 
   &check_cmd( 'Does your system user belong to the "dspace" group', '',
               "id $ENV{USER} | grep dspace",
@@ -99,7 +94,9 @@ sub check_env {
 
   &check_cmd( 'Have you mounted //dspace-nfsdev/dspace-assetstore-dev', '',
               'mount | grep dspace-assetstore',
-              "The nfs dspace assetstore needs to be mounted. Try running the commands (on linux):\n".
+              "The nfs dspace assetstore needs to be mounted. \n" .
+              "Make sure you have an NFS client installed (\"sudo apt-get install nfs-common\" on Ubuntu-based systems), \n" .
+              "then try running the commands (on linux):\n".
               "sudo cp /etc/fstab /etc/fstab.bak\n".
               "sudo mkdir -p /mnt/dspace-assetstore\n".
               "sudo chown dspace.dspace /mnt/dspace-assetstore\n".
@@ -118,8 +115,7 @@ sub check_env {
               'netstat -l --numeric | grep 8080',
               "A service is already listening at port 8080, tomcat will not".
               "be able to start correctly. Please disable the service running at port 8080." );
-
-  if ( $DEVSTYLE eq '4' ) {
+  if ( $DOCKER_IMAGE eq "dspace6-ide" ) {
     &check_cmd( 'Is X running', 'NE',
                 '$DISPLAY',
                 "The IDE docker requires X to be running\n".
@@ -137,42 +133,7 @@ sub checkout_src {
   my $old_umask = umask( 002 );
   my $git_user = undef;
 
-  print "\n************* SECTION 3: Checkout src ***************\n";
-
-  # Always ask where the source directory should be, even if it already exists
-  while ( ! defined( $git_user ) ) {
-    print "EXEC: What directory should contain your dspace code, [enter] defaults to $SRC_DIR.\n".
-      "Path values not prefixed with / will be added under your $ENV{HOME} directory ? ";
-    my $NEW_DIR = <STDIN>;
-    chomp( $NEW_DIR );
-    if ( length( $NEW_DIR ) ) {
-      $SRC_DIR = $ENV{HOME}.'/'.$NEW_DIR;
-      if ( '/' eq substr( $NEW_DIR, 0, 1 ) ) {
-        $SRC_DIR = $NEW_DIR;
-      }
-    }
-
-    last if ( -d $SRC_DIR );
-    
-    print "EXEC: cloning the git campusrepo from vitae into $SRC_DIR.\n";
-    print "EXEC: What git user should be used to checkout campusrepo.git on vitae ? [enter] defaults to $ENV{USER} ? ";
-    my $new_user = <STDIN>;
-    chomp( $new_user );
-    $git_user = $ENV{USER};
-    if ( length( $new_user ) ) {
-      $git_user = $new_user;
-    }
-    print "EXEC: About to git clone $git_user\@vitae into $SRC_DIR, hit [enter] to proceed, anything else to restart.\n";
-    chomp( $new_user = <STDIN> );
-    if ( length( $new_user ) ) {
-      $git_user = undef;
-    }
-    if ( defined( $git_user ) ) {
-      $cmd = "git clone -b develop $git_user\@vitae:/data1/vitae/repos/campusrepo.git $SRC_DIR";
-      print "EXEC: '$cmd'\n";
-      `$cmd`;
-    }
-  }
+  print "\n************* SECTION 2: Checkout src ***************\n";
 
   if ( ! -d "$SRC_DIR/src/dspace" ) {
     print "EXEC: exploding the dspace src tarball\n";
@@ -297,9 +258,8 @@ sub create_docker_container {
     print "FINISHED: To access the container, type the command:\n";
     print "docker start my-$DOCKER_IMAGE; docker exec -it my-$DOCKER_IMAGE bash\n\n";
   }
+  print "\nNOTE: to start tomcat, within the docker container run 'debug-tomcat.sh'\n";
 }
-
-&get_dev_style();
 
 &check_env();
 
