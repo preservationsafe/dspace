@@ -39,6 +39,7 @@ sub check_cmd {
   print "CHECK: $env ?\n";
   my $out = `$cmd`;
   chomp( $out );
+  print "CHECK: \"$cmd\" returned '$out'\n";
   #print "DEBUG: '$out'\n";
 
   my $success = 1;
@@ -47,12 +48,13 @@ sub check_cmd {
   elsif ( $out ne $val ) { $success = 0; }
 
   if ( ! $success ) { die "ERROR: \"$cmd\" failed\n\n$err_info\n\n" }
-  print "CHECK: \"$cmd\" returned '$out'\n"
 }
 
 sub check_env {
 
   print "\n************* SECTION 1: Environment check ***************\n";
+
+  print "CHECK: Operating system is $^O\n";
 
   &check_cmd('Are you running campusrepo-install-dev.pl from the campusrepo repository', '',
                 'git remote -v | grep vitae | grep "/data1/vitae/repos/campusrepo.git"',
@@ -63,11 +65,13 @@ sub check_env {
               "Docker CE is required. Please install for your system via:\n".
               "   https://docs.docker.com/engine/installation/" );
 
-  &check_cmd( 'Does your system user belong to the "docker" group', '',
-              'id | grep docker',
-              "Your system user needs to belong to the \"docker\" group\n".
-              "Try running the command:\n".
-              "sudo usermod -a -G docker <your_unix_userid>" );
+  if ( $^O ne "darwin" ) {
+    &check_cmd( 'Does your system user belong to the "docker" group', '',
+                'id | grep docker',
+                "Your system user needs to belong to the \"docker\" group\n".
+                "Try running the command:\n".
+                "sudo usermod -a -G docker <your_unix_userid>" );
+    }
 
   &check_cmd( 'Does the dspace user, uid=800 exist', '800',
               'perl -e \'$uid = getpwnam("dspace"); print $uid\'',
@@ -75,11 +79,13 @@ sub check_env {
               "On linux try running the command:\n".
               "sudo useradd dspace --uid 800 --gid 800" );
 
-  &check_cmd( 'Does the dspace group, gid=800 exist', '800',
-              'perl -e \'$gid = getgrnam("dspace"); print $gid\'',
-              "Your system needs the group dspace to exist with id=800\n".
-              "On linux try running the command:\n".
-              "sudo groupadd dspace --gid 800" );
+  if ( $^O ne "darwin" ) {
+    &check_cmd( 'Does the dspace group, gid=800 exist', '800',
+                'perl -e \'$gid = getgrnam("dspace"); print $gid\'',
+                "Your system needs the group dspace to exist with id=800\n".
+                "On linux try running the command:\n".
+                "sudo groupadd dspace --gid 800" );
+  }
 
   &check_cmd( 'Does your system user belong to the "dspace" group', '',
               "id $ENV{USER} | grep dspace",
@@ -88,7 +94,7 @@ sub check_env {
               "sudo usermod -a -G dspace <your_unix_userid>" );
 
   &check_cmd( 'Does /opt/tomcat exist with proper permissions', 'success',
-              'touch /opt/tomcat/dspace-tst && rm /opt/tomcat/dspace-tst && echo -n "success"',
+              'touch /opt/tomcat/dspace-tst && rm /opt/tomcat/dspace-tst && echo "success"',
               "The directory /opt/tomcat needs to exist with rw permissions.\n".
               "Run 'sudo mkdir -p /opt/tomcat; sudo chown $ENV{USER}.$ENV{USER} /opt/tomcat'" );
 
