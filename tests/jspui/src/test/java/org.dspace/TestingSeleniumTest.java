@@ -13,36 +13,18 @@ import java.net.MalformedURLException;
 import org.apache.log4j.Logger;
 
 /**
- * Unit Tests for nothing in particular
- * See dspace-api/src/test/java/org.dspace/AbstractUnitTest for more info.
+ * Trying out our hand on some automation.
+ * See also https://github.com/SeleniumHQ/docker-selenium
  *
  * @author turmanator
  */
-public class TestingTest{
+public class TestingSeleniumTest{
     /** log4j category */
-    private static final Logger log = Logger.getLogger(TestingTest.class);
+    private static final Logger log = Logger.getLogger(TestingSeleniumTest.class);
 
     /**
-     * Test the testing of test
+     * Test automation system
      */
-    @Test
-    public void testTesting() {
-        try {
-            /*fail("ALERT: this a test of a failing unit test");*/
-            throw new IllegalStateException("This test tests a test. Wait, huh?");
-        } catch (IllegalStateException e) {
-            assertNotNull(e.getMessage());
-        }
-    }
-
-    /**
-     * Test the number of test
-     */
-    @Test
-    public void testNumber() {
-        assertEquals(4, 4);
-    }
-
     @Test
     public void testSelenium() throws MalformedURLException {
         RemoteWebDriver driver = new RemoteWebDriver(
