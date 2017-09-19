@@ -28,7 +28,9 @@ public class TestingSeleniumTest{
     @Test
     public void testSelenium() throws MalformedURLException {
         RemoteWebDriver driver = new RemoteWebDriver(
+                // The URL port is defined on Docker startup of Selenium
                 new URL("http://localhost:4444/wd/hub"),
+                // Use firefox, since preferred Docker image is selenium/standalone-firefox:2.53.0
                 DesiredCapabilities.firefox());
         driver.get("https://google.com");
         String title = driver.getTitle();
