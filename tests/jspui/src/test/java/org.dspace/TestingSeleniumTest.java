@@ -1,6 +1,10 @@
 package org.dspace;
 
+import static java.lang.System.out;
+
 import org.junit.Test;
+import org.junit.Before;
+import org.junit.After;
 import static org.junit.Assert.*;
 
 import org.openqa.selenium.*;
@@ -22,21 +26,30 @@ public class TestingSeleniumTest{
     /** log4j category */
     private static final Logger log = Logger.getLogger(TestingSeleniumTest.class);
 
-    /**
-     * Test automation system
-     */
-    @Test
-    public void testSelenium() throws MalformedURLException {
-        RemoteWebDriver driver = new RemoteWebDriver(
+    private RemoteWebDriver driver;
+
+    @Before
+    public void createDriver() throws MalformedURLException {
+        System.out.println("@Before - create our driver.");
+        driver = new RemoteWebDriver(
                 // The URL port is defined on Docker startup of Selenium
                 new URL("http://localhost:4444/wd/hub"),
                 // Use firefox, since preferred Docker image is selenium/standalone-firefox:2.53.0
                 DesiredCapabilities.firefox());
+    }
+
+    @After
+    public void closeBrowser() {
+        System.out.println("@After - close our browser down.");
+        driver.quit();
+    }
+
+    @Test
+    public void testGoogle() throws MalformedURLException {
         driver.get("https://google.com");
         String title = driver.getTitle();
         String seekTitle = "Google";
         assertEquals(title, seekTitle);
-        // close the browser
-        driver.quit();
+
     }
 }
