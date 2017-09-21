@@ -17,11 +17,9 @@ DSPACE_SRC_RELEASE="dspace-6.2-src-release"
 if [ $# -eq 1 ]; then
   if [ $1 = "clean" ]; then
     rm -rf $DSPACE_SRC/* && rm -rf $DSPACE_RUN/*
-    cd $DSPACE_HOME_DIR && ssh vitae "cat /data1/vitae/repos/$DSPACE_SRC_RELEASE.tar.gz" | pv | tar -xzf - \
+    cd $DSPACE_HOME_DIR && ssh vitae "cat /data1/vitae/repos/$DSPACE_SRC_RELEASE.tar.gz" | tar -xzf - \
       && mv $DSPACE_SRC_RELEASE/* src && rmdir $DSPACE_SRC_RELEASE
     bin/fix-permissions.sh
-    bin/overlay-softlink.sh overlay src
-    ln -fs $DSPACE_SRC /opt/tomcat/dspace
   fi
 else
   # Pickup latest overlays
