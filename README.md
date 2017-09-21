@@ -20,6 +20,11 @@
 6. After the script runs you should be able to get to the DSpace JSPUI hime page by going to `http://localhost:8080/jspui` on your host machine  
 **Note:** If you are getting an internal error message in JSPUI make sure tomcat is owned by dspace:dspace
 
+## Developer workflow
+1. Make all changes in the overlay/dspace directory (must keep the same structure as whats in src). Most changes will occure in `overlay/dspace/modules` (i.e. for api and jspui changes). 
+2. When developing locally, most changes will take effect after running `build-dspace.sh` within the docker container. If you still aren't seeing your changes take effect, you may need to run `build-dpsace.sh clean && build-dspace.sh`. You may or may not need to restart tomcat, to do so you would run 
+`/opt/tomcat/bin/shutdown.sh && /opt/tomcat/bin/startup.sh` from inside the docker container. 
+
 ## Useful Links
 
 * [DSpace 6.X Documentation](https://wiki.duraspace.org/display/DSDOC6x)
