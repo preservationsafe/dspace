@@ -106,7 +106,7 @@ sub check_env {
               "sudo cp /etc/fstab /etc/fstab.bak\n".
               "sudo mkdir -p /mnt/dspace-assetstore\n".
               "sudo chown dspace.dspace /mnt/dspace-assetstore\n".
-              "sudo echo \"dspace-nfsdev:/dspace-assetstore-dev /mnt/dspace-assetstore nfs nfsvers=4,proto=tcp,hard 0 0\" >> /etc/fstab\n".
+              "sudo echo \"qnas1.library.arizona.edu:/dspace-assetstore-dev /mnt/dspace-assetstore nfs nfsvers=3,proto=tcp,hard 0 0\" >> /etc/fstab\n".
               "sudo mount /mnt/dspace-assetstore" );
 
   &check_cmd( 'Is the pipe progress utility "pv" installed', '',
