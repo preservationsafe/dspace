@@ -14,25 +14,30 @@ DSPACE_SRC="$DSPACE_HOME_DIR/src"
 DSPACE_RUN="$DSPACE_HOME_DIR/run"
 DSPACE_SRC_RELEASE="dspace-6.2-src-release"
 
-if [ $# -eq 1 ]; then
-  if [ $1 = "clean" ]; then
-    rm -rf $DSPACE_SRC/* && rm -rf $DSPACE_RUN/*
-    cd $DSPACE_HOME_DIR && ssh vitae "cat /data1/vitae/repos/$DSPACE_SRC_RELEASE.tar.gz" | tar -xzf - \
-      && mv $DSPACE_SRC_RELEASE/* src && rmdir $DSPACE_SRC_RELEASE
-    bin/fix-permissions.sh
-  fi
-else
+if [ "$1" == "clean" ]; then
+  rm -rf $DSPACE_SRC/* && rm -rf $DSPACE_RUN/*
+  cd $DSPACE_HOME_DIR && ssh vitae "cat /data1/vitae/repos/$DSPACE_SRC_RELEASE.tar.gz" | tar -xzf - \
+    && mv $DSPACE_SRC_RELEASE/* src && rmdir $DSPACE_SRC_RELEASE
+  cd $DSPACE_HOME_DIR && bin/fix-permissions.sh
+  exit
+fi
+
+if [ "$1" != "install" ]; then
   # Pickup latest overlays
   cd $DSPACE_HOME_DIR && bin/overlay-softlink.sh overlay src
 
   # Default to a dev build
   if [ ! -f "$DSPACE_SRC/dspace/config/local.cfg" ]; then
-      cp "$DSPACE_SRC/dspace/config/local.cfg-dev" "$DSPACE_SRC/dspace/config/local.cfg"
+      cd $DSPACE_HOME_DIR && bin/overlay-config.pl dev src/dspace/config
   fi
 
   # Build dspace:
   cd $DSPACE_SRC && mvn package
+fi
+  
+# Install dspace:
+cd $DSPACE_SRC/dspace/target/dspace-installer && ant fresh_install
 
-  # Install dspace:
-  cd $DSPACE_SRC/dspace/target/dspace-installer && ant fresh_install
+if [ ! -f "$DSPACE_RUN/config/local.cfg-dev" ]; then
+  cd $DSPACE_HOME_DIR && bin/overlay-softlink.sh overlay/dspace/config run/config
 fi
