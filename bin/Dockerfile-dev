@@ -1,0 +1,24 @@
+#
+# DSpace v6.x Dockerfile, using ubuntu 16.04, oracle jdk7
+#
+FROM dockerepo.library.arizona.edu:5000/dspace6-dev:1.0
+
+# Set user/work dir back to root to install packages
+USER root
+WORKDIR /
+
+# Add relevant directories 
+COPY bin /opt/tomcat/dspace/bin
+COPY run /opt/tomcat/dspace/run
+COPY overlay /opt/tomcat/dspace/overlay
+COPY LICENSE /opt/tomcat/dspace/LICENSE
+COPY README.md /opt/tomcat/dspace/README.md
+
+# fix dspace ownership
+RUN chown -R dspace /opt/tomcat/dspace
+
+# fix dspace permissions
+RUN /opt/tomcat/dspace/bin/fix-permissions.sh
+
+USER dspace
+WORKDIR /opt/tomcat

@@ -1,0 +1,11 @@
+#
+# DSpace v6.x Dockerfile, using ubuntu 16.04, oracle jdk7
+#
+# https://vitae/....
+#
+
+# Pull base image, ubuntu 16.04 + oracle jdk7.0.80 + tomcat 7.0.x
+FROM dspace6-dev:__DSPACE_BUILD_TAG__
+
+# Update dspace environment config values
+RUN /opt/tomcat/dspace/bin/overlay-config.sh __DSPACE_STAGE_ENV__
