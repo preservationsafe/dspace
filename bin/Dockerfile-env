@@ -8,4 +8,4 @@
 FROM dspace6-dev:__DSPACE_BUILD_TAG__
 
 # Update dspace environment config values
-RUN /opt/tomcat/dspace/bin/overlay-config.sh __DSPACE_STAGE_ENV__
+RUN cd /opt/tomcat/dspace && bin/overlay-config.pl __DSPACE_STAGE_ENV__ run/config
