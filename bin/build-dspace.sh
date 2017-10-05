@@ -28,6 +28,7 @@ if [ "$1" != "install" ]; then
 
   # Default to a dev build
   if [ ! -f "$DSPACE_SRC/dspace/config/local.cfg" ]; then
+      cp $DSPACE_SRC/dspace/config/local.cfg-dev $DSPACE_SRC/dspace/config/local.cfg
       cd $DSPACE_HOME_DIR && bin/overlay-config.pl dev src/dspace/config
   fi
 
