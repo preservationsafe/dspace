@@ -67,7 +67,13 @@ sub overlay_files {
     print "DEBUG OVERLAY: $src_file\n" if $debug;
 
     my $dst_file = substr( $src_file, 0, -$suffix_len );
-    $cmd = "mv $dst_file $dst_file-orig; mv $src_file $dst_file";
+    if ( $dst_file =~ /local.cfg$/ ) {
+      # for some reason local.cfg is special, it can't be a softlink
+      $cmd = "cp $src_file $dst_file";
+    }
+    else {
+      $cmd = "mv $dst_file $dst_file-orig; mv $src_file $dst_file";
+    }
     print "EXEC: $cmd\n";
     `$cmd`;
   }
