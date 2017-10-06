@@ -1,15 +1,15 @@
 #!/bin/sh
 
-useradd -m -G docker,sudo,buildmeister -c "Jeff Turman" turmanj
-useradd -m -G docker,sudo,buildmeister -c "Brittany Rothengatter" BrittanyRothengatter
-useradd -m -G docker,sudo,buildmeister -c "Mike Hagedon" mhagedonm
-useradd -m -G docker,sudo,buildmeister -c "William Simpson" simpsonw
-useradd -m -G docker,sudo,buildmeister -c "Elia Nazarenko" enazar
-useradd -m -G docker,sudo,buildmeister -c "Andy Osborne" cao89
+useradd -m --shell /bin/bash -G docker -c "Build Meister" buildmeister
+useradd -m --shell /bin/bash -G docker,sudo -c "Jeff Turman" turmanj
+useradd -m --shell /bin/bash -G docker,sudo -c "Brittany Rothengatter" BrittanyRothengatter
+useradd -m --shell /bin/bash -G docker,sudo -c "Mike Hagedon" mhagedon
+useradd -m --shell /bin/bash -G docker,sudo -c "William Simpson" simpsonw
+useradd -m --shell /bin/bash -G docker,sudo -c "Elia Nazarenko" enazar
+useradd -m --shell /bin/bash -G docker,sudo -c "Andy Osborne" cao89
 
-for USER in turmanj BrittanyRothengatter mhagedonm simpsonw enazar cao89; do
+for USER in buildmeister turmanj BrittanyRothengatter mhagedon simpsonw enazar cao89; do
 
 echo "asdf\nasdf" | passwd $USER
 
 done
-
