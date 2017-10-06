@@ -1,0 +1,355 @@
+body {
+    /*min-width: 490px;*/
+}
+
+header h1 {
+    width: 70%;
+}
+header h1 a {
+    font-size: 28pt;
+}
+
+/*LOGO*/
+a#logo {
+    margin: 0;
+    padding: 0;
+}
+a#logo:active img {
+    background-color: white;
+}
+a#logo img {
+    max-width: 500px;
+    display: block;
+    overflow: hidden;
+    padding: 0;
+    max-height: 90px;
+}
+
+/*MAIN NAV*/
+nav#mainnav ul {
+    border-top: none;
+    padding-left: 10pt;
+    margin: 0 300px 0 0;
+}
+nav#mainnav li {
+    display: block;
+    float: left;
+    border-top: 0;
+    width: auto;
+}
+nav#mainnav li.navshow {
+    display: none;
+}
+nav#mainnav a {
+    border-top: 0;
+    display: block;
+}
+nav#mainnav .navsearch {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: 10pt;
+    width: 250px;
+    height: 26px;
+    margin: 0;
+    padding: 0;
+}
+
+.navsearch a {
+    position: absolute;
+    right: 205px;
+    bottom: 0;
+    text-align: right;
+}
+
+nav#mainnav .navlocale {
+    display: block;
+    position: absolute;
+    bottom: 30pt;
+    right: 10pt;
+    width: 171px;
+    height: 26px;
+    margin: 0;
+    padding: 0;
+}
+
+.s-text {
+    position: absolute;
+    background: white;
+    top: 0;
+    left: 0;
+    border: 0;
+    height: 26px;
+    padding: 0;
+    margin: 0;
+}
+.s-text input {
+    color: #222;
+    background: transparent;
+    position: absolute;
+    top: 0;
+    left: 5px;
+    border: 0;
+    height: 26px;
+    padding: 0;
+    margin: 0;
+    width: 168px;
+}
+
+.s-text2 {
+    position: absolute;
+    background: #ddd;
+    top: 0;
+    left: 0;
+    border: 0;
+    height: 26px;
+    padding: 0;
+    margin: 0;
+    width: 171px;
+}
+.s-text2 input {
+    color: #222;
+    background: transparent;
+    position: absolute;
+    top: 0;
+    left: 2px;
+    border: 0;
+    height: 26px;
+    padding: 0;
+    margin: 0;
+    width: 168px;
+}
+
+.localeselect {
+    color: #222;
+    background: transparent;
+    top: 0;
+    left: 5px;
+    border: 0;
+    height: 26px;
+    padding: 0;
+    margin: 0;
+    width: 100px;
+}
+
+.s-submit {
+    position: absolute;
+    top: 0;
+    right: 0;
+    /*  background: $or-ui-color-header-search-field-submit-button;*/
+    padding: 5px 5px 6px 6px;
+}
+
+.s-submit2 {
+    position: absolute;
+    top: 0;
+    /*  background:$or-ui-color-header-search-field-submit-button;*/
+    padding: 5px 5px 6px 6px;
+}
+
+#main {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: white;
+}
+
+.frame {
+    max-width: 1020pt;
+    padding: 0 10pt;
+}
+
+/*FULL INFO*/
+#full-info {
+    margin: 0;
+}
+
+/*INTRO*/
+#intro {
+    padding: 10pt 0 0 0;
+}
+
+#intro-home {
+    padding: 0pt;
+}
+
+#toolbar ul.toolbar1 {
+    padding-left: 0;
+}
+
+#toolbar .s-submit {
+    left: 192pt;
+}
+
+#toolbar li {
+    padding-left: 0;
+}
+
+.toolbar1 {
+    background-color: #eee;
+}
+
+/*ADMINTOOLBAR*/
+#admintoolbar {
+    padding: 0;
+    background-color: transparent;
+}
+
+#admintoolbar .s-text, #admintoolbar .s-text2 {
+    background-color: #eeeeee;
+    left: 0;
+}
+
+#admintoolbar .s-submit {
+    left: 192pt;
+}
+
+#admintoolbar li {
+    padding-left: 0;
+}
+
+/*CONTENT*/
+#content {
+    padding: 0;
+    margin: 0 0 9pt 0;
+    float: right;
+    width: 75%;
+    border-bottom: none;
+}
+
+.no-shortcuts #content {
+    padding: 0;
+    margin: 0 0 9pt 0;
+    float: right;
+    width: 100%;
+    border-bottom: none;
+}
+
+#location {
+    padding: 0;
+    /*margin: 0 0 9pt 0;*/
+    float: right;
+    /*width: 75%;*/
+    border-bottom: none;
+}
+
+/*ARTICLE*/
+#info {
+    padding: 10pt 0;
+}
+
+#info-item {
+    padding: 10pt 0;
+    float: left;
+    width: 75%;
+}
+
+#article-info {
+    padding: 10pt 0;
+    margin-right: 160pt;
+    display: block;
+}
+
+#list-collection-info {
+    padding: 10pt 0;
+    margin-right: 190pt;
+    display: block;
+}
+
+/*MOSTACCESSED*/
+#mostAccessed {
+    padding: 10pt 0;
+    margin-right: 160pt;
+    float: left;
+    display: block;
+}
+
+#sidebar {
+    right: 0;
+    float: right;
+    width: 190px;
+    margin: 0;
+}
+
+#list-collection-sidebar {
+    padding: 10pt 0;
+    float: right;
+    width: 245px;
+    margin: 0;
+}
+
+/*ITEM INFO*/
+.item-info {
+    margin-right: 120pt;
+    float: left;
+    display: block;
+}
+
+.item-info2, .item-info3 {
+    border-top: 1px solid #cccccc;
+    margin-top: 1em;
+    padding-right: 10pt;
+    width: 100%;
+    float: left;
+}
+
+/*DOWNLOADS*/
+#downloads {
+    width: 200px;
+    margin: 0;
+    float: left;
+}
+#downloads h1 {
+    margin: 0;
+    list-style: none;
+}
+#downloads ul {
+    display: block;
+}
+
+/*AUTHOR INTRO*/
+.intro {
+    padding: 0;
+}
+
+.author-intro {
+    padding: 8pt 0 0 110pt;
+}
+.author-intro .author-photo img {
+    width: 100pt;
+    height: 100pt;
+}
+
+nav#shortcuts {
+    padding: 10pt 0;
+    width: 24%;
+    background: none;
+    border: 0;
+}
+
+/*LOGIN*/
+.browse-pagination, .search-pagination {
+    padding: 0;
+}
+
+#searchCriteriaButton {
+    display: none;
+}
+
+.item-sidebar {
+    float: left;
+    width: 200px;
+}
+
+.upload-file-1 {
+    width: 70px;
+    margin-left: 0px;
+}
+
+.upload-file-2 {
+    width: 500px;
+}
+
+.upload-file-3 {
+    max-width: 100px;
+}

@@ -1,0 +1,96 @@
+/*LOGIN AREA*/
+#login-nav {
+  display: block;
+  float: right;
+  margin: 0 10pt;
+  width: 30%;
+}
+#login-nav ul {
+  padding: 0;
+  margin: 0;
+}
+#login-nav li {
+  display: block;
+  float: right;
+  margin: 0;
+  padding: 0;
+}
+#login-nav a {
+  font-size: 10pt;
+  font-weight: 300;
+  padding: 4pt 7pt;
+  margin: 0;
+  text-decoration: none;
+}
+#login-nav .login a {
+  text-shadow: none;
+}
+
+/*TOOLBAR*/
+#toolbar {
+  padding: 7px;
+}
+#toolbar h1 {
+  display: none;
+}
+#toolbar ul {
+  display: block;
+}
+#toolbar .s-text, #toolbar .s-text2 {
+  left: 0;
+}
+
+#toolbar-listcontrol li {
+  float: left;
+}
+
+/*ADMINTOOLBAR*/
+#admintoolbar h1 {
+  display: none;
+}
+#admintoolbar ul {
+  display: block;
+}
+
+#admintoolbar-listcontrol li {
+  float: left;
+}
+
+/*FOOTER*/
+#logo2 img {
+  width: 100%;
+}
+
+/*
+footer section {
+  display: block;
+  margin-left: 85pt;
+}*/
+.browse-pagination, .search-pagination {
+  padding: 10pt;
+}
+
+#full-info {
+  clear: left;
+  width: 100%;
+  padding: 10pt 0 0 0;
+  margin: 0 -10pt 0 0;
+}
+
+.metadataFieldValue {
+  color: #444;
+  vertical-align: top;
+  text-align: left;
+  text-decoration: none;
+  padding: 3px;
+  word-break: break-all;
+}
+
+.upload-file-2 {
+  display: INLINE-block;
+  width: 300px;
+}
+
+.evenLineUpload {
+  background-color: #eee;
+}
