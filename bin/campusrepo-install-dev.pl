@@ -93,10 +93,13 @@ sub check_env {
               "Try running the command:\n".
               "sudo usermod -a -G dspace <your_unix_userid>" );
 
+<<<<<<< Updated upstream
   &check_cmd( 'Does /opt/tomcat exist with proper permissions', 'success',
               'touch /opt/tomcat/dspace-tst && rm /opt/tomcat/dspace-tst && echo "success"',
               "The directory /opt/tomcat needs to exist with rw permissions.\n".
               "Run 'sudo mkdir -p /opt/tomcat; sudo chown $ENV{USER}.$ENV{USER} /opt/tomcat'" );
+=======
+>>>>>>> Stashed changes
 
   &check_cmd( 'Have you mounted //dspace-nfsdev/dspace-assetstore-dev', '',
               'mount | grep dspace-assetstore',
