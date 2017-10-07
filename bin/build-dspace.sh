@@ -26,7 +26,8 @@ fi
 
 if [ "$1" != "install" ]; then
   # Pickup latest overlays
-  rm -f $DSPACE_SRC/dspace/modules/jspui/pom.xml
+  # Still working through bug if mvn test can use softlink'd pom.xml  
+  #rm -f $DSPACE_SRC/dspace/modules/jspui/pom.xml
   cd $DSPACE_HOME_DIR && bin/overlay-softlink.sh overlay src
   cp $DSPACE_SRC/dspace/config/local.cfg-dev $DSPACE_SRC/dspace/config/local.cfg
   # Do not enable this - install will not pick up the soft link'd files !
