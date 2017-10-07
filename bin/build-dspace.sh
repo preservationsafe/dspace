@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ENV=${1:-dev}
+
 if [ "$HOME" == "/opt/tomcat/dspace" ]; then
   DSPACE_HOME_DIR="$HOME"
 else
@@ -24,13 +26,11 @@ fi
 
 if [ "$1" != "install" ]; then
   # Pickup latest overlays
+  rm -f $DSPACE_SRC/dspace/modules/jspui/pom.xml
   cd $DSPACE_HOME_DIR && bin/overlay-softlink.sh overlay src
-
-  # Default to a dev build
-  if [ ! -f "$DSPACE_SRC/dspace/config/local.cfg" ]; then
-      cp $DSPACE_SRC/dspace/config/local.cfg-dev $DSPACE_SRC/dspace/config/local.cfg
-      cd $DSPACE_HOME_DIR && bin/overlay-config.pl dev src/dspace/config
-  fi
+  cp $DSPACE_SRC/dspace/config/local.cfg-dev $DSPACE_SRC/dspace/config/local.cfg
+  # Do not enable this - install will not pick up the soft link'd files !
+  #cd $DSPACE_HOME_DIR && bin/overlay-config.pl $ENV src/dspace/config
 
   # Build dspace:
   cd $DSPACE_SRC && mvn package
@@ -38,7 +38,4 @@ fi
   
 # Install dspace:
 cd $DSPACE_SRC/dspace/target/dspace-installer && ant fresh_install
-
-if [ ! -f "$DSPACE_RUN/config/local.cfg-dev" ]; then
-  cd $DSPACE_HOME_DIR && bin/overlay-softlink.sh overlay/dspace/config run/config
-fi
+cd $DSPACE_HOME_DIR && bin/overlay-softlink.sh overlay/dspace/config run/config

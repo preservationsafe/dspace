@@ -52,6 +52,12 @@ sub verify_srcenv {
   }
 }
 
+sub exec_cmd {
+  my ( $cmd ) =  @_;
+  print "EXEC: $cmd\n";
+  `$cmd`;
+}
+
 sub overlay_files {
 
   my ( $suffix ) =  @_;
@@ -68,14 +74,18 @@ sub overlay_files {
 
     my $dst_file = substr( $src_file, 0, -$suffix_len );
     if ( $dst_file =~ /local.cfg$/ ) {
-      # for some reason local.cfg is special, it can't be a softlink
+      # Because local.cfg is used by Apache Commons Configuration, it can't be a softlink"
       $cmd = "cp $src_file $dst_file";
     }
     else {
-      $cmd = "mv $dst_file $dst_file-orig; mv $src_file $dst_file";
+      if ( ! -e "$dst_file-orig" ) {
+        &exec_cmd( "mv $dst_file $dst_file-orig" );
+      }
+      if ( -l  "$dst_file" ) {
+        &exec_cmd( "rm $dst_file" );
+      }
+      &exec_cmd( "cp -a $src_file $dst_file" );
     }
-    print "EXEC: $cmd\n";
-    `$cmd`;
   }
 }
 
