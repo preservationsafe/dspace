@@ -43,10 +43,7 @@
         <meta name="Generator" content="DSpace" />
         <link rel="stylesheet" href="<%= request.getContextPath() %>/styles.css" type="text/css" />
         <link rel="stylesheet" href="<%= request.getContextPath() %>/print.css" media="print" type="text/css" />
-        <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon"/
-        <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/custom-styles.css" type="text/css" />
-        <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/768.css" type="text/css" />
-        <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/490.css" type="text/css" />>
+        <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon"/>
 <%
     if (extraHeadData != null)
         { %>

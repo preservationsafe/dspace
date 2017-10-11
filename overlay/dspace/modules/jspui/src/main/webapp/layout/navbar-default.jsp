@@ -83,91 +83,6 @@
 %>
 
 
-
-
-
-<nav id="login-nav">
-    <ul>
-        <ul>
-            <%
-                if (user != null)
-                {
-                    out.println("<li class=\"logout\"><span style=\"font-weight:bold\">Welcome " + user.getFullName() + "<a href=\"" + request.getContextPath() + "/logout\">(Logout)</a></li>");
-                }
-                else
-                {
-                    out.println("<li class=\"register\"><a href=\"" + request.getContextPath() + "/register\" title=\"Part of UA Campus Repository? Register now to publish your work to UA Campus Repository\">Register</a></li>");
-                    out.println("<li class=\"login\"><a href=\"" + request.getContextPath() + "/password-login\" title=\"Already using UA Campus Repository? Login now\">Login</a></li>");
-                }
-            %>
-        </ul>
-</nav>
-
-<h1><a href="<%= request.getContextPath() %>/"
-       title="UA Campus Repository homepage">
-    UA Campus Repository</a></h1>
-
-<nav id="mainnav">
-
-    <%--
-        Enumeration e = request.getAttributeNames();
-        while (e.hasMoreElements() ){
-            out.println( "<li style=\"background:white\">" + e.nextElement().toString() + "</li>" );
-            out.println("<br>");
-        }
-    --%>
-    <ul>
-
-        <li class="navshow">Show Navigation</li>
-        <li class="navhome"><a href="<%= request.getContextPath() %>/index">Home</a></li>
-        <li class="navbrowse"><a href="<%= request.getContextPath() %>/community-list">Browse</a></li>
-        <li class="navabout"><a href="<%= request.getContextPath() %>/pages/about.html">About </a></li>
-
-        <%--
-        Code to check if a user is logged in to display the My Account menu options.
-        --%>
-
-        <% if (user != null) { %>
-            <li class="navmydspace"><a href="<%= request.getContextPath() %>/mydspace">My account</a></li>
-        <% } %>
-
-        <li class="navsubmit"><a href="<%= request.getContextPath() %>/submit">Submit an Item</a></li>
-
-        <%--
-        Code to check for admin. If admin, display an additional menu option to go to the admin page.
-        --%>
-
-        <% if(isAdmin) { %>
-            <li class="navmydspace"><a href="<%= request.getContextPath() %>/dspace-admin">Admin</a></li>
-        <% } %>
-
-        <li class="navabout"><a href="http://www.library.arizona.edu/">University Libraries</a></li>
-        <li class="navsearch"><a href="<%= request.getContextPath() %>/advanced-search">Advanced Search</a></li>
-
-        <li class="navsearch ">
-
-            <form method="get" action="<%= request.getContextPath() %>/simple-search">
-
-                <span class="s-text"><input type="text" name="query"
-                                            placeholder="Search"/></span>
-                <input type="hidden" name="field1" value="ANY"/>
-                <input type="hidden" name="quicksearch" value="true"/>
-
-                <input type="hidden" name="submit_search" value="Go"/>
-                <input type="image" src="<%= request.getContextPath() %>/img/search-15x15.png" name="submit_search"
-                       value="Search" class="s-submit"/>
-            </form>
-
-
-        </li>
-
-    </ul>
-</nav>
-
-
-
-<%--
-
        <div class="navbar-header">
          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
            <span class="icon-bar"></span>
@@ -176,18 +91,18 @@
          </button>
          <a class="navbar-brand" href="<%= request.getContextPath() %>/"><img height="25" src="<%= request.getContextPath() %>/image/dspace-logo-only.png" alt="DSpace logo" /></a>
        </div>
-       <nav id="mainnav" class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+       <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
          <ul class="nav navbar-nav">
            <li class="<%= currentPage.endsWith("/home.jsp")? "active" : "" %>"><a href="<%= request.getContextPath() %>/"><span class="glyphicon glyphicon-home"></span> <fmt:message key="jsp.layout.navbar-default.home"/></a></li>
-
+                
            <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="jsp.layout.navbar-default.browse"/> <b class="caret"></b></a>
              <ul class="dropdown-menu">
                <li><a href="<%= request.getContextPath() %>/community-list"><fmt:message key="jsp.layout.navbar-default.communities-collections"/></a></li>
 				<li class="divider"></li>
         <li class="dropdown-header"><fmt:message key="jsp.layout.navbar-default.browseitemsby"/></li>
-				<%-- Insert the dynamic browse indices here --%
-
+				<%-- Insert the dynamic browse indices here --%>
+				
 				<%
 					for (int i = 0; i < bis.length; i++)
 					{
@@ -195,11 +110,11 @@
 						String key = "browse.menu." + bix.getName();
 					%>
 				      			<li><a href="<%= request.getContextPath() %>/browse?type=<%= bix.getName() %>"><fmt:message key="<%= key %>"/></a></li>
-					<%
+					<%	
 					}
 				%>
-
-				<%-- End of dynamic browse indices --%
+				    
+				<%-- End of dynamic browse indices --%>
 
             </ul>
           </li>
@@ -234,7 +149,7 @@
  <%
    }
  %>
-
+ 
        <div class="nav navbar-nav navbar-right">
 		<ul class="nav navbar-nav navbar-right">
          <li class="dropdown">
@@ -249,7 +164,7 @@
     } else {
 		%>
              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <fmt:message key="jsp.layout.navbar-default.sign"/> <b class="caret"></b></a>
-	<% } %>
+	<% } %>             
              <ul class="dropdown-menu">
                <li><a href="<%= request.getContextPath() %>/mydspace"><fmt:message key="jsp.layout.navbar-default.users"/></a></li>
                <li><a href="<%= request.getContextPath() %>/subscribe"><fmt:message key="jsp.layout.navbar-default.receive"/></a></li>
@@ -260,10 +175,10 @@
                 %>
 			   <li class="divider"></li>
                            <% if (isAdmin) {%>
-
+                    
                                 <li><a href="<%= request.getContextPath()%>/dspace-admin">
                            <% } else if (isCommunityAdmin || isCollectionAdmin) {%>
-
+                        
                                 <li><a href="<%= request.getContextPath()%>/tools">
                 <% } %>
                 <fmt:message key="jsp.administer"/></a></li>
@@ -276,8 +191,8 @@
              </ul>
            </li>
           </ul>
-
-	<%-- Search Box --%
+          
+	<%-- Search Box --%>
 	<form method="get" action="<%= request.getContextPath() %>/simple-search" class="navbar-form navbar-right">
 	    <div class="form-group">
           <input type="text" class="form-control" placeholder="<fmt:message key="jsp.layout.navbar-default.search"/>" name="query" id="tequery" size="25"/>
@@ -287,12 +202,10 @@
 <%
 			if (ConfigurationManager.getBooleanProperty("webui.controlledvocabulary.enable"))
 			{
-%>
+%>        
               <br/><a href="<%= request.getContextPath() %>/subject-search"><fmt:message key="jsp.layout.navbar-default.subjectsearch"/></a>
 <%
             }
-%> --%
+%> --%>
 	</form></div>
     </nav>
-
---%>

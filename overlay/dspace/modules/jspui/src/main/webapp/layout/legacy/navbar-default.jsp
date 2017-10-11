@@ -74,99 +74,7 @@
     }
 %>
 
-
-<nav id="login-nav">
-    <ul>
-
-        <li class="register">
-            <a href="<%= request.getContextPath() %>/register"
-               title="Part of UA Campus Repository? Register now to publish your work to UA Campus Repository">
-                Register</a>
-        </li>
-
-        <li class="login">
-
-            <a href="<%= request.getContextPath() %>/password-login"
-               title="Already using UA Campus Repository? Login now">
-                Login</a>
-
-        </li>
-    </ul>
-</nav>
-
-<h1><a href="<%= request.getContextPath() %>/"
-       title="UA Campus Repository homepage">
-    UA Campus Repository</a></h1>
-
-<nav id="mainnav">
-
-    <%--
-        Enumeration e = request.getAttributeNames();
-        while (e.hasMoreElements() ){
-            out.println( "<li style=\"background:white\">" + e.nextElement().toString() + "</li>" );
-            out.println("<br>");
-        }
-    --%>
-    <ul>
-
-        <li class="navshow">Show Navigation</li>
-        <li class="navhome"><a href="<%= request.getContextPath() %>/index">Home</a></li>
-        <li class="navbrowse"><a href="<%= request.getContextPath() %>/community-list">Browse</a></li>
-        <li class="navabout"><a href="<%= request.getContextPath() %>/pages/about.html">About </a></li>
-
-        <%--
-        Code to check if a user is logged in to display the My Account menu options.
-        --%>
-
-        <% if(isAdmin) { %>
-            <li class="navmydspace"><a href="<%= request.getContextPath() %>/mydspace">My account</a></li>
-        <% } %>
-
-        <li class="navsubmit"><a href="<%= request.getContextPath() %>/submit">Submit an Item</a></li>
-
-        <%--
-        Code to check for admin. If admin, display an additional menu option to go to the admin page.
-        --%>
-
-        <% if(isAdmin) { %>
-            <%--<%
-                boolean isAdmin = ((Boolean) request.getAttribute("is.admin")).booleanValue();
-                if(isAdmin) {
-                    out.println("<li class=\"navmydspace\"><a href=\"" + request.getContextPath()  + "/dspace-admin>Admin</a></li>");
-                }
-            %>--%>
-
-            <li class="navmydspace"><a href="<%= request.getContextPath() %>/dspace-admin">Admin</a></li>
-         <% } %>
-
-        <li class="navabout"><a href="http://www.library.arizona.edu/">University Libraries</a></li>
-        <li class="navsearch"><a href="<%= request.getContextPath() %>/advanced-search">Advanced Search</a></li>
-
-        <li class="navsearch ">
-
-            <form method="get" action="<%= request.getContextPath() %>/simple-search">
-
-                <span class="s-text"><input type="text" name="query"
-                                            placeholder="Search"/></span>
-                <input type="hidden" name="field1" value="ANY"/>
-                <input type="hidden" name="quicksearch" value="true"/>
-
-                <input type="hidden" name="submit_search" value="Go"/>
-                <input type="image" src="<%= request.getContextPath() %>/img/search-15x15.png" name="submit_search"
-                       value="Search" class="s-submit"/>
-            </form>
-
-
-        </li>
-
-    </ul>
-</nav>
-
-
-
-
-
-<%-- Search Box -->
+<%-- Search Box --%>
 <form method="get" action="<%= request.getContextPath() %>/simple-search">
 
 <%
@@ -189,13 +97,13 @@
           </tr>
           <tr>
             <td class="searchBoxLabelSmall" valign="middle" nowrap="nowrap">
-              <%-- <input type="text" name="query" id="tequery" size="10"/><input type=image border="0" src="<%= request.getContextPath() %>/image/search-go.gif" name="submit" alt="Go" value="Go"/> --%
+              <%-- <input type="text" name="query" id="tequery" size="10"/><input type=image border="0" src="<%= request.getContextPath() %>/image/search-go.gif" name="submit" alt="Go" value="Go"/> --%>
               <input type="text" name="query" id="tequery" size="8"/><input type="submit" name="submit" value="<fmt:message key="jsp.layout.navbar-default.go"/>" />
               <br/><a href="<%= request.getContextPath() %>/advanced-search"><fmt:message key="jsp.layout.navbar-default.advanced"/></a>
 <%
 			if (ConfigurationManager.getBooleanProperty("webui.controlledvocabulary.enable"))
 			{
-%>
+%>        
               <br/><a href="<%= request.getContextPath() %>/subject-search"><fmt:message key="jsp.layout.navbar-default.subjectsearch"/></a>
 <%
             }
@@ -208,7 +116,7 @@
   </table>
 </form>
 
-<%-- HACK: width, border, cellspacing, cellpadding: for non-CSS compliant Netscape, Mozilla browsers --%
+<%-- HACK: width, border, cellspacing, cellpadding: for non-CSS compliant Netscape, Mozilla browsers --%>
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
   <tr class="navigationBarItem">
     <td>
@@ -238,7 +146,7 @@
   </tr>
 
 
-<%-- Insert the dynamic browse indices here --%
+<%-- Insert the dynamic browse indices here --%>
 
 <%
 	for (int i = 0; i < bis.length; i++)
@@ -254,11 +162,11 @@
       			<a href="<%= request.getContextPath() %>/browse?type=<%= bix.getName() %>"><fmt:message key="<%= key %>"/></a>
     		</td>
   		</tr>
-	<%
+	<%	
 	}
 %>
 
-<%-- End of dynamic browse indices --%
+<%-- End of dynamic browse indices --%>
 
   <tr>
     <td colspan="2">&nbsp;</td>
@@ -299,7 +207,7 @@
 <%
   if (isAdmin)
   {
-%>
+%>  
   <tr class="navigationBarItem">
     <td>
       <img alt="" src="<%= request.getContextPath() %>/image/<%= ( currentPage.endsWith( "/dspace-admin" ) ? "arrow-highlight" : "arrow" ) %>.gif" width="16" height="16"/>
@@ -334,10 +242,3 @@
     </td>
   </tr>
 </table>
-
---%>
-
-
-
-
-
