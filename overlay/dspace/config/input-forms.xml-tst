@@ -729,7 +729,7 @@ it, please enter the types and the actual numbers or codes.</hint>
          <repeatable>true</repeatable>
          <label>Keywords</label>
          <input-type>twobox</input-type>
-         <hint></hint>
+         <hint>Enter appropriate subject keywords or phrases.</hint>
          <required></required>
        </field>
 
@@ -748,9 +748,9 @@ it, please enter the types and the actual numbers or codes.</hint>
          <dc-schema>dc</dc-schema>
          <dc-element>type</dc-element>
          <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
+         <repeatable>true</repeatable>
          <label>Type</label>
-         <input-type value-pairs-name="common_types">dropdown</input-type>
+         <input-type value-pairs-name="common_types">list</input-type>
          <hint></hint>
          <required></required>
        </field>
@@ -759,10 +759,10 @@ it, please enter the types and the actual numbers or codes.</hint>
          <dc-schema>dc</dc-schema>
          <dc-element>eprint</dc-element>
          <dc-qualifier>version</dc-qualifier>
-         <repeatable>false</repeatable>
+         <repeatable>true</repeatable>
          <label>Version</label>
-         <input-type value-pairs-name="common_version">dropdown</input-type>
-         <hint></hint>
+         <input-type value-pairs-name="common_version">list</input-type>
+         <hint>Select the Article version, indicating which version of the article is being deposited.</hint>
          <required></required>
        </field>
 
@@ -845,16 +845,16 @@ it, please enter the types and the actual numbers or codes.</hint>
 
    <value-pairs value-pairs-name="common_version" dc-term="version">
      <pair>
-       <displayed-value>Final Published Version</displayed-value>
-       <stored-value>published</stored-value>
+       <displayed-value>Final published version</displayed-value>
+       <stored-value>Final published version</stored-value>
      </pair>
      <pair>
-       <displayed-value>Final Accepted Manuscript</displayed-value>
-       <stored-value>accepted</stored-value>
+       <displayed-value>Final accepted manuscript</displayed-value>
+       <stored-value>Final accepted manuscript</stored-value>
      </pair>
      <pair>
-       <displayed-value>Original Manuscript</displayed-value>
-       <stored-value>original</stored-value>
+       <displayed-value>Original manuscript</displayed-value>
+       <stored-value>Original manuscript</stored-value>
      </pair>
    </value-pairs>
 
