@@ -42,15 +42,15 @@
 
 <%
     Context context = null;
-
+    
     Locale sessionLocale = UIUtil.getSessionLocale(request);
     Config.set(request.getSession(), Config.FMT_LOCALE, sessionLocale);
-
+    
     try
     {
         // Obtain a context so that the location bar can display log in status
         context = UIUtil.obtainContext(request);
-
+        
         try
         {
             SiteHomeProcessor[] chp = (SiteHomeProcessor[]) CoreServiceFactory.getInstance().getPluginService().getPluginSequence(SiteHomeProcessor.class);
@@ -65,7 +65,7 @@
             log.error("caught exception: ", e);
             throw new ServletException(e);
         }
-
+        
         // Show home page JSP
         JSPManager.showJSP(request, response, "/home.jsp");
     }
@@ -74,8 +74,8 @@
         // Database error occurred.
         Logger log = Logger.getLogger("org.dspace.jsp");
         log.warn(LogManager.getHeader(context,
-                "database_error",
-                se.toString()), se);
+            "database_error",
+            se.toString()), se);
 
         // Also email an alert
         UIUtil.sendAlert(request, se);
