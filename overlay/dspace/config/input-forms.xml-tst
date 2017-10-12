@@ -592,7 +592,7 @@
          <dc-qualifier>author</dc-qualifier>
          <repeatable>true</repeatable>
          <label>Author</label>
-         <input-type>twobox</input-type>
+         <input-type>onebox</input-type>
          <hint>Enter the names of the authors of this item below.</hint>
          <required></required>
        </field>
