@@ -508,8 +508,8 @@
                                 Integer fieldID = new Integer(dcTypes.get(i).getID());
                                 String displayName = (String)metadataFields.get(fieldID);
 
-                            <%-- Code to only show the option to add the admin-note field
-                                 from the drop down when a system admin is logged in --%>
+                                // Code to only show the option to add the admin-note field
+                                // from the drop down when a system admin is logged in
 
                                 if( (isAdmin) || (!displayName.equals("dc.description.admin-note") && !isAdmin) ) {
 
