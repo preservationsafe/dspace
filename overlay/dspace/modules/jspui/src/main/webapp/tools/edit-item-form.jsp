@@ -508,12 +508,16 @@
                                 Integer fieldID = new Integer(dcTypes.get(i).getID());
                                 String displayName = (String)metadataFields.get(fieldID);
 
-                                if( (displayName.equals("dc.description.admin-note") && isAdmin)
-                                        || (!displayName.equals("dc.description.admin-note") && (!isAdmin || isAdmin))) {
+                            <%-- Code to only show the option to add the admin-note field
+                                 from the drop down when a system admin is logged in --%>
+
+                                if( (isAdmin) || (!displayName.equals("dc.description.admin-note") && !isAdmin) ) {
 
                             %>
-                            <option value="<%= fieldID.intValue() %>"><%= displayName %></option>
-                            <%  } } %>
+                                <option value="<%= fieldID.intValue() %>"><%= displayName %></option>
+                            <%
+                                }
+                            } %>
                         </select>
                     </td>
                     <td headers="t3" class="<%= row %>RowOddCol">
