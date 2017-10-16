@@ -6,6 +6,7 @@ my $srcenv = shift @ARGV;
 my $dstdir = shift @ARGV;
 my %config_env = ();
 my $debug = 0;
+my $softlink = 0;
 
 # git command outputs the absolute path to root of the repository
 my $out = `git rev-parse --show-toplevel`;
@@ -41,7 +42,7 @@ sub verify_srcenv {
 
   if ( ! keys %config_env ) {
     die "ERROR: dst directory $dstdir does not have any configuration overlay.\n"
-       ."ERROR: run $dspace_dir/bin/overlay-softlink.sh overlay/dspace/config run/config\n";
+       ."ERROR: run $dspace_dir/bin/overlay-softlink.sh overlay/dspace/config $dstdir\n";
   }
 
   if ( ! defined ( $srcenv ) || ! defined( $config_env{ $srcenv } ) ) {
@@ -75,16 +76,21 @@ sub overlay_files {
     my $dst_file = substr( $src_file, 0, -$suffix_len );
     if ( $dst_file =~ /local.cfg$/ ) {
       # Because local.cfg is used by Apache Commons Configuration, it can't be a softlink"
-      $cmd = "cp $src_file $dst_file";
+      &exec_cmd( "cp $src_file $dst_file" );
     }
     else {
       if ( ! -e "$dst_file-orig" ) {
         &exec_cmd( "mv $dst_file $dst_file-orig" );
       }
-      if ( -l  "$dst_file" ) {
+      # Note $softlink = 0 for now.
+      # mvn test is broken when dependant files are softlinks
+      if ( $softlink ) {
         &exec_cmd( "rm $dst_file" );
+        &exec_cmd( "cp -a $src_file $dst_file" );
       }
-      &exec_cmd( "cp -a $src_file $dst_file" );
+      else {
+        &exec_cmd( "cp $src_file $dst_file" );
+      }
     }
   }
 }

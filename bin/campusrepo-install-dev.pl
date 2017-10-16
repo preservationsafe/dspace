@@ -7,6 +7,8 @@ my $DOCKER_REGISTRY    = "dockerepo.library.arizona.edu:5000";
 my $DOCKER_IMAGE_NAME  = "dspace6-dev";
 my $DOCKER_IMAGE       = "dspace6-dev:1.0";
 my $DSPACE_SRC         = "dspace-6.2-src-release";
+my $SELENIUM_IMAGE     = "selenium/standalone-firefox:2.53.0";
+my $SELENIUM_NAME      = "dspace6-selenium";
 
 # git command outputs the absolute path to root of the repository
 my $out = `git rev-parse --show-toplevel`;
@@ -177,9 +179,44 @@ sub checkout_src {
   print "EXEC: '$cmd' returned '$out'\n";
 }
 
+sub create_selenium_container {
+
+  print "\n************* SECTION 3: Create selenium container ***************\n";
+
+  my $cmd = "docker ps -a | grep $SELENIUM_IMAGE | awk '{ printf \$NF }'";
+  my $out = undef;
+  my $selenium_id = `$cmd`;
+  print "EXEC: $cmd returned '$selenium_id'\n";
+
+  if ( ! length( $selenium_id ) ) {
+
+    $cmd = "docker image list | grep $SELENIUM_IMAGE";
+    $out = `$cmd`;
+    print "EXEC: '$cmd' returned '$out'\n";
+    
+    if ( $out != "" ) {
+      $cmd = "docker pull $SELENIUM_IMAGE";
+      print "EXEC: $cmd\n";
+      `$cmd`;
+    }
+    
+    $cmd="docker run -d ".
+    "--net=host ".
+    "-p 4444:4444 ".
+    "--name $SELENIUM_NAME ".
+    "$SELENIUM_IMAGE";
+    print "EXEC: $cmd\n\n"; $out=`$cmd`;
+
+    $selenium_id = $SELENIUM_NAME;
+  }
+
+  print "NOTE: The selenium container $selenium_id exists, to restart it for dspace6 testing:\n";
+  print "docker start $selenium_id\n";
+}
+
 sub create_docker_container {
 
-  print "\n************* SECTION 3: Create docker container ***************\n";
+  print "\n************* SECTION 4: Create docker container ***************\n";
 
   my $cmd = "docker ps -a | grep $DOCKER_IMAGE | awk '{ printf \$1 }'";
   my $out = undef;
@@ -271,5 +308,7 @@ sub create_docker_container {
 &check_env();
 
 &checkout_src();
+
+&create_selenium_container();
 
 &create_docker_container();
