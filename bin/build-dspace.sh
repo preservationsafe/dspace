@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ENV=${1:-dev}
+STEP=${1:-build}
 
 if [ "$HOME" == "/opt/tomcat/dspace" ]; then
   DSPACE_HOME_DIR="$HOME"
@@ -18,7 +18,7 @@ DSPACE_OVR="$DSPACE_HOME_DIR/overlay"
 DSPACE_SRC_RELEASE="dspace-6.2-src-release"
 SELENIUM_IMAGE="selenium/standalone-firefox:2.53.0";
 
-if [ "$1" == "clean" ]; then
+if [ "$STEP" == "clean" ]; then
   rm -rf $DSPACE_SRC/* && rm -rf $DSPACE_RUN/*
   cd $DSPACE_HOME_DIR && ssh vitae "cat /data1/vitae/repos/$DSPACE_SRC_RELEASE.tar.gz" | tar -xzf - \
     && mv $DSPACE_SRC_RELEASE/* src && rmdir $DSPACE_SRC_RELEASE
@@ -26,7 +26,7 @@ if [ "$1" == "clean" ]; then
   exit
 fi
 
-if [ "$1" != "install" ]; then
+if [ "$STEP" == "build" ]; then
   # Pickup latest overlays
   if [ ! -e $DSPACE_SRC/dspace/config/local.cfg-dev ]; then
     cd $DSPACE_HOME_DIR && bin/overlay-softlink.sh overlay src
@@ -45,12 +45,14 @@ if [ "$1" != "install" ]; then
   cd $DSPACE_SRC && mvn package
 fi
   
-# Install dspace:
-cd $DSPACE_SRC/dspace/target/dspace-installer && ant fresh_install
-cd $DSPACE_HOME_DIR && bin/overlay-softlink.sh overlay/dspace/config run/config
+if [ "$STEP" == "install" ] || [ "$STEP" == "build" ]; then
+  # Install dspace:
+  cd $DSPACE_SRC/dspace/target/dspace-installer && ant fresh_install
+  cd $DSPACE_HOME_DIR && bin/overlay-softlink.sh overlay/dspace/config run/config
+fi
 
 # Test dspace:
-if [ "$1" == "test" ]; then
+if [ "$STEP" == "test" ]; then
     TESTLIST=${2:-*,!PoiWordFilterTest}
     cd $DSPACE_SRC && mvn test -Dmaven.test.skip=false -DskipITs=false -DfailIfNoTests=false -Dtest="$TESTLIST"
 fi
