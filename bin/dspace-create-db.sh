@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-DB_HOST=${1:-dspace-dbdev}
+DB_HOST=${1:-repository-dbdev}
 DB_USER=postgresdba
 DB_PASSWORD=postgresD5vops-G5tt.62
 export PGPASSWORD="$DB_PASSWORD"

@@ -592,7 +592,7 @@
          <dc-qualifier>author</dc-qualifier>
          <repeatable>true</repeatable>
          <label>Author</label>
-         <input-type>twobox</input-type>
+         <input-type>onebox</input-type>
          <hint>Enter the names of the authors of this item below.</hint>
          <required></required>
        </field>
@@ -729,7 +729,7 @@ it, please enter the types and the actual numbers or codes.</hint>
          <repeatable>true</repeatable>
          <label>Keywords</label>
          <input-type>twobox</input-type>
-         <hint></hint>
+         <hint>Enter appropriate subject keywords or phrases.</hint>
          <required></required>
        </field>
 
@@ -748,9 +748,9 @@ it, please enter the types and the actual numbers or codes.</hint>
          <dc-schema>dc</dc-schema>
          <dc-element>type</dc-element>
          <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
+         <repeatable>true</repeatable>
          <label>Type</label>
-         <input-type value-pairs-name="common_types">dropdown</input-type>
+         <input-type value-pairs-name="common_types">list</input-type>
          <hint></hint>
          <required></required>
        </field>
@@ -759,10 +759,10 @@ it, please enter the types and the actual numbers or codes.</hint>
          <dc-schema>dc</dc-schema>
          <dc-element>eprint</dc-element>
          <dc-qualifier>version</dc-qualifier>
-         <repeatable>false</repeatable>
+         <repeatable>true</repeatable>
          <label>Version</label>
-         <input-type value-pairs-name="common_version">dropdown</input-type>
-         <hint></hint>
+         <input-type value-pairs-name="common_version">list</input-type>
+         <hint>Select the Article version, indicating which version of the article is being deposited.</hint>
          <required></required>
        </field>
 
@@ -809,52 +809,52 @@ it, please enter the types and the actual numbers or codes.</hint>
 
  <form-value-pairs>
    <value-pairs value-pairs-name="common_identifiers" dc-term="identifier">
-     <pair>
-       <displayed-value>DOI</displayed-value>
-       <stored-value>doi</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>PMID</displayed-value>
-       <stored-value>pmid</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>ISSN</displayed-value>
-       <stored-value>issn</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Other</displayed-value>
-       <stored-value>other</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>ISMN</displayed-value>
-       <stored-value>ismn</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Gov't Doc #</displayed-value>
-       <stored-value>govdoc</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>URI</displayed-value>
-       <stored-value>uri</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>ISBN</displayed-value>
-       <stored-value>isbn</stored-value>
-     </pair>
+      <pair>
+        <displayed-value>DOI</displayed-value>
+        <stored-value>doi</stored-value>
+      </pair>
+      <pair>
+        <displayed-value>PubMed ID</displayed-value>
+        <stored-value>pmid</stored-value>
+      </pair>
+      <pair>
+        <displayed-value>PubMed Central ID</displayed-value>
+        <stored-value>pmcid</stored-value>
+      </pair>
+      <pair>
+        <displayed-value>ArXiv</displayed-value>
+        <stored-value>arxiv</stored-value>
+      </pair>
+      <pair>
+        <displayed-value>ISSN</displayed-value>
+        <stored-value>issn</stored-value>
+      </pair>
+      <pair>
+        <displayed-value>eISSN</displayed-value>
+        <stored-value>eissn</stored-value>
+      </pair>
+      <pair>
+        <displayed-value>ISBN</displayed-value>
+        <stored-value>isbn</stored-value>
+      </pair>
+      <pair>
+        <displayed-value>eISBN</displayed-value>
+        <stored-value>eisbn</stored-value>
+      </pair>
    </value-pairs>
 
    <value-pairs value-pairs-name="common_version" dc-term="version">
      <pair>
-       <displayed-value>Final Published Version</displayed-value>
-       <stored-value>published</stored-value>
+       <displayed-value>Final published version</displayed-value>
+       <stored-value>Final published version</stored-value>
      </pair>
      <pair>
-       <displayed-value>Final Accepted Manuscript</displayed-value>
-       <stored-value>accepted</stored-value>
+       <displayed-value>Final accepted manuscript</displayed-value>
+       <stored-value>Final accepted manuscript</stored-value>
      </pair>
      <pair>
-       <displayed-value>Original Manuscript</displayed-value>
-       <stored-value>original</stored-value>
+       <displayed-value>Original manuscript</displayed-value>
+       <stored-value>Original manuscript</stored-value>
      </pair>
    </value-pairs>
 

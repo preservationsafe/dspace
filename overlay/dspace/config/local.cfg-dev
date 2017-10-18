@@ -52,7 +52,7 @@ default.language = en_US
 ##### Database settings #####
 
 # URL for connecting to database
-db.url = jdbc:postgresql://dspace-dbdev:5432/dspacedev
+db.url = jdbc:postgresql://repository-dbdev:5432/dspacedev
 
 # JDBC Driver
 db.driver = org.postgresql.Driver
@@ -75,7 +75,7 @@ mail.server.password =
 mail.server.port = 25
 
 # From address for mail
-mail.from.address = dspace-noreply@dspace-webdev.library.arizona.edu
+mail.from.address = noreply@repository-tst.library.arizona.edu
 
 # Name of a pre-configured Session object to be fetched from a directory.
 # This overrides the Session settings above.  If none can be found, then DSpace

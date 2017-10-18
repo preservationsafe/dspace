@@ -3,14 +3,17 @@ use strict;
 use warnings;
 
 # set DOCKER_IMAGE to  dspace6-ide for an option 4 (described in print_help) developer enviroment
-my $DOCKER_IMAGE  = "dspace6-dev";
-my $DSPACE_SRC    = "dspace-6.2-src-release";
+my $DOCKER_REGISTRY    = "dockerepo.library.arizona.edu:5000";
+my $DOCKER_IMAGE_NAME  = "dspace6-dev";
+my $DOCKER_IMAGE       = "dspace6-dev:1.0";
+my $DSPACE_SRC         = "dspace-6.2-src-release";
+my $SELENIUM_IMAGE     = "selenium/standalone-firefox:2.53.0";
+my $SELENIUM_NAME      = "dspace6-selenium";
 
 # git command outputs the absolute path to root of the repository
 my $out = `git rev-parse --show-toplevel`;
 chomp($out);
 my $SRC_DIR = $out;
-
 
 sub print_help {
 
@@ -124,7 +127,7 @@ sub check_env {
               'netstat -l --numeric | grep 8080',
               "A service is already listening at port 8080, tomcat will not".
               "be able to start correctly. Please disable the service running at port 8080." );
-  if ( $DOCKER_IMAGE eq "dspace6-ide" ) {
+  if ( $DOCKER_IMAGE_NAME eq "dspace6-ide" ) {
     &check_cmd( 'Is X running', 'NE',
                 '$DISPLAY',
                 "The IDE docker requires X to be running\n".
@@ -179,9 +182,44 @@ sub checkout_src {
   print "EXEC: '$cmd' returned '$out'\n";
 }
 
+sub create_selenium_container {
+
+  print "\n************* SECTION 3: Create selenium container ***************\n";
+
+  my $cmd = "docker ps -a | grep $SELENIUM_IMAGE | awk '{ printf \$NF }'";
+  my $out = undef;
+  my $selenium_id = `$cmd`;
+  print "EXEC: $cmd returned '$selenium_id'\n";
+
+  if ( ! length( $selenium_id ) ) {
+
+    $cmd = "docker image list | grep $SELENIUM_IMAGE";
+    $out = `$cmd`;
+    print "EXEC: '$cmd' returned '$out'\n";
+    
+    if ( $out != "" ) {
+      $cmd = "docker pull $SELENIUM_IMAGE";
+      print "EXEC: $cmd\n";
+      `$cmd`;
+    }
+    
+    $cmd="docker run -d ".
+    "--net=host ".
+    "-p 4444:4444 ".
+    "--name $SELENIUM_NAME ".
+    "$SELENIUM_IMAGE";
+    print "EXEC: $cmd\n\n"; $out=`$cmd`;
+
+    $selenium_id = $SELENIUM_NAME;
+  }
+
+  print "NOTE: The selenium container $selenium_id exists, to restart it for dspace6 testing:\n";
+  print "docker start $selenium_id\n";
+}
+
 sub create_docker_container {
 
-  print "\n************* SECTION 3: Create docker container ***************\n";
+  print "\n************* SECTION 4: Create docker container ***************\n";
 
   my $cmd = "docker ps -a | grep $DOCKER_IMAGE | awk '{ printf \$1 }'";
   my $out = undef;
@@ -216,7 +254,7 @@ sub create_docker_container {
       chomp( $YESNO = <STDIN> );
       for ( $YESNO ) {
         /[Yy].*/ && do {
-          $cmd = "docker image rm $DOCKER_IMAGE";
+          $cmd = "docker image rm $DOCKER_REGISTRY/$DOCKER_IMAGE:1.0";
           print "EXEC: $cmd\n";
           $out = `$cmd`;
           last };
@@ -228,12 +266,12 @@ sub create_docker_container {
   }
 
   if ( $download_image ) {
-    $cmd = "ssh vitae \"cat /data1/vitae/repos/$DOCKER_IMAGE.gz\" | gunzip | pv | docker load";
+    $cmd = "docker pull $DOCKER_REGISTRY/$DOCKER_IMAGE";
     print "EXEC: $cmd\n";
     `$cmd`;
   }
 
-  if ( $DOCKER_IMAGE eq "dspace6-ide" ) {
+  if ( $DOCKER_IMAGE_NAME eq "dspace6-ide" ) {
 
     $cmd="docker run -d ".
     "--net=host ".
@@ -243,8 +281,8 @@ sub create_docker_container {
     "-p 8443:8443 ".
     "-v $SRC_DIR:/opt/tomcat/dspace ".
     "-v /mnt/dspace-assetstore:/opt/tomcat/assetstore ".
-    "--name my-$DOCKER_IMAGE ".
-    "$DOCKER_IMAGE:latest";
+    "--name my-$DOCKER_IMAGE_NAME ".
+    "$DOCKER_REGISTRY/$DOCKER_IMAGE:1.0";
 
     print "EXEC: $cmd\n\n"; $out=`$cmd`;
     print "FINISHED: To access the container, type the command below. The ssh password is 'asdf'\n";
@@ -260,12 +298,12 @@ sub create_docker_container {
     "-v $SRC_DIR:/opt/tomcat/dspace ".
     "-v /mnt/dspace-assetstore:/opt/tomcat/assetstore ".
     "-it --entrypoint /bin/bash ".
-    "--name my-$DOCKER_IMAGE ".
-    "$DOCKER_IMAGE:latest";
+    "--name my-$DOCKER_IMAGE_NAME ".
+    "$DOCKER_REGISTRY/$DOCKER_IMAGE";
 
     print "EXEC: $cmd\n\n"; $out=`$cmd`;
     print "FINISHED: To access the container, type the command:\n";
-    print "docker start my-$DOCKER_IMAGE; docker exec -it my-$DOCKER_IMAGE bash\n\n";
+    print "docker start my-$DOCKER_IMAGE_NAME; docker exec -it my-$DOCKER_IMAGE_NAME bash\n\n";
   }
   print "\nNOTE: to start tomcat, within the docker container run 'debug-tomcat.sh'\n";
 }
@@ -273,5 +311,7 @@ sub create_docker_container {
 &check_env();
 
 &checkout_src();
+
+&create_selenium_container();
 
 &create_docker_container();

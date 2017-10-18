@@ -28,16 +28,16 @@
 dspace.dir = /opt/tomcat/dspace/run
 
 # DSpace host name - should match base URL.  Do not include port number.
-dspace.hostname = dspace-webdev.library.arizona.edu
+dspace.hostname = repository-tst.library.arizona.edu
 
 # DSpace base host URL.  Include port number etc.
-dspace.baseUrl = http://dspace-webdev.library.arizona.edu
+dspace.baseUrl = http://repository-tst.library.arizona.edu
 
 # DSpace base URL.  Include port number etc., but NOT trailing slash
 # Change to xmlui if you wish to use the xmlui as the default, or remove
 # "/jspui" and set webapp of your choice as the "ROOT" webapp in
 # the servlet engine.
-dspace.url = http://dspace-webdev.library.arizona.edu/jspui
+dspace.url = http://repository-tst.library.arizona.edu/jspui
 
 # Optional: DSpace URL for mobile access
 # This 
@@ -52,7 +52,7 @@ default.language = en_US
 ##### Database settings #####
 
 # URL for connecting to database
-db.url = jdbc:postgresql://dspace-dbdev:5432/dspacetst
+db.url = jdbc:postgresql://repository-dbdev:5432/dspacetst
 
 # JDBC Driver
 db.driver = org.postgresql.Driver
@@ -64,7 +64,7 @@ db.password = dspaceD5vops-G5tt62
 ##### Email settings ######
 
 # SMTP mail server
-#mail.server = dspace-webdev.library.arizona.edu
+#mail.server = repository-tst.library.arizona.edu
 mail.server = localhost
 
 # SMTP mail server authentication username and password (if required)
@@ -75,7 +75,7 @@ mail.server.password =
 mail.server.port = 25
 
 # From address for mail
-mail.from.address = dspace-noreply@dspace-webdev.library.arizona.edu
+mail.from.address = noreply@repository-tst.library.arizona.edu
 
 # Name of a pre-configured Session object to be fetched from a directory.
 # This overrides the Session settings above.  If none can be found, then DSpace
