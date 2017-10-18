@@ -47,15 +47,13 @@
                 <plugin>
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-maven-plugin</artifactId>
-                    <version>9.4.8-SNAPSHOT</version>
+                    <version>9.4.7.v20170914</version>
                     <configuration>
                         <scanIntervalSeconds>10</scanIntervalSeconds>
                         <webApp>
-                            <contextPath>/test</contextPath>
+                            <contextPath>dspace-install/webapps/jspui</contextPath>
                         </webApp>
-                        <port>${jetty.port}</port>
                     </configuration>
-
                 </plugin>
                 <!-- Use to enforce a particular version of Java and ensure no conflicting dependencies -->
                 <plugin>
@@ -250,24 +248,6 @@
         <!-- These plugin settings only apply to this single POM and are not inherited
             to any submodules. -->
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <files>
-                                <file>pom.properties</file>
-                            </files>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <!-- Specify our settings for new releases via 'mvn release:*' -->
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>

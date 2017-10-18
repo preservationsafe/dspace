@@ -32,3 +32,6 @@ META-INF/
 
 ## LNE Specific paths
 dspace/config/jaxb/
+
+## Dspace Install directory
+dspace-install
