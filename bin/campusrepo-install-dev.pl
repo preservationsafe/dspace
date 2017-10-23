@@ -6,7 +6,8 @@ use warnings;
 my $DOCKER_REGISTRY    = "dockerepo.library.arizona.edu:5000";
 my $DOCKER_IMAGE_NAME  = "dspace6-dev";
 my $DOCKER_IMAGE       = "dspace6-dev:1.0";
-my $DOCKER_NETWORK     = "dspace6-network";
+my $DOCKER_NETWORK     = "host";
+#my $DOCKER_NETWORK     = "dspace6-network";
 my $DSPACE_SRC         = "dspace-6.2-src-release";
 my $SELENIUM_IMAGE     = "selenium/standalone-firefox:2.53.0";
 my $SELENIUM_NAME      = "dspace6-selenium";
@@ -184,21 +185,24 @@ sub create_selenium_container {
 
   print "\n************* SECTION 3: Create selenium container ***************\n";
 
-  my $cmd = "docker network create --driver bridge $DOCKER_NETWORK || echo 'network exists'";
+  my $cmd = "docker ps -a | grep $SELENIUM_IMAGE | awk '{ printf \$NF }'";
   my $out = `$cmd`;
-  print "EXEC: $cmd returned '$out'\n";
-  
-  $cmd = "docker ps -a | grep $SELENIUM_IMAGE | awk '{ printf \$NF }'";
-  my $selenium_id = `$cmd`;
+  my $selenium_id = $out;
   print "EXEC: $cmd returned '$selenium_id'\n";
 
+  if ( $DOCKER_NETWORK ne "host" ) {
+    $cmd = "docker network create --driver bridge $DOCKER_NETWORK || echo 'network exists'";
+    $out = `$cmd`;
+    print "EXEC: $cmd returned '$out'\n";
+  }
+  
   if ( ! length( $selenium_id ) ) {
 
     $cmd = "docker image list | grep $SELENIUM_IMAGE";
     $out = `$cmd`;
     print "EXEC: '$cmd' returned '$out'\n";
     
-    if ( $out != "" ) {
+    if ( $out ne "" ) {
       $cmd = "docker pull $SELENIUM_IMAGE";
       print "EXEC: $cmd\n";
       `$cmd`;
@@ -210,11 +214,17 @@ sub create_selenium_container {
     print "EXEC: $cmd returned '$out'\n";
   }
 
+  my $selenium_port = "";
+
+  if ( $DOCKER_NETWORK eq "host" ) {
+    $selenium_port = "-p 4444:4444 ";
+  }
+  
   $cmd="docker run -d ".
     "--net=$DOCKER_NETWORK ".
+    $selenium_port.
     "--name $SELENIUM_NAME ".
     "$SELENIUM_IMAGE";
-  #  "-p 4444:4444 ".
 
   print "EXEC: $cmd\n\n"; $out=`$cmd`;
 
@@ -278,11 +288,18 @@ sub create_docker_container {
     `$cmd`;
   }
 
+  my $docker_link = "";
+  
+  if ( $DOCKER_NETWORK ne "host" ) {
+    $docker_link =
+      "--link $SELENIUM_NAME:selenium ";
+  }
+
   if ( $DOCKER_IMAGE_NAME eq "dspace6-ide" ) {
 
     $cmd="docker run -d ".
     "--net=$DOCKER_NETWORK ".
-    "--link $SELENIUM_NAME:selenium ".
+    $docker_link.
     "-p 2200:2200 ".
     "-p 8000:8000 ".
     "-p 8080:8080 ".
@@ -300,7 +317,7 @@ sub create_docker_container {
 
     $cmd="docker run -d ".
     "--net=$DOCKER_NETWORK ".
-    "--link $SELENIUM_NAME:selenium ".
+    $docker_link.
     "-p 8000:8000 ".
     "-p 8080:8080 ".
     "-p 8443:8443 ".

@@ -29,8 +29,6 @@ public class TestingSeleniumTest{
     private static final Logger log = Logger.getLogger(TestingSeleniumTest.class);
 
     private RemoteWebDriver driver;
-    private String localHostIp;
-    private String localHostName;
     private String urlDspaceJspui;
 
     @Before
@@ -38,15 +36,25 @@ public class TestingSeleniumTest{
 
         System.out.println("@Before - get local host ip and name.");
         InetAddress addr = InetAddress.getLocalHost();
-        localHostIp = addr.getHostAddress();
-        localHostName = addr.getHostName();
-        urlDspaceJspui = "http://" + localHostIp + ":8080/jspui"; 
+        String localHostIp = addr.getHostAddress();
+        String localHostName = addr.getHostName();
+        String urlSelenium;
+
+        if ( localHostName.equals( "build.library.arizona.edu" ) ) {
+           // If tests are running on the build server, assume docker isolated network
+           urlDspaceJspui = "http://" + localHostIp + ":8080/jspui";
+           urlSelenium = "http://selenium:4444/wd/hub";
+        }
+        else {
+           // If tests are not running on the build server, assume localhost access
+           urlDspaceJspui = "http://localhost:8080/jspui";
+           urlSelenium = "http://localhost:4444/wd/hub";
+        }
 
         System.out.println("@Before - create our driver.");
         driver = new RemoteWebDriver(
                 // The URL port is defined on Docker startup of Selenium
-                new URL("http://selenium:4444/wd/hub"),
-                //                new URL("http://172.21.0.2:4444/wd/hub"),
+                new URL( urlSelenium ),
                 // Use firefox, since preferred Docker image is selenium/standalone-firefox:2.53.0
                 DesiredCapabilities.firefox());
     }

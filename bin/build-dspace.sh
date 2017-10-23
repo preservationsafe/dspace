@@ -18,12 +18,8 @@ DSPACE_OVR="$DSPACE_HOME_DIR/overlay"
 DSPACE_SRC_RELEASE="dspace-6.2-src-release"
 SELENIUM_IMAGE="selenium/standalone-firefox:2.53.0";
 
-if [ "$STEP" == "reset" ]; then
-  rm -rf $DSPACE_SRC/* && rm -rf $DSPACE_RUN/*
-  cd $DSPACE_HOME_DIR && ssh vitae "cat /data1/vitae/repos/$DSPACE_SRC_RELEASE.tar.gz" | tar -xzf - \
-    && mv $DSPACE_SRC_RELEASE/* src && rmdir $DSPACE_SRC_RELEASE
-  cd $DSPACE_HOME_DIR && bin/fix-permissions.sh
-
+function overlay_src
+{
   # Pickup latest overlays
   if [ ! -e $DSPACE_SRC/dspace/config/local.cfg-dev ]; then
     cd $DSPACE_HOME_DIR && bin/overlay-softlink.sh overlay src
@@ -38,6 +34,16 @@ if [ "$STEP" == "reset" ]; then
     # and mvn test breaks if dependant files are softlinks !
     #cd $DSPACE_HOME_DIR && bin/overlay-config.pl $ENV src/dspace/config
   fi
+}
+
+if [ "$STEP" == "reset" ]; then
+  rm -rf $DSPACE_SRC/* && rm -rf $DSPACE_RUN/*
+  cd $DSPACE_HOME_DIR && ssh vitae "cat /data1/vitae/repos/$DSPACE_SRC_RELEASE.tar.gz" | tar -xzf - \
+    && mv $DSPACE_SRC_RELEASE/* src && rmdir $DSPACE_SRC_RELEASE
+  cd $DSPACE_HOME_DIR && bin/fix-permissions.sh
+
+  overlay_src
+
   exit
 fi
 
@@ -48,6 +54,9 @@ if [ "$STEP" == "clean" ]; then
 fi
 
 if [ "$STEP" == "build" ]; then
+
+  overlay_src
+
   # Build dspace:
   cd $DSPACE_SRC && mvn package
 fi
