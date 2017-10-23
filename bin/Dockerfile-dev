@@ -20,5 +20,11 @@ RUN chown -R dspace /opt/tomcat/dspace
 # fix dspace permissions
 RUN /opt/tomcat/dspace/bin/fix-permissions.sh
 
+# point dspace log directory into /var/log/dspace
+RUN \
+rmdir /opt/tomcat/dspace/log && \
+rmdir /opt/tomcat/dspace/run/log && \
+ln -s /var/log/dspace /opt/tomcat/dspace/log
+
 USER dspace
 WORKDIR /opt/tomcat

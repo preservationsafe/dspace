@@ -6,6 +6,7 @@ use warnings;
 my $DOCKER_REGISTRY    = "dockerepo.library.arizona.edu:5000";
 my $DOCKER_IMAGE_NAME  = "dspace6-dev";
 my $DOCKER_IMAGE       = "dspace6-dev:1.0";
+my $DOCKER_NETWORK     = "dspace6-network";
 my $DSPACE_SRC         = "dspace-6.2-src-release";
 my $SELENIUM_IMAGE     = "selenium/standalone-firefox:2.53.0";
 my $SELENIUM_NAME      = "dspace6-selenium";
@@ -96,15 +97,12 @@ sub check_env {
               "Try running the command:\n".
               "sudo usermod -a -G dspace <your_unix_userid>" );
 
-<<<<<<< Updated upstream
   &check_cmd( 'Does /opt/tomcat exist with proper permissions', 'success',
               'touch /opt/tomcat/dspace-tst && rm /opt/tomcat/dspace-tst && echo "success"',
               "The directory /opt/tomcat needs to exist with rw permissions.\n".
               "Run 'sudo mkdir -p /opt/tomcat; sudo chown $ENV{USER}.$ENV{USER} /opt/tomcat'" );
-=======
->>>>>>> Stashed changes
 
-  &check_cmd( 'Have you mounted //dspace-nfsdev/dspace-assetstore-dev', '',
+  &check_cmd( 'Have you mounted //qnas1/dspace-assetstore-dev', '',
               'mount | grep dspace-assetstore',
               "The nfs dspace assetstore needs to be mounted. \n" .
               "Make sure you have an NFS client installed (\"sudo apt-get install nfs-common\" on Ubuntu-based systems), \n" .
@@ -186,8 +184,11 @@ sub create_selenium_container {
 
   print "\n************* SECTION 3: Create selenium container ***************\n";
 
-  my $cmd = "docker ps -a | grep $SELENIUM_IMAGE | awk '{ printf \$NF }'";
-  my $out = undef;
+  my $cmd = "docker network create --driver bridge $DOCKER_NETWORK || echo 'network exists'";
+  my $out = `$cmd`;
+  print "EXEC: $cmd returned '$out'\n";
+  
+  $cmd = "docker ps -a | grep $SELENIUM_IMAGE | awk '{ printf \$NF }'";
   my $selenium_id = `$cmd`;
   print "EXEC: $cmd returned '$selenium_id'\n";
 
@@ -202,16 +203,22 @@ sub create_selenium_container {
       print "EXEC: $cmd\n";
       `$cmd`;
     }
-    
-    $cmd="docker run -d ".
-    "--net=host ".
-    "-p 4444:4444 ".
+  }
+  else {
+    $cmd = "docker rm -f $selenium_id";
+    $out = `$cmd`;
+    print "EXEC: $cmd returned '$out'\n";
+  }
+
+  $cmd="docker run -d ".
+    "--net=$DOCKER_NETWORK ".
     "--name $SELENIUM_NAME ".
     "$SELENIUM_IMAGE";
-    print "EXEC: $cmd\n\n"; $out=`$cmd`;
+  #  "-p 4444:4444 ".
 
-    $selenium_id = $SELENIUM_NAME;
-  }
+  print "EXEC: $cmd\n\n"; $out=`$cmd`;
+
+  $selenium_id = $SELENIUM_NAME;
 
   print "NOTE: The selenium container $selenium_id exists, to restart it for dspace6 testing:\n";
   print "docker start $selenium_id\n";
@@ -274,7 +281,8 @@ sub create_docker_container {
   if ( $DOCKER_IMAGE_NAME eq "dspace6-ide" ) {
 
     $cmd="docker run -d ".
-    "--net=host ".
+    "--net=$DOCKER_NETWORK ".
+    "--link $SELENIUM_NAME:selenium ".
     "-p 2200:2200 ".
     "-p 8000:8000 ".
     "-p 8080:8080 ".
@@ -291,7 +299,8 @@ sub create_docker_container {
   else {
 
     $cmd="docker run -d ".
-    "--net=host ".
+    "--net=$DOCKER_NETWORK ".
+    "--link $SELENIUM_NAME:selenium ".
     "-p 8000:8000 ".
     "-p 8080:8080 ".
     "-p 8443:8443 ".
