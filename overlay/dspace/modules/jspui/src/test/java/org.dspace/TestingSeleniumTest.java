@@ -40,8 +40,8 @@ public class TestingSeleniumTest{
         String localHostName = addr.getHostName();
         String urlSelenium;
 
-        if ( localHostName.equals( "build.library.arizona.edu" ) ) {
-           // If tests are running on the build server, assume docker isolated network
+        if ( localHostName.equals( "build-dspace6-dev" ) ) {
+           // Values to run in a docker isolated network
            urlDspaceJspui = "http://" + localHostIp + ":8080/jspui";
            urlSelenium = "http://selenium:4444/wd/hub";
         }
