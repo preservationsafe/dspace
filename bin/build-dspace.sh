@@ -70,5 +70,6 @@ fi
 # Test dspace:
 if [ "$STEP" == "test" ]; then
     TESTLIST=${2:-*,!PoiWordFilterTest}
+    cd $DSPACE_HOME_DIR && bin/debug-tomcat.sh
     cd $DSPACE_SRC && mvn test -Dmaven.test.skip=false -DskipITs=false -DfailIfNoTests=false -Dtest="$TESTLIST"
 fi
