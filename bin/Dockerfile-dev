@@ -22,8 +22,8 @@ RUN /opt/tomcat/dspace/bin/fix-permissions.sh
 
 # point dspace log directory into /var/log/dspace
 RUN \
-rmdir /opt/tomcat/dspace/log && \
-rmdir /opt/tomcat/dspace/run/log && \
+rm -fr /opt/tomcat/dspace/log && \
+rm -fr /opt/tomcat/dspace/run/log && \
 ln -s /var/log/dspace /opt/tomcat/dspace/log
 
 USER dspace
