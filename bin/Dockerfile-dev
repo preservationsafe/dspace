@@ -24,7 +24,7 @@ RUN /opt/tomcat/dspace/bin/fix-permissions.sh
 RUN \
 rm -fr /opt/tomcat/dspace/log && \
 rm -fr /opt/tomcat/dspace/run/log && \
-ln -s /var/log/dspace /opt/tomcat/dspace/log
+ln -s /var/log/dspace /opt/tomcat/dspace/run/log
 
 USER dspace
 WORKDIR /opt/tomcat
