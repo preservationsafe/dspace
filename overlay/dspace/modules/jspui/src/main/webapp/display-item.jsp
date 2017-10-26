@@ -150,11 +150,8 @@
 		    }
 		%>
 
-                <h3 class="itemTitle"><%= title %></h3>
-                <%-- <strong>Please use this identifier to cite or link to this item:
-                <code><%= HandleManager.getCanonicalForm(handle) %></code></strong>--%>
-                <div class="well"><fmt:message key="jsp.display-item.identifier"/>
-                <code><%= preferredIdentifier %></code></div>
+        <h3 class="itemTitle"><%= title %></h3>
+
 <%
         if (admin_button)  // admin edit button
         { %>
