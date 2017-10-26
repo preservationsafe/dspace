@@ -30,6 +30,7 @@ function overlay_src
     # mvn test cannot use softlink'd pom.xml  
     cp -f $DSPACE_OVR/dspace/modules/jspui/pom.xml $DSPACE_SRC/dspace/modules/jspui/pom.xml
     cp -f $DSPACE_OVR/dspace/config/dspace.cfg-all $DSPACE_SRC/dspace/config/dspace.cfg
+    cp -f $DSPACE_OVR/dspace-api/src/main/resources/Messages.properties $DSPACE_SRC/dspace-api/src/main/resources/Messages.properties
     cp $DSPACE_SRC/dspace/config/local.cfg-dev $DSPACE_SRC/dspace/config/local.cfg
     # Do not enable this - install will not pick up the soft link'd files
     # and mvn test breaks if dependant files are softlinks !
