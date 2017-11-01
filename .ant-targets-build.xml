@@ -1,0 +1,4 @@
+build_fresh
+build_update
+mvn_package_fresh
+mvn_package_update

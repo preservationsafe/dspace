@@ -44,17 +44,6 @@
              (NOTE: individual POMs can override specific settings). -->
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-maven-plugin</artifactId>
-                    <version>9.4.7.v20170914</version>
-                    <configuration>
-                        <scanIntervalSeconds>10</scanIntervalSeconds>
-                        <webApp>
-                            <contextPath>dspace-install/webapps/jspui</contextPath>
-                        </webApp>
-                    </configuration>
-                </plugin>
                 <!-- Use to enforce a particular version of Java and ensure no conflicting dependencies -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

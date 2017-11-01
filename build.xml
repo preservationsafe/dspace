@@ -1,0 +1,37 @@
+<project name="CampusRepo" basedir="." default="main">
+    <property name="installer.dir" value="dspace/target/dspace-installer" />
+    <property file="build.properties" />
+
+    <target name="build_update">
+        <antcall target="mvn_package" />
+        <ant dir="${installer.dir}" antfile="build.xml" target="update">
+            <property name="config" value="/dspace/config/dspace.cfg"/>
+        </ant>
+    </target>
+
+    <target name="build_fresh">
+        <antcall target="mvn_package" />
+        <antcall target="ant_fresh" />
+    </target>
+
+    <target name="mvn_package_fresh">
+        <exec dir="." executable="sh">
+            <arg line="-c 'mvn package'" />
+        </exec>
+    </target>
+
+    <target name="mvn_package">
+        <exec dir="." executable="sh">
+            <arg line="-c 'mvn package'" />
+        </exec>
+    </target>
+
+    <target name="ant_fresh" depends="check_ant_file" if="ant.present">
+        <ant dir="${installer.dir}" antfile="build.xml" target="fresh_install" />
+    </target>
+
+    <target name="check_ant_file">
+        <available file="dspace/target/dspace-installer/build.xml" property="ant.present" />
+    </target>
+
+</project>

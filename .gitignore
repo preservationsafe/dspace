@@ -25,7 +25,7 @@ META-INF/
 
 ## Ignore all *.properties file in root folder, EXCEPT build.properties (the default)
 /*.properties
-!/build.properties
+!/build.properties.EXAMPLE
 
 ##Mac noise
 .DS_Store
@@ -33,5 +33,5 @@ META-INF/
 ## LNE Specific paths
 dspace/config/jaxb/
 
-## Dspace Install directory
-dspace-install
+## Local Configurations
+dspace/config/local.cfg
