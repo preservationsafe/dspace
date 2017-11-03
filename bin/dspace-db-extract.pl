@@ -45,7 +45,9 @@ print $DBI::errstr;
 
 my $names = $sth->{NAME};
 my $types = $sth->{TYPE};
+print "SELECT:  ".$stmt."\n";
 print "COLUMNS: ".join( ', ', @$names )."\n";
+print "TYPES:   ".join( ', ', @$types )."\n";
 my $rownum = 1;
 my $row;
 
