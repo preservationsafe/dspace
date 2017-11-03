@@ -9,6 +9,7 @@ my $db_host    = shift @ARGV;
 my $db_admin   = shift @ARGV;
 my $db_pswd    = shift @ARGV;
 my $db_dspace  = shift @ARGV;
+my $NULL       = '_NULL_';
 
 if ( ! $db_host ) {
   $db_host = 'localhost';
@@ -44,12 +45,14 @@ print $DBI::errstr;
 
 my $names = $sth->{NAME};
 my $types = $sth->{TYPE};
-print "COLUMNS: ".join( ', ', @names )."\n";
-my $row = 1;
+print "COLUMNS: ".join( ', ', @$names )."\n";
+my $rownum = 1;
+my $row;
 
-while(my @row = $sth->fetchrow_array()) {
-  printf 'ROW%-6d%s', $row, join( ', ', @row )."\n";
-  row++;
+while( defined( $row = $sth->fetchrow_arrayref() ) ) {
+  printf( 'ROW%-6d', $rownum );
+  print( join( ', ', map { defined ? $_ : $NULL } @$row )."\n" );
+  $rownum++;
 }
 print "Operation done successfully\n";
 $dbh->disconnect();
