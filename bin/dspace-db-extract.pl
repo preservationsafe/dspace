@@ -9,24 +9,45 @@ my $db_host    = shift @ARGV;
 my $db_admin   = shift @ARGV;
 my $db_pswd    = shift @ARGV;
 my $db_dspace  = shift @ARGV;
+my $dev_env    = 0;
 my $dbh        = undef;
 my $dsn        = undef;
 my $NULL       = '_NULL_';
 
 if ( ! $db_host ) {
-  $db_host = 'localhost';
+  if ( $dev_env ) {
+    $db_host = 'localhost';
+  }
+  else {
+    $db_host = 'repository-dbdev';
+  }
 }
 
 if ( ! $db_admin ) {
-  $db_admin = 'postgresDBA';
+  if ( $dev_env ) {
+    $db_admin = 'dspace6dba';
+  }
+  else {
+    $db_admin = 'dspacedba';
+  }
 }
 
 if ( ! $db_pswd ) {
-  $db_pswd = 'postgresD5vops-G5tt.62';
+  if ( $dev_env ) {
+    $db_pswd = "dspace6D5vops-G5tt62";
+  }
+  else {
+    $db_pswd = "dspaceD5vops-G5tt62";
+  }
 }
 
 if ( ! $db_dspace ) {
-  $db_dspace = 'dspacedev';
+  if ( $dev_env ) {
+    $db_dspace = 'dspacedev';
+  }
+  else {
+    $db_dspace = 'dspacetst';
+  }
 }
 
 sub open_db {
@@ -79,8 +100,28 @@ sub extract_table {
   undef $sth;
 }
 
+sub extract_seed_tables {
+
+  my @seed_tables = (
+                     'metadataschemaregistry',
+                     'metadatafieldregistry',
+                     'eperson',
+                     'epersongroup',
+                     'epersongroup2eperson',
+                     'community',
+                     'community2community',
+                     'collection',
+                     'community2collection',
+                     'subscription',
+                     );
+
+  for my $table ( @seed_tables ) {
+    &extract_table( $table );
+  }
+}
+
 &open_db();
 
-&extract_table( 'metadatafieldregistry' );
+&extract_seed_tables();
 
 &close_db();
