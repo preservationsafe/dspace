@@ -35,3 +35,17 @@ dspace/config/jaxb/
 
 ## Local Configurations
 dspace/config/local.cfg
+
+## Dspace src files
+dspace-api/
+dspace-jspui/
+dspace-oai/
+dspace-rdf/
+dspace-rest/
+dspace-services/
+dspace-solr/
+dspace-sword/
+dspace-swordv2/
+dspace-xmlui-mirage2/
+dspace-xmlui/
+

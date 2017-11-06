@@ -1,28 +1,46 @@
 <project name="CampusRepo" basedir="." default="main">
     <property name="installer.dir" value="dspace/target/dspace-installer" />
     <property file="build.properties" />
+    <property name="dspace.version" value="dspace-6.2"/>
+    <property name="dspace-src.url" value="https://github.com/DSpace/DSpace/releases/download/${dspace.version}/${dspace.version}-src-release.tar.gz"/>
 
-    <target name="build_update">
-        <antcall target="mvn_package" />
-        <ant dir="${installer.dir}" antfile="build.xml" target="update">
-            <property name="config" value="/dspace/config/dspace.cfg"/>
-        </ant>
-    </target>
-
-    <target name="build_fresh">
-        <antcall target="mvn_package" />
+    <target name="build_init">
+        <antcall target="mvn_package_full" />
         <antcall target="ant_fresh" />
     </target>
 
-    <target name="mvn_package_fresh">
+    <target name="build_quick">
+        <antcall target="mvn_package_quick" />
+        <antcall target="ant_update" />
+    </target>
+
+    <target name="build_full">
+        <antcall target="mvn_package_quick" />
+        <antcall target="ant_update" />
+    </target>
+
+    <target name="build_clean">
+        <antcall target="mvn_clean_package" />
+        <antcall target="ant_update" />
+    </target>
+
+    <!--Running mvn package from the root [dspace-source]directory -->
+    <target name="mvn_package_full">
         <exec dir="." executable="sh">
             <arg line="-c 'mvn package'" />
         </exec>
     </target>
 
-    <target name="mvn_package">
-        <exec dir="." executable="sh">
+    <!--Running mvn package from the [dspace-source]/dspace/directory -->
+    <target name="mvn_package_quick">
+        <exec dir="dspace" executable="sh">
             <arg line="-c 'mvn package'" />
+        </exec>
+    </target>
+
+    <target name="mvn_clean_package">
+        <exec dir="." executable="sh">
+            <arg line="-c 'mvn clean package'" />
         </exec>
     </target>
 
@@ -30,8 +48,28 @@
         <ant dir="${installer.dir}" antfile="build.xml" target="fresh_install" />
     </target>
 
+    <target name="ant_update" depends="check_ant_file" if="ant.present">
+        <ant dir="${installer.dir}" antfile="build.xml" target="update">
+            <property name="config" value="/dspace/config/dspace.cfg"/>
+        </ant>
+    </target>
+
     <target name="check_ant_file">
         <available file="dspace/target/dspace-installer/build.xml" property="ant.present" />
+    </target>
+
+    <target name="get_src_files">
+        <get src="${dspace-src.url}" dest="." quiet="true" />
+        <gunzip src="${dspace.version}-src-release.tar.gz" dest="." />
+        <untar src="${dspace.version}-src-release.tar" dest=".">
+            <patternset>
+                <include name="${dspace.version}-src-release/dspace-*/**" />
+            </patternset>
+            <globmapper from="${dspace.version}-src-release/*" to="*" />
+        </untar>
+        <delete>
+            <fileset dir="." includes="${dspace.version}-src-release.tar*" />
+        </delete>
     </target>
 
 </project>
