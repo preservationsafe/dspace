@@ -11,6 +11,8 @@ my $db_pswd    = shift @ARGV;
 my $db_dspace  = shift @ARGV;
 my $dev_env    = 0;
 my $output_sql = 1;
+my $output_dir = "db";
+my $datetime   = `date +\%Y-\%m-\%d.\%H.\%M.\%S`;
 my $dbh        = undef;
 my $dsn        = undef;
 my $NULL       = '_NULL_';
@@ -110,21 +112,45 @@ sub extract_table_sql {
   if($rv < 0) {
   print $DBI::errstr;
   }
+
+  my $fh = undef;
+  my $filename = "$output_dir/$table-$datetime.sql";
+  open( $fh, "> $filename " ) || die "ERR: Could not open file '$filename' $!";
   
-  my @names = map { lc } @{$sth->{NAME}};
+  my @columns = map { lc } @{$sth->{NAME}};
   my $types = $sth->{TYPE};
   print "SELECT:  ".$stmt."\n";
-  print "COLUMNS: ".join( ', ', @names )."\n";
-  print "TYPES:   ".join( ', ', @$types )."\n";
   my $rownum = 1;
   my $row;
   
   while( defined( $row = $sth->fetchrow_arrayref() ) ) {
-    printf( 'ROW%-6d', $rownum );
-    print( join( ', ', map { defined ? $_ : $NULL } @$row )."\n" );
+    print( $fh "INSERT INTO $table ("
+           .join( ',', @columns )
+           .") VALUES (" );
+    for my $i ( 0 .. $#$types ) {
+
+      if ( $i != 0 ) {
+        print( $fh "," );
+      }
+
+      if ( defined $$row[ $i ] ) {
+        # type 12 is a string
+        if ( $$types[ $i ] == 12 ) {
+          print( $fh '"'.$$row[ $i ].'"' );
+        }
+        else {
+          print( $fh $$row[ $i ] );
+        }
+      }
+      else {
+        print( $fh $NULL );
+      }
+    }
+    print( $fh ");" );
     $rownum++;
   }
 
+  close( $fh );
   $sth->finish();
   undef $sth;
 }
