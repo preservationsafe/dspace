@@ -10,6 +10,7 @@ my $db_admin   = shift @ARGV;
 my $db_pswd    = shift @ARGV;
 my $db_dspace  = shift @ARGV;
 my $dev_env    = 0;
+my $output_sql = 1;
 my $dbh        = undef;
 my $dsn        = undef;
 my $NULL       = '_NULL_';
@@ -72,7 +73,35 @@ sub close_db {
   undef $dbh;
 }
 
-sub extract_table {
+sub extract_table_stdout {
+  my ( $table ) = @_;
+  
+  my $stmt = qq(SELECT * FROM $table;);
+  my $sth = $dbh->prepare( $stmt );
+  my $rv = $sth->execute() or die $DBI::errstr;
+  if($rv < 0) {
+  print $DBI::errstr;
+  }
+  
+  my @names = map { lc } @{$sth->{NAME}};
+  my $types = $sth->{TYPE};
+  print "SELECT:  ".$stmt."\n";
+  print "COLUMNS: ".join( ', ', @names )."\n";
+  print "TYPES:   ".join( ', ', @$types )."\n";
+  my $rownum = 1;
+  my $row;
+  
+  while( defined( $row = $sth->fetchrow_arrayref() ) ) {
+    printf( 'ROW%-6d', $rownum );
+    print( join( ', ', map { defined ? $_ : $NULL } @$row )."\n" );
+    $rownum++;
+  }
+
+  $sth->finish();
+  undef $sth;
+}
+
+sub extract_table_sql {
   my ( $table ) = @_;
   
   my $stmt = qq(SELECT * FROM $table;);
@@ -102,21 +131,29 @@ sub extract_table {
 
 sub extract_seed_tables {
 
-  my @seed_tables = (
-                     'metadataschemaregistry',
-                     'metadatafieldregistry',
-                     'eperson',
-                     'epersongroup',
-                     'epersongroup2eperson',
-                     'community',
-                     'community2community',
-                     'collection',
-                     'community2collection',
-                     'subscription',
+  # Hash of db tables to their processing functions
+  my %seed_tables = (
+                     'metadataschemaregistry' => \&extract_table_sql,
+                     'metadatafieldregistry'  => \&extract_table_sql,
+                     'eperson'                => \&extract_table_sql,
+                     'epersongroup'           => \&extract_table_sql,
+                     'epersongroup2eperson'   => \&extract_table_sql,
+                     'community'              => \&extract_table_sql,
+                     'community2community'    => \&extract_table_sql,
+                     'collection'             => \&extract_table_sql,
+                     'community2collection'   => \&extract_table_sql,
+                     'subscription'           => \&extract_table_sql,
                      );
 
-  for my $table ( @seed_tables ) {
-    &extract_table( $table );
+  if ( ! $output_sql ) {
+    foreach my $table ( keys %seed_tables ) {
+      $seed_tables{ $table } = \&extract_table_stdout;
+    }
+  }
+
+  # Calling the function associated with the table name
+  for my $table ( keys %seed_tables ) {
+    $seed_tables{ $table }->( $table );
   }
 }
 
