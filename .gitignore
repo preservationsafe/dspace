@@ -51,3 +51,6 @@ dspace-xmlui/
 
 # We can build DSpace into this folder if we want.
 /install
+
+# Bash auto-completion for Ant
+.ant-targets-build.xml
