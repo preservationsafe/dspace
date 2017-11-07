@@ -1,9 +1,18 @@
-<project name="CampusRepo" basedir="." default="main">
+<project name="CampusRepo" basedir="." default="help">
     <property name="installer.dir" value="dspace/target/dspace-installer" />
     <property file="build.properties" />
     <property name="dspace.version" value="dspace-6.2"/>
     <property name="dspace-src.url" value="https://github.com/DSpace/DSpace/releases/download/${dspace.version}/${dspace.version}-src-release.tar.gz"/>
     <property name="maven.options" value=" -P !dspace-xmlui-mirage2,!dspace-xmlui,!dspace-rdf,!dspace-rest,!dspace-sword,!dspace-swordv2,!dspace-oai" />
+
+    <!-- List main targets. -->
+    <target name="help">
+        <java classname="org.apache.tools.ant.Main">
+            <arg value="-projecthelp" />
+            <arg value="-buildfile" />
+            <arg value="${ant.file}" />
+        </java>
+    </target>
 
     <!--
         Use this target for the initial build of dspace. This runs mvn package from the root of the project
