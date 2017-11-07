@@ -121,16 +121,32 @@ sub extract_table_stdout {
   undef $sth;
 }
 
-sub extract_table_sql {
-  my ( $table ) = @_;
-  
-  my $stmt = qq(SELECT * FROM $table;);
+sub extract_table_sql_filter {
+  my ( $table, $order_col, $null_column_list ) = @_;
+
+  # Columns to order by
+  my $order_by = "";
+  if ( defined( $order_col ) && @$order_col > 0 ) {
+    $order_by = " ORDER BY ".join( ",", @$order_col );
+  }
+
+  my $stmt = "SELECT * FROM $table".$order_by.";";
   my $sth = $dbh->prepare( $stmt );
   my $rv = $sth->execute() or die $DBI::errstr;
   if($rv < 0) {
   print $DBI::errstr;
   }
 
+  # columns to overwrite with null values even if they have a value
+  # present. For instance, collection image bitstreams need to get nulled
+  # because we currently are not exporting the bitstream images.
+  my %null_column = ();
+  if ( defined( $null_column_list ) && @$null_column_list > 0 ) {
+    foreach my $col ( @$null_column_list ) {
+      $null_column{ $col }++;
+    }
+  }
+  
   my $prefix = sprintf( "%02d", $table_num );
   $table_num++;
   
@@ -155,7 +171,8 @@ sub extract_table_sql {
         print( $fh "," );
       }
 
-      if ( ! defined $$row[ $i ] ) {
+      if ( ! defined $$row[ $i ] ||
+           defined( $null_column{ $columns[ $i ] } ) ) {
         print( $fh "NULL" );
       }
       else {
@@ -181,6 +198,57 @@ sub extract_table_sql {
   undef $sth;
 }
 
+sub extract_table_sql {
+  return &extract_table_sql_filter( @_ );
+}
+
+sub extract_table_metadataschemaregistry {
+  my ( $table ) = @_;
+  my @order_by  = ( "metadata_schema_id" );
+  return &extract_table_sql_filter( $table, \@order_by );
+}
+
+sub extract_table_metadatafieldregistry {
+  return &extract_table_sql_filter( @_ );
+}
+
+sub extract_table_eperson {
+  return &extract_table_sql_filter( @_ );
+}
+
+sub extract_table_epersongroup {
+  my ( $table ) = @_;
+  my @order_by  = ( "eperson_group_id" );
+  return &extract_table_sql_filter( $table, \@order_by );
+}
+
+sub extract_table_epersongroup2eperson {
+  return &extract_table_sql_filter( @_ );
+}
+
+sub extract_table_community {
+  my ( $table ) = @_;
+  my @order_by  = ( "community_id" );
+  my @null_cols = ( "logo_bitstream_id" );
+  return &extract_table_sql_filter( $table, \@order_by, \@null_cols );
+}
+
+sub extract_table_community2community {
+  return &extract_table_sql_filter( @_ );
+}
+
+sub extract_table_collection {
+  return &extract_table_sql_filter( @_ );
+}
+
+sub extract_table_community2collection {
+  return &extract_table_sql_filter( @_ );
+}
+
+sub extract_table_subscription {
+  return &extract_table_sql_filter( @_ );
+}
+
 sub output_uuid_table_sql {
   my $table = "dspaceobject";
   my $prefix = "01";
@@ -201,8 +269,17 @@ sub output_uuid_table_sql {
   close( $fh );
 }
 
+sub extract_table_ref {
+  no strict 'refs';
+  my ( $extract_table_func, $table ) = @_;
+  # Calls the function whose name is within $extract_table_func:
+  &$extract_table_func( $table );
+}
+
 sub extract_seed_tables {
 
+  # Note this is a purposefully ordered array, we want
+  # the import of these tables done in this order
   my @seed_tables = (
                      'metadataschemaregistry',
                      'metadatafieldregistry' ,
@@ -216,29 +293,15 @@ sub extract_seed_tables {
                      'subscription'          ,
                      );
 
-  # Hash of db tables to their processing functions
-  my %table_func = (
-                     'metadataschemaregistry' => \&extract_table_sql,
-                     'metadatafieldregistry'  => \&extract_table_sql,
-                     'eperson'                => \&extract_table_sql,
-                     'epersongroup'           => \&extract_table_sql,
-                     'epersongroup2eperson'   => \&extract_table_sql,
-                     'community'              => \&extract_table_sql,
-                     'community2community'    => \&extract_table_sql,
-                     'collection'             => \&extract_table_sql,
-                     'community2collection'   => \&extract_table_sql,
-                     'subscription'           => \&extract_table_sql,
-                     );
-
-  if ( ! $output_sql ) {
-    foreach my $table ( @seed_tables ) {
-      $table_func{ $table } = \&extract_table_stdout;
-    }
-  }
-
   # Calling the function associated with the table name
   for my $table ( @seed_tables ) {
-    $table_func{ $table }->( $table );
+    my $extract_table_func = "extract_table_".$table;
+
+    if ( ! $output_sql ) {
+      $extract_table_func = "extract_table_stdout";
+    }
+
+    &extract_table_ref( $extract_table_func, $table );
   }
 
   &output_uuid_table_sql();
