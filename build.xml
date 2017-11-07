@@ -56,7 +56,7 @@
 
     <target name="ant_update" depends="check_ant_file" if="ant.present">
         <ant dir="${installer.dir}" antfile="build.xml" target="update">
-            <property name="config" value="/dspace/config/dspace.cfg"/>
+            <property name="config" value="${dspace_install.dir}/config/dspace.cfg"/>
         </ant>
     </target>
 
