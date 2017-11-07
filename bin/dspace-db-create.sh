@@ -1,9 +1,9 @@
 #!/bin/sh
 
-DB_HOST=${1:-repository-dbdev}
+DB_HOST=${1:-localhost}
 DB_SUPER_ADMIN=${2:-postgresDBA}
 DB_SUPER_PSWD=${3:-postgresD5vops-G5tt.62}
-DB_DSPACE_ADMIN=dspace6DBA
+DB_DSPACE_ADMIN=dspace6dba
 DB_DSPACE_INSTANCE=dspacedev
 
 export PGPASSWORD="$DB_SUPER_PSWD"
