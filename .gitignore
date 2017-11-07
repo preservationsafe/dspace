@@ -49,3 +49,5 @@ dspace-swordv2/
 dspace-xmlui-mirage2/
 dspace-xmlui/
 
+# We can build DSpace into this folder if we want.
+/install
