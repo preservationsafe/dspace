@@ -3,6 +3,7 @@
     <property file="build.properties" />
     <property name="dspace.version" value="dspace-6.2"/>
     <property name="dspace-src.url" value="https://github.com/DSpace/DSpace/releases/download/${dspace.version}/${dspace.version}-src-release.tar.gz"/>
+    <property name="maven-options" value=" -P !dspace-xmlui-mirage2,!dspace-xmlui,!dspace-rdf,!dspace-rest,!dspace-sword,!dspace-swordv2,!dspace-oai" />
 
     <!-- Use this target for the initial build of dspace. This runs mvn package from the root of the project
          and runs ant fresh_install from the dspace-installer directory -->
@@ -32,21 +33,21 @@
     <!--Running mvn package from the root [dspace-source] directory -->
     <target name="mvn_package_full">
         <exec dir="." executable="sh">
-            <arg line="-c 'mvn package'" />
+            <arg line="-c 'mvn package ${maven-options}'" />
         </exec>
     </target>
 
     <!--Running mvn package from the [dspace-source]/dspace/directory -->
     <target name="mvn_package_quick">
         <exec dir="dspace" executable="sh">
-            <arg line="-c 'mvn package'" />
+            <arg line="-c 'mvn package ${maven-options}'" />
         </exec>
     </target>
 
     <!--Running mvn clean package from the root [dspace-source] directory -->
     <target name="mvn_clean_package">
         <exec dir="." executable="sh">
-            <arg line="-c 'mvn clean package'" />
+            <arg line="-c 'mvn clean package ${maven-options}'" />
         </exec>
     </target>
 
