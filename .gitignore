@@ -47,9 +47,6 @@ dspace-swordv2/
 dspace-xmlui-mirage2/
 dspace-xmlui/
 
-# We can build DSpace into this folder if we want.
-dspace-install
-
 # Bash auto-completion for Ant
 .ant-targets-build.xml
 
