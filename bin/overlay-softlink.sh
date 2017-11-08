@@ -13,15 +13,7 @@ if [ ! -d "$DSTDIR" ]; then
     exit 1
 fi
 
-if [ "$HOME" == "/opt/tomcat/dspace" ]; then
-  DSPACE_HOME_DIR="$HOME"
-else
-  SHELL_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-  DSPACE_HOME_DIR="$( cd $SHELL_SCRIPT_DIR/.. && pwd )"
-  while [ ! -d "$DSPACE_HOME_DIR/$SRCDIR" ] && [ ! -d "$DSPACE_HOME_DIR/$DSTDIR" ]; do
-      DSPACE_HOME_DIR="$( cd $DSPACE_HOME_DIR/.. && pwd )"
-  done
-fi
+. "$( dirname "${BASH_SOURCE[0]}" )/get-dspace-home-dir.sh"
 
 DSTDIR_DEPTH=".."
 

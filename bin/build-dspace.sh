@@ -2,15 +2,7 @@
 
 STEP=${1:-build}
 
-if [ "$HOME" == "/opt/tomcat/dspace" ]; then
-  DSPACE_HOME_DIR="$HOME"
-else
-  SHELL_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-  DSPACE_HOME_DIR="$( cd $SHELL_SCRIPT_DIR/.. && pwd )"
-  while [ ! -d "$DSPACE_HOME_DIR/overlay" ]; do
-      DSPACE_HOME_DIR="$( cd $DSPACE_HOME_DIR/.. && pwd )"
-  done
-fi
+. "$( dirname "${BASH_SOURCE[0]}" )/get-dspace-home-dir.sh"
 
 DSPACE_SRC="$DSPACE_HOME_DIR/src"
 DSPACE_RUN="$DSPACE_HOME_DIR/run"
