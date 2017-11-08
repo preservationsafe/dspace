@@ -1,0 +1,182 @@
+#
+# DSpace Configuration
+# HEllo
+#
+# NOTE: The DSpace Configuration File is separated into several sections:
+#  * General Configurations
+#  * JSPUI & XMLUI Configurations
+#  * JSPUI Specific Configurations
+#  * XMLUI Specific Configurations
+#
+# Revision: $Revision$
+#
+# Date:     $Date$
+#
+
+
+#------------------------------------------------------------------#
+#------------------GENERAL CONFIGURATIONS--------------------------#
+#------------------------------------------------------------------#
+# These configs are used by underlying DSpace API, and are         #
+# therefore applicable to all interfaces                           #
+# Local, simple configuration should be made in build.properties   #
+# Global or more complex configuration can be hardcoded here       #
+#------------------------------------------------------------------#
+##### Basic information ######
+
+# DSpace installation directory
+dspace.dir = /opt/tomcat/dspace/dspace-install
+
+# DSpace host name - should match base URL.  Do not include port number.
+dspace.hostname = localhost
+
+# DSpace base host URL.  Include port number etc.
+dspace.baseUrl = http://localhost:8080
+
+# DSpace base URL.  Include port number etc., but NOT trailing slash
+# Change to xmlui if you wish to use the xmlui as the default, or remove
+# "/jspui" and set webapp of your choice as the "ROOT" webapp in
+# the servlet engine.
+dspace.url = http://localhost:8080/jspui
+
+# Optional: DSpace URL for mobile access
+# This 
+#dspace.mobileUrl = http://mobile.example.com
+
+# Name of the site
+dspace.name = University of Arizona Library TESS
+
+# Default language for metadata values
+default.language = en_US
+
+##### Database settings #####
+
+# URL for connecting to database
+db.url = jdbc:postgresql://localhost:5432/dspacelocal
+
+# JDBC Driver
+db.driver = org.postgresql.Driver
+
+# Database username and password
+db.username = dspace6dba
+db.password = dspace6D5vops-G5tt62
+
+##### Email settings ######
+
+# SMTP mail server
+#mail.server = localhost
+mail.server = smtpgate.email.arizona.edu
+
+# SMTP mail server authentication username and password (if required)
+mail.server.username =
+mail.server.password =
+
+# SMTP mail server alternate port (defaults to 25)
+mail.server.port = 25
+
+# From address for mail
+mail.from.address = noreply@repository-tst.library.arizona.edu
+
+# Name of a pre-configured Session object to be fetched from a directory.
+# This overrides the Session settings above.  If none can be found, then DSpace
+# will use the above settings to create a Session.
+#mail.session.name = Session
+
+# Currently limited to one recipient!
+feedback.recipient = glbrimhall@email.arizona.edu
+
+# General site administration (Webmaster) e-mail
+mail.admin = glbrimhall@email.arizona.edu
+
+# Recipient for server errors and alerts
+alert.recipient = glbrimhall@email.arizona.edu
+
+# Recipient for new user registration emails
+registration.notify = glbrimhall@email.arizona.edu
+
+# Set the default mail character set. This may be overridden by providing a line
+# inside the email template "charset: <encoding>", otherwise this default is used.
+mail.charset = UTF-8
+
+# A comma-separated list of hostnames that are allowed to refer browsers to email forms.
+# Default behaviour is to accept referrals only from dspace.hostname
+mail.allowed.referrers = localhost
+
+# Pass extra settings to the Java mail library. Comma-separated, equals sign between
+# the key and the value. For example:
+#mail.extraproperties = mail.smtp.socketFactory.port=465, \
+#                       mail.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory, \
+#                       mail.smtp.socketFactory.fallback=false
+
+# An option is added to disable the mailserver. By default, this property is set to false
+# By setting mail.server.disabled = true, DSpace will not send out emails.
+# It will instead log the subject of the email which should have been sent
+# This is especially useful for development and test environments where production data is used when testing functionality.
+#mail.server.disabled = false
+
+##### File Storage ######
+
+# Asset (bitstream) store number 0 (zero)
+assetstore.dir = /opt/tomcat/assetstore
+
+##### Hide Item Metadata Fields  #####
+# Fields named here are hidden in the following places UNLESS the
+# logged-in user is an Administrator:
+#  1. XMLUI metadata XML view, and Item splash pages (long and short views).
+#  2. JSPUI Item splash pages
+#  3. RDF (every where as there is currently no possibility to authenticate)
+#  4. OAI (every where as there is currently no possibility to authenticate)
+#     Attention: You need to rebuild the OAI SOLR index after every change of
+#     this property. Run [dspace-install]/bin/dspace oai import -c to do so.
+#
+# To designate a field as hidden, add a property here in the form:
+#    metadata.hide.SCHEMA.ELEMENT.QUALIFIER = true
+#
+# This default configuration hides the dc.description.provenance field,
+# since that usually contains email addresses which ought to be kept
+# private and is mainly of interest to administrators:
+metadata.hide.dc.description.provenance = true
+
+# Allows custom metadata field dc.description.admin-note to be hidden
+metadata.hide.dc.description.admin-note = true
+
+#
+# dspace.cfg over-rides support custom item meta-display
+#
+webui.itemdisplay.default = \
+  dc.identifier.uri(link), \
+  dc.title, \
+  dc.title.alternative, \
+  dc.contributor.author, \
+  dc.contributor.department, \
+  dc.date.issued(date), \
+  dc.publisher, \
+  dc.identifier.citation, \
+  dc.identifier.journal, \
+  dc.rights, \
+  dc.description.collectioninformation, \
+  dc.description.abstract, \
+  dc.description, \
+  dc.description.note, \
+  dc.identifier.doi(doi), \
+  dc.identifier.pmid(pmid), \
+  dc.identifier.pmcid(pmcid), \
+  dc.identifier.arxiv, \
+  dc.identifier.issn, \
+  dc.identifier.eissn, \
+  dc.identifier.isbn, \
+  dc.identifier.eisbn, \
+  dc.subject, \
+  dc.relation.ispartofseries, \
+  dc.type, \
+  dc.eprint.version, \
+  dc.description.sponsorship, \
+  dc.relation.url(link)
+  
+# render identifiers as resolvable links
+webui.resolver.1.urn = doi
+webui.resolver.1.baseurl = http://dx.doi.org/
+webui.resolver.2.urn = pmid
+webui.resolver.2.baseurl = https://www.ncbi.nlm.nih.gov/pubmed/
+webui.resolver.3.urn = pmcid
+webui.resolver.3.baseurl = https://www.ncbi.nlm.nih.gov/pmc/
