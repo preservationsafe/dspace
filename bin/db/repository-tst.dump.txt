@@ -1,0 +1,430 @@
+DBACCESS: Opened DBI:Pg:dbname = dspacetst;host = repository-dbdev;port = 5432 successfully
+SELECT:  SELECT * FROM metadataschemaregistry;
+COLUMNS: metadata_schema_id, namespace, short_id
+TYPES:   4, 12, 12
+ROW1     1, http://dublincore.org/documents/dcmi-terms/, dc
+ROW2     2, http://purl.org/dc/terms/, dcterms
+ROW3     3, http://dspace.org/eperson, eperson
+ROW4     5, http://dspace.org/namespace/local/, local
+ROW5     7, https://www.fgdc.gov/metadata/csdgm/, csdgm
+ROW6     8, http://www.tridas.org/, tridas
+ROW7     4, http://www.ndltd.org/standards/metadata, thesis
+SELECT:  SELECT * FROM metadatafieldregistry;
+COLUMNS: metadata_field_id, metadata_schema_id, element, qualifier, scope_note
+TYPES:   4, 4, 12, 12, -1
+ROW1     1, 1, contributor, _NULL_, A person, organization, or service responsible for the content of the resource.  Catch-all for unspecified contributors.
+ROW2     2, 1, contributor, advisor, Use primarily for thesis advisor.
+ROW3     3, 1, contributor, author, _NULL_
+ROW4     4, 1, contributor, editor, _NULL_
+ROW5     5, 1, contributor, illustrator, _NULL_
+ROW6     6, 1, contributor, other, _NULL_
+ROW7     7, 1, coverage, spatial, Spatial characteristics of content.
+ROW8     8, 1, coverage, temporal, Temporal characteristics of content.
+ROW9     9, 1, creator, _NULL_, Do not use; only for harvested metadata.
+ROW10    10, 1, date, _NULL_, Use qualified form if possible.
+ROW11    11, 1, date, accessioned, Date DSpace takes possession of item.
+ROW12    12, 1, date, available, Date or date range item became available to the public.
+ROW13    13, 1, date, copyright, Date of copyright.
+ROW14    14, 1, date, created, Date of creation or manufacture of intellectual content if different from date.issued.
+ROW15    15, 1, date, issued, Date of publication or distribution.
+ROW16    16, 1, date, submitted, Recommend for theses/dissertations.
+ROW17    17, 1, identifier, _NULL_, Catch-all for unambiguous identifiers not defined by
+    qualified form; use identifier.other for a known identifier common
+    to a local collection instead of unqualified form.
+ROW18    18, 1, identifier, citation, Human-readable, standard bibliographic citation 
+    of non-DSpace format of this item
+ROW19    19, 1, identifier, govdoc, A government document number
+ROW20    20, 1, identifier, isbn, International Standard Book Number
+ROW21    21, 1, identifier, issn, International Standard Serial Number
+ROW22    22, 1, identifier, sici, Serial Item and Contribution Identifier
+ROW23    23, 1, identifier, ismn, International Standard Music Number
+ROW24    24, 1, identifier, other, A known identifier type common to a local collection.
+ROW25    25, 1, identifier, uri, Uniform Resource Identifier
+ROW26    26, 1, description, _NULL_, Catch-all for any description not defined by qualifiers.
+ROW27    27, 1, description, abstract, Abstract or summary.
+ROW28    28, 1, description, provenance, The history of custody of the item since its creation, including any changes successive custodians made to it.
+ROW29    29, 1, description, sponsorship, Information about sponsoring agencies, individuals, or
+    contractual arrangements for the item.
+ROW30    30, 1, description, statementofresponsibility, To preserve statement of responsibility from MARC records.
+ROW31    31, 1, description, tableofcontents, A table of contents for a given item.
+ROW32    32, 1, description, uri, Uniform Resource Identifier pointing to description of
+    this item.
+ROW33    33, 1, format, _NULL_, Catch-all for any format information not defined by qualifiers.
+ROW34    34, 1, format, extent, Size or duration.
+ROW35    35, 1, format, medium, Physical medium.
+ROW36    36, 1, format, mimetype, Registered MIME type identifiers.
+ROW37    37, 1, language, _NULL_, Catch-all for non-ISO forms of the language of the
+    item, accommodating harvested values.
+ROW38    38, 1, language, iso, Current ISO standard for language of intellectual content, including country codes (e.g. "en_US").
+ROW39    39, 1, publisher, _NULL_, Entity responsible for publication, distribution, or imprint.
+ROW40    40, 1, relation, _NULL_, Catch-all for references to other related items.
+ROW41    41, 1, relation, isformatof, References additional physical form.
+ROW42    42, 1, relation, ispartof, References physically or logically containing item.
+ROW43    43, 1, relation, ispartofseries, Series name and number within that series, if available.
+ROW44    44, 1, relation, haspart, References physically or logically contained item.
+ROW45    45, 1, relation, isversionof, References earlier version.
+ROW46    46, 1, relation, hasversion, References later version.
+ROW47    47, 1, relation, isbasedon, References source.
+ROW48    48, 1, relation, isreferencedby, Pointed to by referenced resource.
+ROW49    49, 1, relation, requires, Referenced resource is required to support function,
+    delivery, or coherence of item.
+ROW50    50, 1, relation, replaces, References preceeding item.
+ROW51    51, 1, relation, isreplacedby, References succeeding item.
+ROW52    52, 1, relation, uri, References Uniform Resource Identifier for related item.
+ROW53    53, 1, rights, _NULL_, Terms governing use and reproduction.
+ROW54    54, 1, rights, uri, References terms governing use and reproduction.
+ROW55    56, 1, source, uri, Do not use; only for harvested metadata.
+ROW56    57, 1, subject, _NULL_, Uncontrolled index term.
+ROW57    58, 1, subject, classification, Catch-all for value from local classification system;
+    global classification systems will receive specific qualifier
+ROW58    59, 1, subject, ddc, Dewey Decimal Classification Number
+ROW59    60, 1, subject, lcc, Library of Congress Classification Number
+ROW60    61, 1, subject, lcsh, Library of Congress Subject Headings
+ROW61    62, 1, subject, mesh, MEdical Subject Headings
+ROW62    63, 1, subject, other, Local controlled vocabulary; global vocabularies will receive specific qualifier.
+ROW63    64, 1, title, _NULL_, Title statement/title proper.
+ROW64    65, 1, title, alternative, Varying (or substitute) form of title proper appearing in item,
+    e.g. abbreviation or translation
+ROW65    66, 1, type, _NULL_, Nature or genre of content.
+ROW66    67, 1, provenance, _NULL_, _NULL_
+ROW67    68, 1, rights, license, _NULL_
+ROW68    69, 2, abstract, _NULL_, A summary of the resource.
+ROW69    70, 2, accessRights, _NULL_, Information about who can access the resource or an indication of its security status. May include information regarding access or restrictions based on privacy, security, or other policies.
+ROW70    71, 2, accrualMethod, _NULL_, The method by which items are added to a collection.
+ROW71    72, 2, accrualPeriodicity, _NULL_, The frequency with which items are added to a collection.
+ROW72    73, 2, accrualPolicy, _NULL_, The policy governing the addition of items to a collection.
+ROW73    74, 2, alternative, _NULL_, An alternative name for the resource.
+ROW74    75, 2, audience, _NULL_, A class of entity for whom the resource is intended or useful.
+ROW75    76, 2, available, _NULL_, Date (often a range) that the resource became or will become available.
+ROW76    77, 2, bibliographicCitation, _NULL_, Recommended practice is to include sufficient bibliographic detail to identify the resource as unambiguously as possible.
+ROW77    55, 1, source, _NULL_, 
+ROW78    78, 2, conformsTo, _NULL_, An established standard to which the described resource conforms.
+ROW79    79, 2, contributor, _NULL_, An entity responsible for making contributions to the resource. Examples of a Contributor include a person, an organization, or a service.
+ROW80    80, 2, coverage, _NULL_, The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant.
+ROW81    81, 2, created, _NULL_, Date of creation of the resource.
+ROW82    82, 2, creator, _NULL_, An entity primarily responsible for making the resource.
+ROW83    83, 2, date, _NULL_, A point or period of time associated with an event in the lifecycle of the resource.
+ROW84    84, 2, dateAccepted, _NULL_, Date of acceptance of the resource.
+ROW85    85, 2, dateCopyrighted, _NULL_, Date of copyright.
+ROW86    86, 2, dateSubmitted, _NULL_, Date of submission of the resource.
+ROW87    87, 2, description, _NULL_, An account of the resource.
+ROW88    88, 2, educationLevel, _NULL_, A class of entity, defined in terms of progression through an educational or training context, for which the described resource is intended.
+ROW89    89, 2, extent, _NULL_, The size or duration of the resource.
+ROW90    90, 2, format, _NULL_, The file format, physical medium, or dimensions of the resource.
+ROW91    91, 2, hasFormat, _NULL_, A related resource that is substantially the same as the pre-existing described resource, but in another format.
+ROW92    92, 2, hasPart, _NULL_, A related resource that is included either physically or logically in the described resource.
+ROW93    93, 2, hasVersion, _NULL_, A related resource that is a version, edition, or adaptation of the described resource.
+ROW94    94, 2, identifier, _NULL_, An unambiguous reference to the resource within a given context.
+ROW95    95, 2, instructionalMethod, _NULL_, A process, used to engender knowledge, attitudes and skills, that the described resource is designed to support.
+ROW96    96, 2, isFormatOf, _NULL_, A related resource that is substantially the same as the described resource, but in another format.
+ROW97    97, 2, isPartOf, _NULL_, A related resource in which the described resource is physically or logically included.
+ROW98    98, 2, isReferencedBy, _NULL_, A related resource that references, cites, or otherwise points to the described resource.
+ROW99    99, 2, isReplacedBy, _NULL_, A related resource that supplants, displaces, or supersedes the described resource.
+ROW100   100, 2, isRequiredBy, _NULL_, A related resource that requires the described resource to support its function, delivery, or coherence.
+ROW101   101, 2, issued, _NULL_, Date of formal issuance (e.g., publication) of the resource.
+ROW102   102, 2, isVersionOf, _NULL_, A related resource of which the described resource is a version, edition, or adaptation.
+ROW103   103, 2, language, _NULL_, A language of the resource.
+ROW104   104, 2, license, _NULL_, A legal document giving official permission to do something with the resource.
+ROW105   105, 2, mediator, _NULL_, An entity that mediates access to the resource and for whom the resource is intended or useful.
+ROW106   106, 2, medium, _NULL_, The material or physical carrier of the resource.
+ROW107   107, 2, modified, _NULL_, Date on which the resource was changed.
+ROW108   108, 2, provenance, _NULL_, A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation.
+ROW109   109, 2, publisher, _NULL_, An entity responsible for making the resource available.
+ROW110   110, 2, references, _NULL_, A related resource that is referenced, cited, or otherwise pointed to by the described resource.
+ROW111   111, 2, relation, _NULL_, A related resource.
+ROW112   112, 2, replaces, _NULL_, A related resource that is supplanted, displaced, or superseded by the described resource.
+ROW113   113, 2, requires, _NULL_, A related resource that is required by the described resource to support its function, delivery, or coherence.
+ROW114   114, 2, rights, _NULL_, Information about rights held in and over the resource.
+ROW115   115, 2, rightsHolder, _NULL_, A person or organization owning or managing rights over the resource.
+ROW116   116, 2, source, _NULL_, A related resource from which the described resource is derived.
+ROW117   117, 2, spatial, _NULL_, Spatial characteristics of the resource.
+ROW118   118, 2, subject, _NULL_, The topic of the resource.
+ROW119   119, 2, tableOfContents, _NULL_, A list of subunits of the resource.
+ROW120   120, 2, temporal, _NULL_, Temporal characteristics of the resource.
+ROW121   121, 2, title, _NULL_, A name given to the resource.
+ROW122   122, 2, type, _NULL_, The nature or genre of the resource.
+ROW123   123, 2, valid, _NULL_, Date (often a range) of validity of a resource.
+ROW124   124, 3, firstname, _NULL_, Metadata field used for the first name
+ROW125   125, 3, lastname, _NULL_, Metadata field used for the last name
+ROW126   126, 3, phone, _NULL_, Metadata field used for the phone number
+ROW127   127, 3, language, _NULL_, Metadata field used for the language
+ROW128   128, 1, date, updated, The last time the item was updated via the SWORD interface
+ROW129   129, 1, description, version, The Peer Reviewed status of an item
+ROW130   130, 1, identifier, slug, a uri supplied via the sword slug header, as a suggested uri for the item
+ROW131   131, 1, language, rfc3066, the rfc3066 form of the language for the item
+ROW132   132, 1, rights, holder, The owner of the copyright
+ROW133   143, 1, identifier, journal, 
+ROW134   134, 1, contributor, department, Affiliation
+ROW135   135, 1, description, collectioninformation, local, used to provide contact information and populate cover sheets
+ROW136   136, 1, description, note, Note
+ROW137   137, 4, degree, discipline, Program
+ROW138   138, 4, degree, grantor, Degree Grantor
+ROW139   139, 4, degree, level, Degree Level
+ROW140   140, 4, degree, name, Degree Name
+ROW141   141, 1, relation, url, Additional Links
+ROW142   142, 1, relation, embedded, Embedded Content
+ROW143   144, 1, eprint, version, 
+ROW144   145, 1, contributor, mentor, 
+ROW145   146, 1, contributor, instructor, 
+ROW146   147, 1, identifier, pmid, PubMed ID
+ROW147   148, 1, identifier, doi, Digital Object Identifier
+ROW148   149, 7, bounding, north, geospatial data
+ROW149   150, 7, accuracy, horizontal, geospatial data
+ROW150   151, 7, accuracy, vertical, geospatial data
+ROW151   152, 7, bounding, east, geospatial data
+ROW152   153, 7, bounding, south, geospatial data
+ROW153   154, 7, bounding, west, geospatial data
+ROW154   155, 7, contributor, compiler, geospatial data
+ROW155   156, 7, geodetic, horizdn, geospatial data
+ROW156   157, 7, measure, units, geospatial data
+ROW157   158, 7, projection, _NULL_, geospatial data
+ROW158   160, 7, subject, geographic, geospatial data
+ROW159   159, 7, spdoinfo, _NULL_, geospatial data
+ROW160   165, 2, contributor, department, theses/dissertations, articles, conference proceedings, faculty publications
+ROW161   166, 2, contributor, editor, monograph collections
+ROW162   167, 2, contributor, instructor, undergraduate and graduate projects 
+ROW163   168, 2, contributor, mentor, undergraduate and graduate projects 
+ROW164   170, 2, coverage, spatial, geospatial data, linguistics
+ROW165   171, 2, coverage, temporal, geospatial data, linguistics
+ROW166   172, 2, date, accessioned, system assigned
+ROW167   173, 2, date, available, system assigned
+ROW168   174, 2, date, issued, used as publication date
+ROW169   175, 2, date, submitted, system assigned
+ROW170   176, 2, description, abstract, 
+ROW171   179, 2, description, note, 
+ROW172   180, 2, description, provenance, system assigned
+ROW173   182, 2, description, sponsorship, articles, proceedings, theses/dissertations, student work
+ROW174   183, 2, description, tableofcontents, monographs, proceedings
+ROW175   188, 2, identifier, citation, 
+ROW176   189, 2, identifier, doi, 
+ROW177   191, 2, identifier, issn, 
+ROW178   192, 2, identifier, georef, 
+ROW179   193, 2, identifier, isbn, 
+ROW180   194, 2, identifier, journal, journals, magazines, newsletters, conference proceedings
+ROW181   197, 2, identifier, pmid, 
+ROW182   204, 1, subject, language, linguistics
+ROW183   199, 2, identifier, uri, system assigned
+ROW184   200, 2, language, iso, 
+ROW185   201, 2, relation, embedded, used for embedded audio/video links
+ROW186   202, 2, relation, ispartofseries, 
+ROW187   203, 2, relation, url, used for additional links
+ROW188   205, 2, subject, mesh, college of medicine, pharmacy collections
+ROW189   206, 2, title, alternative, 
+ROW190   208, 8, site, alias, dendrochronology collections
+ROW191   209, 8, site, name, dendrochronology collections
+ROW192   210, 8, site, number, dendrochronology collections
+ROW193   211, 8, coverage, spatial, dendrochronology collections
+ROW194   212, 8, coverage, temporal, dendrochronology collections
+ROW195   213, 8, date, issued, dendrochronology collections
+ROW196   214, 8, description, attributes, dendrochronology collections
+ROW197   215, 8, description, culture, dendrochronology collections
+ROW198   216, 8, description, dateCount, dendrochronology collections
+ROW199   217, 8, description, ecologicalZone, dendrochronology collections
+ROW200   218, 8, description, elevation, dendrochronology collections
+ROW201   219, 8, description, features, dendrochronology collections
+ROW202   220, 8, description, sampleCount, dendrochronology collections
+ROW203   221, 8, description, species, dendrochronology collections
+ROW204   222, 8, description, structureCount, dendrochronology collections
+ROW205   223, 8, description, structureType, dendrochronology collections
+ROW206   224, 8, issuedto, _NULL_, dendrochronology collections
+ROW207   225, 8, issuing, agency, dendrochronology collections
+ROW208   169, 1, contributor, participants, linguistics
+ROW209   164, 1, contributor, committeemember, theses/dissertations
+ROW210   163, 1, contributor, chair, theses/dissertations
+ROW211   181, 1, description, release, theses/dissertations
+ROW212   190, 1, identifier, eisbn, 
+ROW213   187, 1, identifier, cals, used for identification purposes with external customer
+ROW214   186, 1, identifier, callnumber, used for internal purposes for UAL material
+ROW215   185, 1, identifier, bibrecord, used for internal purposes for UAL material
+ROW216   184, 1, identifier, arxivid, 
+ROW217   198, 1, identifier, proquest, used for internal purposes for UAL material
+ROW218   196, 1, identifier, pmcid, 
+ROW219   195, 1, identifier, oclc, used for internal purposes for UAL material
+ROW220   177, 1, description, admin-note, local, used by system administrator / not publicly viewable
+ROW221   207, 1, type, linguistic, linguistics
+ROW222   226, 1, coverage, _NULL_, 
+ROW223   227, 1, identifier, eissn, 
+ROW224   228, 1, identifier, georef, 
+SELECT:  SELECT * FROM eperson;
+COLUMNS: eperson_id, email, password, can_log_in, require_certificate, self_registered, last_active, sub_frequency, netid, salt, digest_algorithm, uuid
+TYPES:   4, 12, 12, 16, 16, 16, 11, 4, 12, 12, 12, 0
+ROW1     13, turmanator@email.arizona.edu, deca7e2ec5fcfcdcdb8124364c1ac179b5804972693043d93396ca8550a506dad93a25e96ed18e6d082c60024b32307ac107b7fe6419762d3676ba30733c523f, 1, 0, 1, 2017-11-03 20:21:36.336, _NULL_, _NULL_, 24e34e4c97587bc37553f6e24eb0b8aa, SHA-512, fcc3aa81-a489-424a-b807-9d6235bf74eb
+ROW2     9, chapmank@u.library.arizona.edu, 846fc2a0e101336547ad67fcb8b576a4cef8d72ec8cb4df8afc78de22c7425e23e76f9042c0fa9a6cd989a5826ff22bf4ccd2fcb3a9f7b63aafbe9e044f88511, 1, 0, 1, _NULL_, _NULL_, _NULL_, 98041ca366a03ccd473dc624621b2057, SHA-512, d7a6d651-d999-435f-941e-29f2088e2b4f
+ROW3     3, glbrimhallmusic@gmail.com, 118c41321bf3426bea75bfb150fbdad6540d0b95f1a4f12901ab57441e6601bc18719ae0d1209c3834d87d613d7f06ff0f2c08852753cabbea911d0a3d4098f0, 1, 0, 1, 2017-06-06 22:13:12.023, _NULL_, _NULL_, 9af2a8fabdd8a2cb4dca77bbda310b4d, SHA-512, 51dde7d9-aca4-44b7-aafa-620b9edd691b
+ROW4     4, adhoward@email.arizona.edu, f00f8001f51149ac69cd262b1d4713d552b824ef3cf5ec3f37892b5cb3bba5b79b05385da4fbe69e1857400e9ba9f3680c2d3a8009298ab65d4a8747339277af, 1, 0, 1, _NULL_, _NULL_, _NULL_, 7a87faff28fbe56c8cda849d0cb85465, SHA-512, 70d2dd43-699d-411d-a986-f9ed601546c0
+ROW5     _NULL_, newuser41a42b2b-e3cc-406a-bf92-0fdcf0f81a97, _NULL_, _NULL_, 0, 0, _NULL_, _NULL_, _NULL_, _NULL_, _NULL_, 41a42b2b-e3cc-406a-bf92-0fdcf0f81a97
+ROW6     11, ruiqi@email.arizona.edu, 926d4a2e98abe048f6178f9368e5141a2fcfaff9479b5fc35627a5fa0d917e7388208e7415f0cf9441b4528a402eb637270352e4c052b2b56964686e8a12bf9a, 1, 0, 1, _NULL_, _NULL_, _NULL_, e5796ffdbbee305547b7f6cc3841c8aa, SHA-512, 55af3d6d-f0e7-4d6f-a7d3-aa3f4a78b6db
+ROW7     7, newuser7, _NULL_, _NULL_, 0, 0, _NULL_, _NULL_, _NULL_, _NULL_, _NULL_, f834664f-b9a5-4807-afb0-2993b4d80cab
+ROW8     2, kimberlychapman@email.arizona.edu, 47c53d4a29773a01aff6e5a1e1144ee5d74f721bbc2a3e79f1ee821732ba9eb7e49f1c8785bfb058b2c6a5e4812025f1aec273b996df02d57ef53edf26d193b8, 1, 0, 0, 2017-11-04 01:33:49.257, _NULL_, _NULL_, 9d0bc562d6ae2130c68ecd0e21ca7d40, SHA-512, 478e6c43-5a3f-4c71-a5a4-7a7d27176fcc
+ROW9     _NULL_, joeylongo@email.arizona.edu, a64a613d9300d41ece5e9f74134f7d096e72bdc3bb340f81c5823a10e4eb33ddaf48a4e144d8a96a30d1986f6cd06626c72c672a0c31abceb7d565806e939536, 1, 0, 1, 2017-10-04 18:17:44.384, _NULL_, _NULL_, 4ed84bcbdf8a6a9f946d4203b199bf54, SHA-512, 308f06b5-4250-4657-984c-83d499d11afb
+ROW10    12, cao89@email.arizona.edu, 66da52c88e8c604789f5cf54d7eb3cc909f30baaa286b7d229b59046a406e8ba79e1b17d7582e0d9b3130931197e92dce3e2b6d404283e1c9116246fdd75ae72, 1, 0, 1, 2017-10-27 08:37:26.267, _NULL_, _NULL_, a19ac1bb643acfb0ea2970523dc96826, SHA-512, 0e3df352-a814-4dab-b745-d5683533921b
+ROW11    10, rjromero1@email.arizona.edu, 00b0c5c1cd2cb77627190caa6aa3a14594f1478176bcd753b7f319228448bfa9e9c1386d86f78dba3399f49ef35a06ce93c031b3f65d06d998f1aff39107c29e, 1, 0, 1, 2017-08-25 20:37:00.114, _NULL_, _NULL_, 952e5ed846f04b568afa3be5cf7d411a, SHA-512, c0124e1b-a83e-412e-8bb4-c0d50f594d0d
+ROW12    8, librariankimberly@gmail.com, f8938d5ac3aac952db7cb87787b447a95d442dab34aadae0e521514e877b233f7bd5f79f5cd6f2408f8a7d7db9ef6cc63ee3b1c343d8b3148d29423ba3701c2a, 1, 0, 1, 2017-10-19 18:26:38.657, _NULL_, _NULL_, 2b4a85d707d3bc556496016599c7b51f, SHA-512, 38b93a85-c914-47cb-88c0-e478d4f5b217
+ROW13    5, mhagedon@email.arizona.edu, 698db684900e4b425ee7e342625575a4985656e521cb0059bbccb7946c97a252ccde5dcf8cb353fa5c5b7e0bb004a359f6cd967203c986acdca2055f5746f148, 1, 0, 1, 2017-10-05 16:46:32.151, _NULL_, _NULL_, 87d72bddb0fe8bf383f1bae6c6788e4f, SHA-512, 9719b5e0-eaa8-4f0b-8c60-e9bd8c8e1384
+ROW14    1, glbrimhall@email.arizona.edu, fdbbe4eb91e4b8ddcebbdbc883e27cd4956ac66699e8e8e6296ac09598c165b63bd091cdad898ba97b230ae06541c602384288aaa4c1f111eb9056849b83d448, 1, 0, 0, 2017-11-03 18:31:25.573, _NULL_, _NULL_, 893f21935531462e30817f1f6543805a, SHA-512, 4c0f3635-2381-46c5-889f-c9d0410f0e2f
+ROW15    6, brittanyrothengatter@gmail.com, 60feff19d512562790e6e0f0928a56cce54325824d0bade479b4c4e1729f35c8f84177b3b14510d5b207b95887df5febdf842763d0845afe26f63cfee4965efa, 1, 0, 1, 2017-11-03 18:33:10.835, _NULL_, _NULL_, 26fedc963ef84717e3dba6cdb65509cd, SHA-512, 38f47873-999d-4cd9-a5ff-2dc1c0d9a7cf
+ROW16    _NULL_, newuserb8307ca9-b650-4162-8a49-0b3b43914ed8, _NULL_, _NULL_, 0, 0, _NULL_, _NULL_, _NULL_, _NULL_, _NULL_, b8307ca9-b650-4162-8a49-0b3b43914ed8
+ROW17    _NULL_, brlatawiec@gmail.com, 38b7a0c0e5f307abad0032aac0468b5fa8d89568d8d1a91e4e19c084b39f3992909b8a7b416162555cb825d5607d7d292e5d244fd981cf3cb8e939d6eee32c0a, 1, 0, 1, 2017-11-03 18:38:15.991, _NULL_, _NULL_, 1e2d673b8c5a8b1b91b13e27b8348ba6, SHA-512, 1ffeacb5-70da-4700-a789-ecffee38fa8a
+SELECT:  SELECT * FROM epersongroup;
+COLUMNS: eperson_group_id, uuid, permanent, name
+TYPES:   4, 0, 16, 12
+ROW1     2, 22c96ba9-8918-4429-8cb8-ba3b485b2efb, 0, COMMUNITY_1_ADMIN
+ROW2     3, 487abf97-57b0-4bf7-ba55-01b89b4a4b61, 0, FacultySubmitter
+ROW3     4, 27eca032-7c1b-40fd-9343-2093ed2d0635, 0, COLLECTION_1_SUBMIT
+ROW4     6, 97832ef7-345f-4ebf-9140-b0541768ed26, 0, COLLECTION_11_SUBMIT
+ROW5     7, 7b7b3163-29ba-4cc8-912d-e44e81df143e, 0, COLLECTION_13_SUBMIT
+ROW6     8, 980e7c52-c756-4f99-973a-512ab076c813, 0, COLLECTION_14_SUBMIT
+ROW7     9, c7fcadf3-e642-453f-b361-6c30e4813a21, 0, COLLECTION_15_SUBMIT
+ROW8     10, 376ee30c-991d-472e-bb6f-73f7051dd115, 0, COLLECTION_16_SUBMIT
+ROW9     11, 73b5cb07-561f-40c8-b129-9c80894fc1ae, 0, COLLECTION_17_SUBMIT
+ROW10    12, 65974d14-6c6f-41c5-8dad-02914796e439, 0, COLLECTION_18_SUBMIT
+ROW11    13, 8769f194-9a3d-4ac2-8f1f-c1c0e7a92417, 0, COLLECTION_19_SUBMIT
+ROW12    14, f2684b2a-480e-445e-a86d-9bc4ab8c6a82, 0, COLLECTION_20_SUBMIT
+ROW13    15, e4d81308-7522-49f3-8170-dfd7257b56ec, 0, COLLECTION_21_SUBMIT
+ROW14    16, e1c7588e-7df3-424b-843a-9410e43dbabd, 0, COLLECTION_22_SUBMIT
+ROW15    17, b760fb9d-f268-4780-baa6-76059801e8ab, 0, COLLECTION_23_SUBMIT
+ROW16    18, e1550a94-91af-4341-b02e-5bc3b9775ccc, 0, COLLECTION_24_SUBMIT
+ROW17    19, d366fdf2-0324-40e6-be71-2281d5b018f3, 0, COLLECTION_5_SUBMIT
+ROW18    20, 713be310-ceb3-477b-9d01-0e82cd246f9e, 0, COLLECTION_4_ADMIN
+ROW19    0, 5f2c9fd0-3547-4bfd-b789-0093fc282dfc, 1, Anonymous
+ROW20    1, 1269e1fa-23c4-49a4-aa82-3a54e0cc1c17, 1, Administrator
+ROW21    _NULL_, 6f32fefd-79d7-404d-9219-95075533e397, 0, COLLECTION_0a829ed9-cb13-497c-9f6d-c4b59e5177b3_SUBMIT
+ROW22    _NULL_, f6fe4dc0-e426-4904-9a53-38a35464b272, 0, COLLECTION_119f4d4d-c977-4c81-87e1-d87a0924fa3e_SUBMIT
+ROW23    _NULL_, 92c9150f-ea3d-4eb3-8d26-e7c7712fb47a, 0, COLLECTION_ce9843d4-6dac-4ddf-9d50-51ce2ffed527_SUBMIT
+ROW24    _NULL_, a5ba2193-2b9d-433c-a87e-7179e695be1b, 0, COLLECTION_11618501-061f-49fe-b8a3-af00882a3ef9_ADMIN
+ROW25    _NULL_, 74dc3966-60c6-411e-8ae4-74ba3c62f7a1, 0, COLLECTION_0d6b6f7e-3914-4cb6-9fc4-8a0fdf80a629_ADMIN
+ROW26    _NULL_, c69f30d8-7fda-487b-88de-9d2198b336bd, 0, TucsonPovertyAdmins
+ROW27    _NULL_, 2b4edb60-27ac-47fe-b8b5-3a60de017e6b, 0, COLLECTION_38dc1615-f7ba-4065-b1ab-8704f5f9889a_ADMIN
+ROW28    _NULL_, 0f286be2-1661-4fb0-8654-0f8d3c1a6035, 0, new group0f286be2-1661-4fb0-8654-0f8d3c1a6035
+ROW29    _NULL_, 3da7c330-df35-4b3d-a0cd-a1c4db5d17d9, 0, A-Senior-Capstones
+ROW30    _NULL_, da4dc206-3d82-46d2-a28a-c12a0686897c, 0, COLLECTION_4fd006b5-8978-43fd-8001-2aa4e328273e_SUBMIT
+SELECT:  SELECT * FROM epersongroup2eperson;
+COLUMNS: eperson_group_id, eperson_id
+TYPES:   0, 0
+ROW1     74dc3966-60c6-411e-8ae4-74ba3c62f7a1, 38b93a85-c914-47cb-88c0-e478d4f5b217
+ROW2     c69f30d8-7fda-487b-88de-9d2198b336bd, 38b93a85-c914-47cb-88c0-e478d4f5b217
+ROW3     3da7c330-df35-4b3d-a0cd-a1c4db5d17d9, 1ffeacb5-70da-4700-a789-ecffee38fa8a
+ROW4     1269e1fa-23c4-49a4-aa82-3a54e0cc1c17, fcc3aa81-a489-424a-b807-9d6235bf74eb
+ROW5     1269e1fa-23c4-49a4-aa82-3a54e0cc1c17, d7a6d651-d999-435f-941e-29f2088e2b4f
+ROW6     1269e1fa-23c4-49a4-aa82-3a54e0cc1c17, 70d2dd43-699d-411d-a986-f9ed601546c0
+ROW7     1269e1fa-23c4-49a4-aa82-3a54e0cc1c17, 55af3d6d-f0e7-4d6f-a7d3-aa3f4a78b6db
+ROW8     1269e1fa-23c4-49a4-aa82-3a54e0cc1c17, 0e3df352-a814-4dab-b745-d5683533921b
+ROW9     1269e1fa-23c4-49a4-aa82-3a54e0cc1c17, 9719b5e0-eaa8-4f0b-8c60-e9bd8c8e1384
+ROW10    1269e1fa-23c4-49a4-aa82-3a54e0cc1c17, 4c0f3635-2381-46c5-889f-c9d0410f0e2f
+ROW11    1269e1fa-23c4-49a4-aa82-3a54e0cc1c17, 38f47873-999d-4cd9-a5ff-2dc1c0d9a7cf
+ROW12    1269e1fa-23c4-49a4-aa82-3a54e0cc1c17, 308f06b5-4250-4657-984c-83d499d11afb
+ROW13    487abf97-57b0-4bf7-ba55-01b89b4a4b61, 478e6c43-5a3f-4c71-a5a4-7a7d27176fcc
+ROW14    d366fdf2-0324-40e6-be71-2281d5b018f3, c0124e1b-a83e-412e-8bb4-c0d50f594d0d
+ROW15    713be310-ceb3-477b-9d01-0e82cd246f9e, c0124e1b-a83e-412e-8bb4-c0d50f594d0d
+ROW16    22c96ba9-8918-4429-8cb8-ba3b485b2efb, 70d2dd43-699d-411d-a986-f9ed601546c0
+ROW17    22c96ba9-8918-4429-8cb8-ba3b485b2efb, 478e6c43-5a3f-4c71-a5a4-7a7d27176fcc
+ROW18    22c96ba9-8918-4429-8cb8-ba3b485b2efb, 9719b5e0-eaa8-4f0b-8c60-e9bd8c8e1384
+ROW19    22c96ba9-8918-4429-8cb8-ba3b485b2efb, 4c0f3635-2381-46c5-889f-c9d0410f0e2f
+ROW20    22c96ba9-8918-4429-8cb8-ba3b485b2efb, 1ffeacb5-70da-4700-a789-ecffee38fa8a
+SELECT:  SELECT * FROM community;
+COLUMNS: community_id, uuid, admin, logo_bitstream_id
+TYPES:   4, 0, 0, 0
+ROW1     2, abf3228c-837c-4232-ab0c-0b57c033c457, _NULL_, b13a1acd-1639-41a8-8f2a-a20528eabaf9
+ROW2     3, 3022f890-3910-4264-b307-5bb6abaad9e6, _NULL_, _NULL_
+ROW3     4, 094e709c-9fee-4762-9f53-959ce5420489, _NULL_, _NULL_
+ROW4     6, 26a74528-c6b8-4453-a933-49d85b385c62, _NULL_, _NULL_
+ROW5     7, 096108f9-bb72-4039-b2eb-7fe22a0de6df, _NULL_, _NULL_
+ROW6     8, 8468e63d-0b8a-466f-9602-b1b3764d7f8b, _NULL_, 43fc9fa5-d397-494e-9f12-472858577176
+ROW7     9, 3373327a-01b1-4446-b1bf-b0900b7a145f, _NULL_, e2c620bb-2def-4291-9098-08e2716a6783
+ROW8     10, 9fe05f87-44ba-4866-abb2-83db37378253, _NULL_, 4c15647c-2769-4f21-8d7d-f35cb6d6bf1f
+ROW9     5, 6bdabe2f-e02e-4a84-98c3-2d14cf36ba26, _NULL_, 29e2c9fb-a143-4dbb-9237-ae54cdcbd970
+ROW10    11, 87aa8895-a642-4b50-b529-e052c6d25797, _NULL_, 12c36397-4e91-4e7b-8aa8-ab33fe1a9b14
+ROW11    12, a636292d-e17a-44d9-99b7-32016e523f0e, _NULL_, 3415c16b-a15d-4ebe-a497-a79fa7221204
+ROW12    13, c8bd5892-18c3-4a49-9553-d49dab163638, _NULL_, 4b4b8240-56f5-4aed-b31b-86496e77862b
+ROW13    14, fe03c203-e13d-4d64-8697-124df0139583, _NULL_, 01f2c351-080b-4b67-91fc-244927333760
+ROW14    15, ba25d37c-8c4b-42c1-8a6c-0d6af565fb50, _NULL_, b14f4203-7f5c-4187-ad7e-40d144580254
+ROW15    16, f1ec81da-7fa9-4d43-be0b-33cdd65d4a16, _NULL_, 70360b8d-93ea-41ff-955f-318329849087
+ROW16    17, e864068f-9c00-4449-a617-1a624484b0f3, _NULL_, b9f62f59-aa61-445e-b2ef-0afcf25f775c
+ROW17    18, 307a3a52-319f-41c0-a828-f5e28a06bd81, _NULL_, _NULL_
+ROW18    19, 6a417854-133b-40be-885d-30285e541bf3, _NULL_, e490ca32-1a46-4d4a-810f-c86c7449033b
+ROW19    20, d4ed0b4a-34be-45eb-9f75-9f9683f26a31, _NULL_, c2a1cabc-8380-432b-9456-7d76735a156d
+ROW20    21, 92985974-a26f-4c7e-8c41-dd18a361a21c, _NULL_, 9ed1e6af-971c-49f5-81e7-efdb2d11339f
+ROW21    22, c8794c48-01bf-41d9-962d-797b25b41974, _NULL_, 8682ae56-18e6-4cc4-9cd4-e7916759eb85
+ROW22    23, 42720e70-8341-4f23-b79c-f872b13b3fd7, _NULL_, _NULL_
+ROW23    1, e39eeeac-723e-468f-9df6-06bf176c513f, 22c96ba9-8918-4429-8cb8-ba3b485b2efb, 80dbf054-db3c-400b-8fe9-b6d9a59b9a37
+ROW24    _NULL_, cf7494d9-9f32-4c2e-8e2f-3a7858c0c2f5, _NULL_, _NULL_
+SELECT:  SELECT * FROM community2community;
+COLUMNS: parent_comm_id, child_comm_id
+TYPES:   0, 0
+ROW1     e39eeeac-723e-468f-9df6-06bf176c513f, 3022f890-3910-4264-b307-5bb6abaad9e6
+ROW2     abf3228c-837c-4232-ab0c-0b57c033c457, 094e709c-9fee-4762-9f53-959ce5420489
+ROW3     6bdabe2f-e02e-4a84-98c3-2d14cf36ba26, 26a74528-c6b8-4453-a933-49d85b385c62
+ROW4     e39eeeac-723e-468f-9df6-06bf176c513f, 096108f9-bb72-4039-b2eb-7fe22a0de6df
+ROW5     8468e63d-0b8a-466f-9602-b1b3764d7f8b, 3373327a-01b1-4446-b1bf-b0900b7a145f
+ROW6     3373327a-01b1-4446-b1bf-b0900b7a145f, 9fe05f87-44ba-4866-abb2-83db37378253
+ROW7     8468e63d-0b8a-466f-9602-b1b3764d7f8b, 87aa8895-a642-4b50-b529-e052c6d25797
+ROW8     8468e63d-0b8a-466f-9602-b1b3764d7f8b, a636292d-e17a-44d9-99b7-32016e523f0e
+ROW9     8468e63d-0b8a-466f-9602-b1b3764d7f8b, c8bd5892-18c3-4a49-9553-d49dab163638
+ROW10    8468e63d-0b8a-466f-9602-b1b3764d7f8b, fe03c203-e13d-4d64-8697-124df0139583
+ROW11    8468e63d-0b8a-466f-9602-b1b3764d7f8b, ba25d37c-8c4b-42c1-8a6c-0d6af565fb50
+ROW12    8468e63d-0b8a-466f-9602-b1b3764d7f8b, f1ec81da-7fa9-4d43-be0b-33cdd65d4a16
+ROW13    8468e63d-0b8a-466f-9602-b1b3764d7f8b, e864068f-9c00-4449-a617-1a624484b0f3
+ROW14    307a3a52-319f-41c0-a828-f5e28a06bd81, 6a417854-133b-40be-885d-30285e541bf3
+ROW15    307a3a52-319f-41c0-a828-f5e28a06bd81, d4ed0b4a-34be-45eb-9f75-9f9683f26a31
+ROW16    d4ed0b4a-34be-45eb-9f75-9f9683f26a31, 92985974-a26f-4c7e-8c41-dd18a361a21c
+ROW17    307a3a52-319f-41c0-a828-f5e28a06bd81, c8794c48-01bf-41d9-962d-797b25b41974
+ROW18    307a3a52-319f-41c0-a828-f5e28a06bd81, 42720e70-8341-4f23-b79c-f872b13b3fd7
+ROW19    6bdabe2f-e02e-4a84-98c3-2d14cf36ba26, cf7494d9-9f32-4c2e-8e2f-3a7858c0c2f5
+SELECT:  SELECT * FROM collection;
+COLUMNS: collection_id, uuid, workflow_step_1, workflow_step_2, workflow_step_3, submitter, template_item_id, logo_bitstream_id, admin
+TYPES:   4, 0, 0, 0, 0, 0, 0, 0, 0
+ROW1     _NULL_, 0a829ed9-cb13-497c-9f6d-c4b59e5177b3, _NULL_, _NULL_, _NULL_, 6f32fefd-79d7-404d-9219-95075533e397, _NULL_, _NULL_, _NULL_
+ROW2     _NULL_, 119f4d4d-c977-4c81-87e1-d87a0924fa3e, _NULL_, _NULL_, _NULL_, f6fe4dc0-e426-4904-9a53-38a35464b272, _NULL_, _NULL_, _NULL_
+ROW3     _NULL_, ce9843d4-6dac-4ddf-9d50-51ce2ffed527, _NULL_, _NULL_, _NULL_, 92c9150f-ea3d-4eb3-8d26-e7c7712fb47a, _NULL_, _NULL_, _NULL_
+ROW4     2, 11618501-061f-49fe-b8a3-af00882a3ef9, _NULL_, _NULL_, _NULL_, _NULL_, _NULL_, 550a8db8-36eb-4ab8-9bda-ed1ef8dac820, a5ba2193-2b9d-433c-a87e-7179e695be1b
+ROW5     1, 0d6b6f7e-3914-4cb6-9fc4-8a0fdf80a629, _NULL_, _NULL_, _NULL_, 27eca032-7c1b-40fd-9343-2093ed2d0635, 9463b508-268e-4cef-88fc-d2e45a669ae5, _NULL_, 74dc3966-60c6-411e-8ae4-74ba3c62f7a1
+ROW6     3, 38dc1615-f7ba-4065-b1ab-8704f5f9889a, _NULL_, _NULL_, _NULL_, _NULL_, ab21ba0a-eabb-48c7-835c-e11aee4e1b54, 59494a1c-e282-443f-ac43-f8a201ae1784, 2b4edb60-27ac-47fe-b8b5-3a60de017e6b
+ROW7     4, 4fd006b5-8978-43fd-8001-2aa4e328273e, _NULL_, _NULL_, _NULL_, da4dc206-3d82-46d2-a28a-c12a0686897c, _NULL_, _NULL_, 713be310-ceb3-477b-9d01-0e82cd246f9e
+ROW8     6, a544240d-ca09-42f1-b098-e04eb1d48883, _NULL_, _NULL_, _NULL_, _NULL_, _NULL_, _NULL_, _NULL_
+ROW9     7, 46f53c6e-5781-4b33-8d39-36b0f5bbdb8b, _NULL_, _NULL_, _NULL_, _NULL_, _NULL_, _NULL_, _NULL_
+ROW10    12, 892b1d76-5e0a-481b-9882-db8a781f1e6e, _NULL_, _NULL_, _NULL_, _NULL_, _NULL_, _NULL_, _NULL_
+ROW11    11, 1fa35ecf-a138-4868-bc34-5a0bd11a4a1a, _NULL_, _NULL_, _NULL_, 97832ef7-345f-4ebf-9140-b0541768ed26, _NULL_, caf80f0b-7874-4e00-90fd-9df928d55899, _NULL_
+ROW12    13, c5f71a77-ca96-4582-8f3e-06215e344480, _NULL_, _NULL_, _NULL_, 7b7b3163-29ba-4cc8-912d-e44e81df143e, _NULL_, _NULL_, _NULL_
+ROW13    14, 79754c5c-634c-446d-be9f-702f8790971e, _NULL_, _NULL_, _NULL_, 980e7c52-c756-4f99-973a-512ab076c813, _NULL_, _NULL_, _NULL_
+ROW14    15, 16359c80-bb4c-4310-a93a-a67aae3abb52, _NULL_, _NULL_, _NULL_, c7fcadf3-e642-453f-b361-6c30e4813a21, _NULL_, eefdd500-15f4-46b0-8c36-827b939f985b, _NULL_
+ROW15    16, c088529e-12e1-46bb-85dd-9a208918eaab, _NULL_, _NULL_, _NULL_, 376ee30c-991d-472e-bb6f-73f7051dd115, _NULL_, bab8109b-965c-4b19-94f7-ad4d07af5d35, _NULL_
+ROW16    17, 60338ca5-e8fa-4d7c-bb4c-26a93873d152, _NULL_, _NULL_, _NULL_, 73b5cb07-561f-40c8-b129-9c80894fc1ae, _NULL_, 2a6b88fd-96e1-44d9-9eaa-50e595f0bb1e, _NULL_
+ROW17    18, 9d79bd02-4351-4a39-9e04-6c3ed0e2af23, _NULL_, _NULL_, _NULL_, 65974d14-6c6f-41c5-8dad-02914796e439, _NULL_, b90b970b-c9ef-48e3-928d-9043456cff05, _NULL_
+ROW18    19, 76e45c60-4faf-4d61-8580-bbc585bf2c68, _NULL_, _NULL_, _NULL_, 8769f194-9a3d-4ac2-8f1f-c1c0e7a92417, _NULL_, 1d38949b-60f3-490f-8c46-932970cee286, _NULL_
+ROW19    20, eb0de306-ba52-438c-b199-ff5631a6c40e, _NULL_, _NULL_, _NULL_, f2684b2a-480e-445e-a86d-9bc4ab8c6a82, _NULL_, _NULL_, _NULL_
+ROW20    21, 408811c9-d4f8-4eee-8b61-1e79b7307a86, _NULL_, _NULL_, _NULL_, e4d81308-7522-49f3-8170-dfd7257b56ec, _NULL_, _NULL_, _NULL_
+ROW21    22, 1fbf3154-c3cd-4476-84b6-2ec0e7ebb2a3, _NULL_, _NULL_, _NULL_, e1c7588e-7df3-424b-843a-9410e43dbabd, _NULL_, fb0c236c-79c7-4b58-beab-6aae9079719c, _NULL_
+ROW22    23, 62582628-41d9-47bf-851b-6787fc36e19b, _NULL_, _NULL_, _NULL_, b760fb9d-f268-4780-baa6-76059801e8ab, _NULL_, 51457254-0dde-4601-96db-934eed03a320, _NULL_
+ROW23    24, 1f1fcaa8-3421-4e7d-b9ba-127d88eabce2, _NULL_, _NULL_, _NULL_, e1550a94-91af-4341-b02e-5bc3b9775ccc, _NULL_, f1b833b8-af37-4cae-ba45-9c18044ae77b, _NULL_
+ROW24    5, 334460ad-38ba-4437-93df-325821d5703e, _NULL_, _NULL_, _NULL_, d366fdf2-0324-40e6-be71-2281d5b018f3, _NULL_, _NULL_, _NULL_
+SELECT:  SELECT * FROM community2collection;
+COLUMNS: collection_id, community_id
+TYPES:   0, 0
+ROW1     0d6b6f7e-3914-4cb6-9fc4-8a0fdf80a629, abf3228c-837c-4232-ab0c-0b57c033c457
+ROW2     11618501-061f-49fe-b8a3-af00882a3ef9, 094e709c-9fee-4762-9f53-959ce5420489
+ROW3     38dc1615-f7ba-4065-b1ab-8704f5f9889a, 6bdabe2f-e02e-4a84-98c3-2d14cf36ba26
+ROW4     4fd006b5-8978-43fd-8001-2aa4e328273e, 26a74528-c6b8-4453-a933-49d85b385c62
+ROW5     334460ad-38ba-4437-93df-325821d5703e, 096108f9-bb72-4039-b2eb-7fe22a0de6df
+ROW6     a544240d-ca09-42f1-b098-e04eb1d48883, 094e709c-9fee-4762-9f53-959ce5420489
+ROW7     46f53c6e-5781-4b33-8d39-36b0f5bbdb8b, 8468e63d-0b8a-466f-9602-b1b3764d7f8b
+ROW8     1fa35ecf-a138-4868-bc34-5a0bd11a4a1a, 9fe05f87-44ba-4866-abb2-83db37378253
+ROW9     892b1d76-5e0a-481b-9882-db8a781f1e6e, 3373327a-01b1-4446-b1bf-b0900b7a145f
+ROW10    c5f71a77-ca96-4582-8f3e-06215e344480, 9fe05f87-44ba-4866-abb2-83db37378253
+ROW11    79754c5c-634c-446d-be9f-702f8790971e, 9fe05f87-44ba-4866-abb2-83db37378253
+ROW12    16359c80-bb4c-4310-a93a-a67aae3abb52, 87aa8895-a642-4b50-b529-e052c6d25797
+ROW13    c088529e-12e1-46bb-85dd-9a208918eaab, 87aa8895-a642-4b50-b529-e052c6d25797
+ROW14    60338ca5-e8fa-4d7c-bb4c-26a93873d152, 87aa8895-a642-4b50-b529-e052c6d25797
+ROW15    9d79bd02-4351-4a39-9e04-6c3ed0e2af23, 87aa8895-a642-4b50-b529-e052c6d25797
+ROW16    76e45c60-4faf-4d61-8580-bbc585bf2c68, 87aa8895-a642-4b50-b529-e052c6d25797
+ROW17    eb0de306-ba52-438c-b199-ff5631a6c40e, 307a3a52-319f-41c0-a828-f5e28a06bd81
+ROW18    408811c9-d4f8-4eee-8b61-1e79b7307a86, 307a3a52-319f-41c0-a828-f5e28a06bd81
+ROW19    1fbf3154-c3cd-4476-84b6-2ec0e7ebb2a3, d4ed0b4a-34be-45eb-9f75-9f9683f26a31
+ROW20    62582628-41d9-47bf-851b-6787fc36e19b, 42720e70-8341-4f23-b79c-f872b13b3fd7
+ROW21    1f1fcaa8-3421-4e7d-b9ba-127d88eabce2, 42720e70-8341-4f23-b79c-f872b13b3fd7
+ROW22    0a829ed9-cb13-497c-9f6d-c4b59e5177b3, cf7494d9-9f32-4c2e-8e2f-3a7858c0c2f5
+ROW23    119f4d4d-c977-4c81-87e1-d87a0924fa3e, cf7494d9-9f32-4c2e-8e2f-3a7858c0c2f5
+ROW24    ce9843d4-6dac-4ddf-9d50-51ce2ffed527, cf7494d9-9f32-4c2e-8e2f-3a7858c0c2f5
+SELECT:  SELECT * FROM subscription;
+COLUMNS: subscription_id, eperson_id, collection_id
+TYPES:   4, 0, 0
+DBACCESS: Closed DBI:Pg:dbname = dspacetst;host = repository-dbdev;port = 5432 successfully

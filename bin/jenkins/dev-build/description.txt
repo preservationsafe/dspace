@@ -1,0 +1,11 @@
+Project name: dspace-dev-build
+
+Description:
+
+Bringing the University of Arizona Library Campus Repository in house ( http://arizona.openrepository.com/arizona/ )
+
+JIRA:  https://jira.arizona.edu/projects/DSPACE/issues/DSPACE-49?filter=allopenissues
+
+Confluence: https://confluence.arizona.edu/display/UALTESS/DCP+Portfolio
+
+Redmine:  http://redmine.library.arizona.edu/projects/dspace
