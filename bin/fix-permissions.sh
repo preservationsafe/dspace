@@ -12,8 +12,11 @@ exec_cmd "chgrp -R dspace $DSPACE_HOME_DIR 2>/dev/null"
 exec_cmd "find $DSPACE_HOME_DIR -type f -print0 | xargs -0 chmod 664 2>/dev/null"
 exec_cmd "find $DSPACE_HOME_DIR -type d -print0 | xargs -0 chmod 2775 2>/dev/null"
 exec_cmd "find $DSPACE_HOME_DIR/bin -type f -print0 | xargs -0 chmod 775 2>/dev/null"
-exec_cmd "find $DSPACE_HOME_DIR/dspace/bin -type f -print0 | xargs -0 chmod 775 2>/dev/null"
+
+if [ -d "$DSPACE_HOME_DIR/dspace/bin" ]; then
+   exec_cmd "find $DSPACE_HOME_DIR/dspace/bin -type f -print0 | xargs -0 chmod 775 2>/dev/null"
+fi
 
 if [ -d "$DSPACE_HOME_DIR/dspace-install/bin" ]; then
    exec_cmd "find $DSPACE_HOME_DIR/dspace-install/bin -type f -print0 | xargs -0 chmod 775 2>/dev/null"
-fi
+fi 
