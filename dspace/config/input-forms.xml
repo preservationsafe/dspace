@@ -875,6 +875,7 @@ it, please enter the types and the actual numbers or codes.</hint>
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>rights</dc-element>
+         <dc-qualifier></dc-qualifier>
          <repeatable>false</repeatable>
          <label>Rights</label>
          <input-type>textarea</input-type>
@@ -1014,17 +1015,6 @@ it, please enter the types and the actual numbers or codes.</hint>
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>contributor</dc-element>
-         <dc-qualifier>committeechair</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Committee Chair</label>
-         <input-type>onebox</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>contributor</dc-element>
          <dc-qualifier>committeemember</dc-qualifier>
          <repeatable>true</repeatable>
          <label>Committee Member</label>
@@ -1060,6 +1050,7 @@ it, please enter the types and the actual numbers or codes.</hint>
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>coverage</dc-element>
+         <dc-qualifier></dc-qualifier>
          <label>Coverage</label>
          <input-type>textarea</input-type>
          <hint></hint>
@@ -1154,9 +1145,13 @@ it, please enter the types and the actual numbers or codes.</hint>
      </pair>
      <pair>
        <displayed-value>ProQuest ID</displayed-value>
+       <stored-value>proquest</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Other</displayed-value>
        <stored-value>other</stored-value>
      </pair>
-   </value-pairs>
+</value-pairs>
 
    <value-pairs value-pairs-name="common_version" dc-term="version">
      <pair>
@@ -1203,6 +1198,7 @@ it, please enter the types and the actual numbers or codes.</hint>
        <stored-value>Other</stored-value>
      </pair>
    </value-pairs>
+
    <!-- List of types for ua-dissertations -->
    <value-pairs value-pairs-name="ua-dissertations-types" dc-term="type">
      <pair>
