@@ -5,6 +5,7 @@ STEP=${1:-build}
 . "$( dirname "${BASH_SOURCE[0]}" )/get-dspace-home-dir.sh"
 
 DSPACE_SRC="$DSPACE_HOME_DIR/dspace"
+DSPACE_RUN="$DSPACE_HOME_DIR/dspace-install"
 SELENIUM_IMAGE="selenium/standalone-firefox:2.53.0";
 
 if [ "$STEP" == "reset" ]; then
