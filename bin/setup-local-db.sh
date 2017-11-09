@@ -20,7 +20,7 @@
 # Comment out old shared DB info and add new line 'db.url = jdbc:postgresql://localhost:5432/dspacelocal'
 #
 #
-# If script fails part way through, will need to remove the DB with 'dropdb dspacelocal' (may need pstgres password again for that cmd) in order to rerun
+# If script fails part way through, will need to remove the DB user created in the first step with 'dropuser dspacedba' and the DB with 'dropdb dspacelocal' (may need pstgres password again for that cmd) in order to rerun
 # Also if script fails AFTER the assetstoreShared is created and the empty dir assetstore is created, skip those parts and just run the cp command at the end.
 
       
@@ -38,9 +38,14 @@ ASSET_STORE_SHARED=assetstoreShared # Name of shared assetstore to allow for fut
 ASSET_STORE_LOCAL=assetstore # Name of local assetstore (should stay the same name to avoid config changes in local.cfg)
 
 
-# Create the postgres DB on local machine to be used for DSpace development. 
+# Create the postgres user and DB on local machine to be used for DSpace development. 
+# NOTE: Will be prompted twice for the new user password, remember this... and prompted to enter the superuser password to confirm you are authorized to complete this action
+# If user is already created can skip this or run: 'dropuser $DB_USER_BACKUP' if you have the dropuser cmd installed (came with my postgres install automatically) or log in as the superuser and run 'DROP USER $DB_USER_BACKUP'
+createuser --username=$DB_USER_CREATE --no-superuser --pwprompt $DB_USER_BACKUP
+
 # Use 1st line if postgres user has no password set or edit second line to have correct password if postgres user has a password set
 # NOTE: Very important to keep this DB 100% clean and empty. DO NOT hook up DSpace BEFORE completing the import... it will fail.
+# If DB is already created can skip this or run: 'dropdb $DB_LOCAL' if you have the dropdb cmd installed (came with my postgres install automatically) or log in as superuser and run 'DROP DATABASE $DB_LOCAL'
 createdb --username=$DB_USER_CREATE --owner=$DB_USER_BACKUP --encoding=UNICODE $DB_LOCAL
 # PGPASSWORD="postgresUserPassword" createdb --username=$DB_USER_CREATE --owner=$DB_USER_BACKUP --encoding=UNICODE $DB_LOCAL
 
@@ -53,8 +58,13 @@ psql --username=$DB_USER_CREATE $DB_LOCAL -c "CREATE EXTENSION pgcrypto;"
 PGPASSWORD=$DB_PASSWORD pg_dump -h $DB_HOST -U $DB_USER_BACKUP $DB_SHARED > $DB_BACKUP_FILE   
 
 # Import the metadata into the new local DSpace development postgres DB
-# NOTE: PG_RESTORE does not work as the backup is done as a text-based file and psql has to be used.
-cat $DB_BACKUP_FILE | psql $DB_LOCAL
+# NOTE: PG_RESTORE does not work as the backup is done as a text-based file and psql has to be used. Also should produce long list of output from successful import of tables.... if do not see this before the assetstore copy starts check for error
+# Use one or the other...
+# For macOS
+# cat $DB_BACKUP_FILE | psql $DB_LOCAL
+# For Linux users
+psql -U $DB_USER_BACKUP $DB_LOCAL < $DB_BACKUP_FILE
+
 
 # CD to the tomcat folder and rename the shared assetstore to avoid having to make configuration file changes with new local one
 cd $TOMCAT 
