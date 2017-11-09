@@ -1,69 +1,56 @@
 
-# DSpace
+# Campusrepo DSpace
+The University of Arizona Library's Customized DSpace Installation for the UA Campus Repository. This project is built around the DSpace platform ([DSpace github](https://github.com/DSpace/DSpace)).
 
-[![Build Status](https://travis-ci.org/DSpace/DSpace.png?branch=master)](https://travis-ci.org/DSpace/DSpace)
+## Getting Started 
 
-[DSpace Documentation](https://wiki.duraspace.org/display/DSDOC/) | 
-[DSpace Releases](https://github.com/DSpace/DSpace/releases) |
-[DSpace Wiki](https://wiki.duraspace.org/display/DSPACE/Home) | 
-[Support](https://wiki.duraspace.org/display/DSPACE/Support)
+### Perquisites
+* Linux/Unix Operating System
+* Java JDK 8 
+* Apache Maven 3.0.5 or above
+* Apache Ant 1.8 or later
+* PostgreSQL 9.6
+* Tomcat 8
 
-DSpace open source software is a turnkey repository application used by more than 
-1000+ organizations and institutions worldwide to provide durable access to digital resources.
-For more information, visit http://www.dspace.org/
+### Installing
+* Create the database
+  
+  If you are going to migreate the database from repository-tst dspacedba will need to be the owner
+```
+createdb --username=[Postgres superuser] --owner=dspacedba --encoding=UNICODE [db name]
+```
+* Enable the pgcrypto extension
+```
+psql --username=[Postgres superuser] [db name] -c "CREATE EXTENSION pgcrypto;"  
+```
 
-## Downloads
+* Update `local.cfg` for your enviroment. Some properties to pay attention to:
+    * **dspace.dir**: This is the DSpace installation directory (must be an absolute path)
+    * **dspace.baseUrl**: DSpace host url
+    * **db.url**: The url of your PostgreSQL database, you may need to update the name of the database in the url
+    * **db.username**: Username of the owner of the PostgreSQL database
+    * **db.password**: Password of the owner of the PostgreSQL database
+* Copy `build.properties.EXAMPLE` to `build.properties` and update the **dspace_install.dir** to your DSpace installation (same as **dspace.dir** in `local.cfg`, and must also be an absolute path)
+* Change the owner (user and group) of `dspace-install` to who ever owns your tomcat directory
+* Run
+```
+ant build_init
+``` 
+* Start tomcat (if already running you may need to restart)
 
-The latest release of DSpace can be downloaded from the [DSpace website](http://www.dspace.org/latest-release/) or from [GitHub](https://github.com/DSpace/DSpace/releases).
+## How to work on this project
 
-Past releases are all available via GitHub at https://github.com/DSpace/DSpace/releases
+Every file (other than configuration files) that is worked on should be placed in the `dspace/modules` directory. Where you place them within that directory should match the file structure of the web app you are customizing. For example, if you wanted to customize `dspace-jspui/src/main/webapp/layout/header-default.jsp`, then you would copy that file to `dspace/modules/jspui/src/main/webapp/layout/header-default.jsp`. The Maven War plug-in will configure your build so that the file in the `dspace/modules` directory will be used as the default. This includes any JSP files or any DSpace api related files. Configuration files (e.g. input-forms.xml) should be altered in placed and versioned (essentially forked). Use one of the several ant `build_*` targets, found in `build.xml` to deploy locally (additional documentation can be found in that file).  
 
-## Documentation / Installation
+## Getting the source files
 
-Documentation for each release may be viewed online or downloaded via our [Documentation Wiki](https://wiki.duraspace.org/display/DSDOC/). 
+For this project we are using the the dspace-release version of dspace. There is also a dspace-src-release version of dspace (you can see all the release version on the [DSpace github release page](https://github.com/DSpace/DSpace/releases)). You can run the ant target `get_dspace_src` to grab those files and include them in your local copy of the project. Maven will recognize that you are including those files in the project and will opt to use those instead of the compiled jar files in your local Maven repository. This will allow you to explore and text DSpace source code, though you don't need them just to install DSpace locally and alter the files using the DSpace `modules` directory. 
 
-The latest DSpace Installation instructions are available at:
-https://wiki.duraspace.org/display/DSDOC6x/Installing+DSpace
+## Current Environments
+* **Production (Hosted by Atmire):** [arizona.openrepository.com](http://arizona.openrepository.com/arizona/)
+* **Test:** [repository-tst.library.arizona.edu](http://repository-tst.library.arizona.edu/jspui/)
 
-Please be aware that, as a Java web application, DSpace requires a database (PostgreSQL or Oracle) 
-and a servlet container (usually Tomcat) in order to function.
-More information about these and all other prerequisites can be found in the Installation instructions above.
-
-## Contributing
-
-DSpace is a community built and supported project. We do not have a centralized development or support team, 
-but have a dedicated group of volunteers who help us improve the software, documentation, resources, etc.
-
-We welcome contributions of any type. Here's a few basic guides that provide suggestions for contributing to DSpace:
-* [How to Contribute to DSpace](https://wiki.duraspace.org/display/DSPACE/How+to+Contribute+to+DSpace): How to contribute in general (via code, documentation, bug reports, expertise, etc)
-* [Code Contribution Guidelines](https://wiki.duraspace.org/display/DSPACE/Code+Contribution+Guidelines): How to give back code or contribute features, bug fixes, etc.
-* [DSpace Community Advisory Team (DCAT)](https://wiki.duraspace.org/display/cmtygp/DSpace+Community+Advisory+Team): If you are not a developer, we also have an interest group specifically for repository managers. The DCAT group meets virtually, once a month, and sends open invitations to join their meetings via the [DCAT mailing list](https://groups.google.com/d/forum/DSpaceCommunityAdvisoryTeam).
-
-We also encourage GitHub Pull Requests (PRs) at any time. Please see our [Development with Git](https://wiki.duraspace.org/display/DSPACE/Development+with+Git) guide for more info.
-
-In addition, a listing of all known contributors to DSpace software can be
-found online at: https://wiki.duraspace.org/display/DSPACE/DSpaceContributors
-
-## Getting Help
-
-DSpace provides public mailing lists where you can post questions or raise topics for discussion.
-We welcome everyone to participate in these lists:
-
-* [dspace-community@googlegroups.com](https://groups.google.com/d/forum/dspace-community) : General discussion about DSpace platform, announcements, sharing of best practices
-* [dspace-tech@googlegroups.com](https://groups.google.com/d/forum/dspace-tech) : Technical support mailing list. See also our guide for [How to troubleshoot an error](https://wiki.duraspace.org/display/DSPACE/Troubleshoot+an+error).
-* [dspace-devel@googlegroups.com](https://groups.google.com/d/forum/dspace-devel) : Developers / Development mailing list
-
-Additional support options are listed at https://wiki.duraspace.org/display/DSPACE/Support
-
-DSpace also has an active service provider network. If you'd rather hire a service provider to 
-install, upgrade, customize or host DSpace, then we recommend getting in touch with one of our 
-[Registered Service Providers](http://www.dspace.org/service-providers).
-
-## Issue Tracker
-
-The DSpace Issue Tracker can be found at: https://jira.duraspace.org/projects/DS/summary
-
-## License
-
-DSpace source code is freely available under a standard [BSD 3-Clause license](https://opensource.org/licenses/BSD-3-Clause).
-The full license is available at http://www.dspace.org/license/
+## Additional Resources
+* [DSpace 6.X Documentation](https://wiki.duraspace.org/display/DSDOC6x)	
+* [DSpace - Advance Customization](https://wiki.duraspace.org/display/DSDOC6x/Advanced+Customisation)
+* [DSpace 6.x Install Instructions](https://wiki.duraspace.org/display/DSDOC6x/Installing+DSpace) (May be helpful with installing the prerequisites)
