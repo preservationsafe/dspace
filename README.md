@@ -13,16 +13,16 @@ The University of Arizona Library's Customized DSpace Installation for the UA Ca
 * Tomcat 8
 
 ### Installing
-* Create the database
-  
-  If you are going to migreate the database from repository-tst dspacedba will need to be the owner
-```
-createdb --username=[Postgres superuser] --owner=dspacedba --encoding=UNICODE [db name]
-```
-* Enable the pgcrypto extension
-```
-psql --username=[Postgres superuser] [db name] -c "CREATE EXTENSION pgcrypto;"  
-```
+* Setup the database. To install a copy of the database from repository-tst check "Database Migrations" below. Otherwise, for a vanilla install: 
+  * Create the database
+
+  ```
+  createdb --username=[Postgres-superuser] --owner=[db-user] --encoding=UNICODE [db-name]
+  ```
+  * Enable the pgcrypto extension
+  ```
+  psql --username=[Postgres-superuser] [db-name] -c "CREATE EXTENSION pgcrypto;"  
+  ```
 
 * Update `local.cfg` for your enviroment. Some properties to pay attention to:
     * **dspace.dir**: This is the DSpace installation directory (must be an absolute path)
@@ -45,6 +45,10 @@ Every file (other than configuration files) that is worked on should be placed i
 ## Getting the source files
 
 For this project we are using the the dspace-release version of dspace. There is also a dspace-src-release version of dspace (you can see all the release version on the [DSpace github release page](https://github.com/DSpace/DSpace/releases)). You can run the ant target `get_dspace_src` to grab those files and include them in your local copy of the project. Maven will recognize that you are including those files in the project and will opt to use those instead of the compiled jar files in your local Maven repository. This will allow you to explore and text DSpace source code, though you don't need them just to install DSpace locally and alter the files using the DSpace `modules` directory. 
+
+## Database Migrations
+
+The script, `bin/setup-local-db.sh`, can be used to create the database and import a copy of the database from repository-tst. Addtional documentation can be found in the script. 
 
 ## Current Environments
 * **Production (Hosted by Atmire):** [arizona.openrepository.com](http://arizona.openrepository.com/arizona/)
