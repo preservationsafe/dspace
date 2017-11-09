@@ -14,6 +14,9 @@ COPY LICENSE* /opt/tomcat/dspace/
 COPY NOTICE /opt/tomcat/dspace/NOTICE
 COPY README.md /opt/tomcat/dspace/README.md
 
+# Remove legacy src/ directory
+RUN rm -fr /opt/tomcat/dspace/src
+
 # fix dspace ownership
 RUN chown -R dspace /opt/tomcat/dspace
 
