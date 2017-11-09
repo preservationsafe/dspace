@@ -5,7 +5,7 @@ use warnings;
 # set DOCKER_IMAGE to  dspace6-ide for an option 4 (described in print_help) developer enviroment
 my $DOCKER_REGISTRY    = "dockerepo.library.arizona.edu:5000";
 my $DOCKER_IMAGE_NAME  = "dspace6-dev";
-my $DOCKER_IMAGE       = "dspace6-dev:1.0";
+my $DOCKER_IMAGE       = "dspace6-dev:1.1";
 my $DOCKER_NETWORK     = "host";
 #my $DOCKER_NETWORK     = "dspace6-network";
 my $DSPACE_SRC         = "dspace-6.2-src-release";
@@ -146,19 +146,9 @@ sub checkout_src {
 
   print "\n************* SECTION 2: Checkout src ***************\n";
 
-  if ( ! -d "$SRC_DIR/src/dspace" ) {
-    print "EXEC: exploding the dspace src tarball\n";
-
-    $cmd = "cd $SRC_DIR; ssh vitae 'cat /data1/vitae/repos/$DSPACE_SRC.tar.gz' | pv | tar -xzf -; mv $DSPACE_SRC/* src; rmdir $DSPACE_SRC; cd -";
-    print "EXEC: '$cmd'\n";
-    `$cmd`;
-  }
-  else { print "VERIFIED: $SRC_DIR/src/dspace\n"; }
-
   my @srcdir_cmds =
       (
        "bin/fix-permissions.sh",
-       "bin/overlay-softlink.sh overlay src",
       );
 
     foreach my $src_cmd ( @srcdir_cmds ) {
@@ -166,12 +156,6 @@ sub checkout_src {
       print "EXEC: $cmd\n";
       `$cmd`;
     }
-
-    if ( ! -f "$SRC_DIR/src/dspace/config/local.cfg" ) {
-      $cmd = "cd $SRC_DIR/src/dspace/config; cp local.cfg-dev local.cfg; cd -";
-      print "EXEC: $cmd\n"; $out = `$cmd`;
-    }
-  else { print "VERIFIED: $SRC_DIR/campusrepo\n"; }
 
   umask( $old_umask );
   
