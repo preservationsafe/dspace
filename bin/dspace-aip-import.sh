@@ -24,7 +24,7 @@ export JAVA_OPTS="\
 -XX:PermSize=256m \
 -XX:MaxPermSize=512m"
 
-$DSPACE_HOME_DIR/run/bin/dspace packager -r -a -f -t AIP -e $EMAIL -i $DSPACE_SITE_HANDLE "$IMPORT_SITE_AIP"
+$DSPACE_HOME_DIR/dspace-install/bin/dspace packager -r -a -f -t AIP -e $EMAIL -i $DSPACE_SITE_HANDLE "$IMPORT_SITE_AIP"
 
 echo "If the import was not clean, make sure to run to reset:"
-echo "   $DSPACE_HOME_DIR/run/bin/dspace cleanup -v"
+echo "   $DSPACE_HOME_DIR/dspace-install/bin/dspace cleanup -v"

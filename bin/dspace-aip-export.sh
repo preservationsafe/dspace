@@ -18,4 +18,4 @@ fi
 
 mkdir -p $OUTPUT_DIR
 
-$DSPACE_HOME_DIR/run/bin/dspace packager -d -a -t AIP -e $EMAIL -i $DSPACE_SITE_HANDLE $OUTPUT_DIR/$OUTPUT_SITE.zip
+$DSPACE_HOME_DIR/dspace-install/bin/dspace packager -d -a -t AIP -e $EMAIL -i $DSPACE_SITE_HANDLE $OUTPUT_DIR/$OUTPUT_SITE.zip

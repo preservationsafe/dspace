@@ -13,7 +13,7 @@ my $out = `git rev-parse --show-toplevel`;
 chomp($out);
 my $dspace_dir = $out;
 
-if ( ! defined( $dstdir ) ) { $dstdir = "run/config"; }
+if ( ! defined( $dstdir ) ) { $dstdir = "dspace-install/config"; }
 
 sub verify_dstdir {
   if ( ! -d "$dstdir" ) {
@@ -48,7 +48,7 @@ sub verify_srcenv {
   if ( ! defined ( $srcenv ) || ! defined( $config_env{ $srcenv } ) ) {
     die "ERROR: invalid dspace environment [$srcenv]\n"
       ."ERROR: Available environments: ". join( ", ", sort( keys %config_env ) ). "\n\n"
-      ."USAGE: overlay-config.pl <environment-suffix> [dest_dir=run/config]\n"
+      ."USAGE: overlay-config.pl <environment-suffix> [dest_dir=dspace-install/config]\n"
       ."EXAMPLE: overlay-config.pl tst\n";
   }
 }

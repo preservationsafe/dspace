@@ -8,4 +8,4 @@
 FROM dockerepo.library.arizona.edu:5000/dspace6-dev:__DSPACE_BUILD_TAG__
 
 # Update dspace environment config values
-RUN cd /opt/tomcat/dspace && bin/overlay-config.pl __DSPACE_STAGE_ENV__ run/config
+RUN cd /opt/tomcat/dspace && bin/overlay-config.pl __DSPACE_STAGE_ENV__ dspace-install/config

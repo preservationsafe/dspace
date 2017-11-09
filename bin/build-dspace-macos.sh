@@ -2,11 +2,8 @@
 
 . "$( dirname "${BASH_SOURCE[0]}" )/get-dspace-home-dir.sh"
 
-DSPACE_SRC="$DSPACE_HOME_DIR/src"
-DSPACE_RUN="$DSPACE_HOME_DIR/run"
-
-# Pickup latest overlays
-cd $DSPACE_HOME_DIR && bin/overlay-softlink.sh overlay src
+DSPACE_SRC="$DSPACE_HOME_DIR/dspace"
+DSPACE_RUN="$DSPACE_HOME_DIR/dspace-install"
 
 # Default to a dev build
 if [ ! -f "$DSPACE_SRC/dspace/config/local.cfg" ]; then
