@@ -64,7 +64,7 @@ sub overlay_files {
   my ( $suffix ) =  @_;
   my $suffix_len = length( $suffix ) + 1;
 
-  my $cmd = "find $dstdir -type l -name \"*-$suffix\"";
+  my $cmd = "find $dstdir -type f -name \"*-$suffix\"";
   print "EXEC: $cmd\n";
   my @file_list = `$cmd`;
 
