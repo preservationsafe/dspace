@@ -40,7 +40,6 @@ dspace.baseUrl = http://localhost:8080
 dspace.url = http://localhost:8080/jspui
 
 # Optional: DSpace URL for mobile access
-# This 
 #dspace.mobileUrl = http://mobile.example.com
 
 # Name of the site
@@ -180,3 +179,10 @@ webui.resolver.2.urn = pmid
 webui.resolver.2.baseurl = https://www.ncbi.nlm.nih.gov/pubmed/
 webui.resolver.3.urn = pmcid
 webui.resolver.3.baseurl = https://www.ncbi.nlm.nih.gov/pmc/
+
+##### Settings for Submission Process #####
+
+# Whether or not we REQUIRE that a file be uploaded
+# during the 'Upload' step in the submission process
+# Defaults to true; If set to 'false', submitter has option to skip upload
+webui.submit.upload.required = false
