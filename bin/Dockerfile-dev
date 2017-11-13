@@ -11,7 +11,6 @@ WORKDIR /
 COPY bin /opt/tomcat/dspace/bin
 COPY dspace-install /opt/tomcat/dspace/dspace-install
 COPY LICENSE* /opt/tomcat/dspace/
-COPY NOTICE /opt/tomcat/dspace/NOTICE
 COPY README.md /opt/tomcat/dspace/README.md
 
 # fix dspace ownership
