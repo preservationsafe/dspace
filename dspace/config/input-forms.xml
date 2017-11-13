@@ -1015,6 +1015,17 @@ it, please enter the types and the actual numbers or codes.</hint>
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>contributor</dc-element>
+         <dc-qualifier>committeechair</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Committee Chair</label>
+         <input-type>onebox</input-type>
+         <hint></hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>contributor</dc-element>
          <dc-qualifier>committeemember</dc-qualifier>
          <repeatable>true</repeatable>
          <label>Committee Member</label>
