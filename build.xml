@@ -42,7 +42,7 @@
         words, all subdirectories of [dspace-source] are recompiled/rebuilt.
     -->
     <target name="build_full" description="Rebuild from source if you have it, then reapply overlays.">
-        <antcall target="mvn_package_quick" />
+        <antcall target="mvn_package_full" />
         <antcall target="ant_update" />
     </target>
 
