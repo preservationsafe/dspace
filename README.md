@@ -24,13 +24,14 @@ The University of Arizona Library's Customized DSpace Installation for the UA Ca
   psql --username=[Postgres-superuser] [db-name] -c "CREATE EXTENSION pgcrypto;"  
   ```
 
-* Update `local.cfg` for your enviroment. Some properties to pay attention to:
+* Copy `build.properties.EXAMPLE` to `build.properties` and update the following properties
     * **dspace.dir**: This is the DSpace installation directory (must be an absolute path)
-    * **dspace.baseUrl**: DSpace host url
     * **db.url**: The url of your PostgreSQL database, you may need to update the name of the database in the url
     * **db.username**: Username of the owner of the PostgreSQL database
     * **db.password**: Password of the owner of the PostgreSQL database
-* Copy `build.properties.EXAMPLE` to `build.properties` and update the **dspace_install.dir** to your DSpace installation (same as **dspace.dir** in `local.cfg`, and must also be an absolute path)
+    * **assetstore.dir**: The directory of your assetstore directory
+    
+    **Note**: These properties correspond to properties in local.cfg.EXAMPLE. All the `build_*` targets will copy `dspace/config/local.cfg.EXAMPLE` to `dspace/config/local.cfg` and place the value of those properties into `local.cfg` using a filter. This eliminates the need to manually setup `local.cfg` manually. 
 * Change the owner (user and group) of `dspace-install` to who ever owns your tomcat directory
 * Run
 ```
