@@ -1,6 +1,5 @@
 #
 # DSpace Configuration
-# HEllo
 #
 # NOTE: The DSpace Configuration File is separated into several sections:
 #  * General Configurations
@@ -63,7 +62,6 @@ db.password = dspaceD5vops-G5tt62
 ##### Email settings ######
 
 # SMTP mail server
-#mail.server = repository-tst.library.arizona.edu
 mail.server = localhost
 
 # SMTP mail server authentication username and password (if required)
