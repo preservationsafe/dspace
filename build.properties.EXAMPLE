@@ -1,1 +1,12 @@
-dspace_install.dir = /dspace
+# DSpace installation directory
+dspace.dir = /opt/tomcat/dspace/dspace-install
+
+# URL for connecting to database
+db.url = jdbc:postgresql://localhost:5432/dspacelocal
+
+# Database username and password
+db.username = dspace6dba
+db.password = dspace6D5vops-G5tt62
+
+# Asset (bitstream) store number 0 (zero)
+assetstore.dir = /opt/tomcat/assetstore

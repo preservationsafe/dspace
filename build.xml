@@ -19,7 +19,8 @@
         and runs ant fresh_install from the dspace-installer directory.
     -->
     <target name="build_init" description="Build the first time.">
-        <antcall target="mvn_package_full" />
+        <antcall target="copy_local_config" />
+        <antcall target="mvn_clean_package" />
         <antcall target="ant_fresh" />
     </target>
 
@@ -32,6 +33,7 @@
         [dspace-source]/dspace/modules/* (the Maven WAR Overlay directories)
     -->
     <target name="build_quick" description="Reapply overlays. This should work for seeing most changes.">
+        <antcall target="copy_local_config" />
         <antcall target="mvn_package_quick" />
         <antcall target="ant_update" />
     </target>
@@ -42,6 +44,7 @@
         words, all subdirectories of [dspace-source] are recompiled/rebuilt.
     -->
     <target name="build_full" description="Rebuild from source if you have it, then reapply overlays.">
+        <antcall target="copy_local_config" />
         <antcall target="mvn_package_full" />
         <antcall target="ant_update" />
     </target>
@@ -53,6 +56,7 @@
     -->
     <target name="build_clean" description=
             "Rebuild everything, switching to using source if you just downloaded it. Useful for setting breakpoints.">
+        <antcall target="copy_local_config" />
         <antcall target="mvn_clean_package" />
         <antcall target="ant_update" />
     </target>
@@ -94,6 +98,18 @@
     -->
     <target name="check_ant_file">
         <available file="dspace/target/dspace-installer/build.xml" property="ant.present" />
+    </target>
+
+    <target name="copy_local_config" description="Copies local.cfg.EXAMPLE to local.cfg and fileters tokens with values in build.properties.">
+        <copy file="dspace/config/local.cfg.EXAMPLE" tofile="dspace/config/local.cfg" filtering="true" overwrite="true">
+            <filterset>
+                <filter token="DSPACE_DIR" value="${dspace.dir}"/>
+                <filter token="DB_URL" value="${db.url}"/>
+                <filter token="DB_USER" value="${db.username}"/>
+                <filter token="DB_PASSWORD" value="${db.password}"/>
+                <filter token="ASSETSTRORE_DIR" value="${assetstore.dir}"/>
+            </filterset>
+        </copy>
     </target>
 
     <!--
