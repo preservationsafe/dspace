@@ -36,6 +36,8 @@
 
 <%
     String contextPath = "/dspace-jspui";
+	Context context = UIUtil.obtainContext(request);
+
 	request.setAttribute("LanguageSwitch", "hide");
 
     //get collection id from the collection home
@@ -97,8 +99,10 @@
 		<input type="hidden" id="suuid-identifier" name="suuid" value="<%= uuid %>"/>
 		<input type="hidden" id="iuuid-identifier" name="iuuid" value=""/>
 		<input type="hidden" id="fuuid-identifier" name="fuuid" value=""/>
-		<input type="hidden" id="collectionid-identifier" name="collectionid" value=""/>
-<% if (identifiers != null && identifiers.size()>0) {
+		<input type="hidden" id="collection-identifier" name="collection" value="<%= collection_id %>"/>
+		<input type="hidden" id="collectionid-identifier" name="collectionid" value="<%= collection_id %>"/>
+
+		<% if (identifiers != null && identifiers.size()>0) {
 	%>
 		
 		<p class="help-block"><fmt:message key="jsp.submit.start-lookup-submission.identifiers.hints"/></p>
@@ -138,6 +142,7 @@
 		
 	} %>
 
+            <%= SubmissionController.getSubmissionParameters(context, request) %>
 
     		<div class="col-md-4 pull-right btn-group">
                 <input class="btn btn-default col-md-6" type="submit" name="<%=AbstractProcessingStep.CANCEL_BUTTON%>" value="<fmt:message key="jsp.submit.edit-metadata.cancelsave"/>"/>
