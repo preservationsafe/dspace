@@ -7,7 +7,7 @@
 dspace.dir = @DSPACE_DIR@
 dspace.ui = jspui
 dspace.name = The University of Arizona Campus Repository
-assetstore.dir = @ASSETSTRORE_DIR@
+assetstore.dir = @ASSETSTORE_DIR@
 
 ## Database settings
 
@@ -59,7 +59,7 @@ webui.itemdisplay.default = \
   dc.description.sponsorship, \
   dc.relation.url(link)
   
-# render identifiers as resolvable links
+# Render identifiers as resolvable links
 webui.resolver.1.urn = doi
 webui.resolver.1.baseurl = http://dx.doi.org/
 webui.resolver.2.urn = pmid
@@ -67,6 +67,5 @@ webui.resolver.2.baseurl = https://www.ncbi.nlm.nih.gov/pubmed/
 webui.resolver.3.urn = pmcid
 webui.resolver.3.baseurl = https://www.ncbi.nlm.nih.gov/pmc/
 
-## Settings for Submission Process
-
+## Submission process settings
 webui.submit.upload.required = false

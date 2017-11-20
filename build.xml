@@ -1,4 +1,4 @@
-<project name="CampusRepo" basedir="." default="help">
+<project name="UACampusRepo" basedir="." default="help">
     <property name="installer.dir" value="dspace/target/dspace-installer" />
     <property file="build.properties" />
     <property name="dspace.version" value="dspace-6.2"/>
@@ -100,14 +100,14 @@
         <available file="dspace/target/dspace-installer/build.xml" property="ant.present" />
     </target>
 
-    <target name="copy_local_config" description="Copies local.cfg.EXAMPLE to local.cfg and fileters tokens with values in build.properties.">
+    <target name="copy_local_config" description="Copies local.cfg.EXAMPLE to local.cfg and filters tokens with values in build.properties.">
         <copy file="dspace/config/local.cfg.EXAMPLE" tofile="dspace/config/local.cfg" filtering="true" overwrite="true">
             <filterset>
                 <filter token="DSPACE_DIR" value="${dspace.dir}"/>
                 <filter token="DB_URL" value="${db.url}"/>
                 <filter token="DB_USER" value="${db.username}"/>
                 <filter token="DB_PASSWORD" value="${db.password}"/>
-                <filter token="ASSETSTRORE_DIR" value="${assetstore.dir}"/>
+                <filter token="ASSETSTORE_DIR" value="${assetstore.dir}"/>
             </filterset>
         </copy>
     </target>

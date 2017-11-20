@@ -4,7 +4,7 @@ The University of Arizona Library's Customized DSpace Installation for the UA Ca
 
 ## Getting Started 
 
-### Perquisites
+### Prerequisites
 * Linux/Unix Operating System
 * Java JDK 8 
 * Apache Maven 3.0.5 or above
@@ -31,7 +31,7 @@ The University of Arizona Library's Customized DSpace Installation for the UA Ca
     * **db.password**: Password of the owner of the PostgreSQL database
     * **assetstore.dir**: The directory of your assetstore directory
     
-    **Note**: These properties correspond to properties in local.cfg.EXAMPLE. All the `build_*` targets will copy `dspace/config/local.cfg.EXAMPLE` to `dspace/config/local.cfg` and place the value of those properties into `local.cfg` using a filter. This eliminates the need to manually setup `local.cfg` manually. 
+    **Note**: These properties correspond to properties in local.cfg.EXAMPLE. All the `build_*` targets will copy `dspace/config/local.cfg.EXAMPLE` to `dspace/config/local.cfg` and place the value of those properties into `local.cfg` using a filter. This eliminates the need to manually set up `local.cfg` manually. 
 * Change the owner (user and group) of `dspace-install` to who ever owns your tomcat directory
 * Run
 ```
