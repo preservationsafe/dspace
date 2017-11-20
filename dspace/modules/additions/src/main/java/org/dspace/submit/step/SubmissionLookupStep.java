@@ -264,24 +264,24 @@ public class SubmissionLookupStep extends AbstractProcessingStep
             }
         }
 
-        //if (result != null && result.size() > 0)
-        //{
+        if (result != null && result.size() > 0)
+        {
             // update Submission Information with this Workspace Item
-            //subInfo.setSubmissionItem(result.iterator().next())
+            subInfo.setSubmissionItem(result.iterator().next());
 
             // Step 4:
             // Save changes to database
             ContentServiceFactory.getInstance().getInProgressSubmissionService(subInfo.getSubmissionItem()).update(context, subInfo.getSubmissionItem());;
-        //}
+        }
 
         // commit changes to database
         context.dispatchEvents();
 
         // need to reload current submission process config,
         // since it is based on the Collection selected
-        //subInfo.reloadSubmissionConfig(request);
+        subInfo.reloadSubmissionConfig(request);
 
-        //slService.invalidateDTOs(request, uuidSubmission);
+        slService.invalidateDTOs(request, uuidSubmission);
         // no errors occurred
         return STATUS_COMPLETE;
     }
