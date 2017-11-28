@@ -6,7 +6,10 @@
 ## General settings
 dspace.dir = @DSPACE_DIR@
 dspace.ui = jspui
-dspace.name = The University of Arizona Campus Repository
+dspace.hostname = @DSPACE_HOSTNAME@
+dspace.baseUrl = @DSPACE_BASEURL@
+dspace.url = @DSPACE_URL@
+dspace.name = @DSPACE_NAME@
 assetstore.dir = @ASSETSTORE_DIR@
 
 ## Database settings
@@ -17,12 +20,12 @@ db.password = @DB_PASSWORD@
 
 ## Email settings
 
-mail.server = smtpgate.email.arizona.edu
-mail.from.address = noreply@repository-tst.library.arizona.edu
-feedback.recipient = glbrimhall@email.arizona.edu
-mail.admin = glbrimhall@email.arizona.edu
-alert.recipient = glbrimhall@email.arizona.edu
-registration.notify = glbrimhall@email.arizona.edu
+mail.server = @MAIL_SERVER@
+mail.from.address = @MAIL_FROM@
+feedback.recipient = @MAIL_ADMIN@
+mail.admin = @MAIL_ADMIN@
+alert.recipient = @MAIL_ADMIN@
+registration.notify = @MAIL_ADMIN@
 
 ## Metadata display
 

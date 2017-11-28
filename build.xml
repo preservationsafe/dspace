@@ -104,10 +104,17 @@
         <copy file="dspace/config/local.cfg.EXAMPLE" tofile="dspace/config/local.cfg" filtering="true" overwrite="true">
             <filterset>
                 <filter token="DSPACE_DIR" value="${dspace.dir}"/>
+                <filter token="DSPACE_HOSTNAME" value="${dspace.hostname}"/>
+                <filter token="DSPACE_BASEURL" value="${dspace.baseUrl}"/>
+                <filter token="DSPACE_URL" value="${dspace.url}"/>
+                <filter token="DSPACE_NAME" value="${dspace.name}"/>
                 <filter token="DB_URL" value="${db.url}"/>
                 <filter token="DB_USER" value="${db.username}"/>
                 <filter token="DB_PASSWORD" value="${db.password}"/>
                 <filter token="ASSETSTORE_DIR" value="${assetstore.dir}"/>
+                <filter token="MAIL_SERVER" value="${mail.server}"/>
+                <filter token="MAIL_ADMIN" value="${mail.admin}"/>
+                <filter token="MAIL_FROM" value="${mail.from}"/>
             </filterset>
         </copy>
     </target>

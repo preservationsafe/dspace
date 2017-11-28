@@ -10,3 +10,14 @@ db.password = dspace6D5vops-G5tt62
 
 # Asset (bitstream) store number 0 (zero)
 assetstore.dir = /opt/tomcat/assetstore
+
+# Application URLs
+dspace.hostname = localhost
+dspace.baseUrl  = http://localhost:8080
+dspace.url      = http://localhost:8080/jspui
+dspace.name     = The University of Arizona Campus Repository
+
+# Email settings
+mail.server = smtpgate.email.arizona.edu
+mail.admin  = user@email.arizona.edu
+mail.from   = noreply@email.arizona.edu
