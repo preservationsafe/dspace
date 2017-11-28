@@ -24,7 +24,6 @@ fi
 if [ "$STEP" == "env" ]; then
   echo -n "COPY: " && cp -vf "$DSPACE_HOME_DIR/bin/env/build.properties-$ENV" "$DSPACE_HOME_DIR/build.properties"
   cd $DSPACE_HOME_DIR && ant copy_local_config
-  echo "cp -vf $DSPACE_SRC/config/local.cfg $DSPACE_RUN/config/local.cfg"
   echo -n "COPY: " && cp -vf "$DSPACE_SRC/config/local.cfg" "$DSPACE_RUN/config/local.cfg"
   exit
 fi
