@@ -1,0 +1,23 @@
+# DSpace installation directory
+dspace.dir = /opt/tomcat/dspace/dspace-install
+
+# URL for connecting to database
+db.url = jdbc:postgresql://repository-dbdev:5432/dspacedev
+
+# Database username and password
+db.username = dspace6dba
+db.password = dspace6D5vops-G5tt62
+
+# Asset (bitstream) store number 0 (zero)
+assetstore.dir = /opt/tomcat/assetstore
+
+# Application URLs
+dspace.hostname = localhost
+dspace.baseUrl  = http://localhost:8080
+dspace.url      = http://localhost:8080/jspui
+dspace.name     = The University of Arizona Campus Repository
+
+# Email settings
+mail.server = smtpgate.email.arizona.edu
+mail.admin  = glbrimhall@email.arizona.edu
+mail.from   = noreply@email.arizona.edu
