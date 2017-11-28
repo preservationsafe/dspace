@@ -21,6 +21,7 @@ fi
 
 if [ "$STEP" == "build" ]; then
   cd $DSPACE_HOME_DIR && ant build_init
+  cd $DSPACE_HOME_DIR && bin/fix-permissions.sh
 fi
   
 # Test dspace:
