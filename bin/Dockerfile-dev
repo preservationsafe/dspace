@@ -24,5 +24,14 @@ RUN \
 rm -fr /opt/tomcat/dspace/dspace-install/log && \
 ln -s /var/log/dspace /opt/tomcat/dspace/dspace-install/log
 
+# Move all webapps into tomcat/webapps directory
+RUN mv /opt/tomcat/dspace/dspace-install/webapps/* /opt/tomcat/webapps/
+
+# Make webapps/jspui be the root URL ( needed for shibboleth )
+RUN mv /opt/tomcat/webapps/jspui /opt/tomcat/webapps/ROOT
+
+# Remove configuration having tomcat look into dspace-install for webapps
+RUN rm -fr /opt/tomcat/conf/Catalina
+
 USER dspace
 WORKDIR /opt/tomcat
