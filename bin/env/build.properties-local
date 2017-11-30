@@ -1,5 +1,3 @@
-## Any properties you don't specify will revert to defaults in dspace.cfg.
-
 # DSpace installation directory
 dspace.dir = /opt/tomcat/dspace/dspace-install
 
