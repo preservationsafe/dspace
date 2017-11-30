@@ -51,3 +51,6 @@ dspace-xmlui/
 
 # Bash files from having campusrepo.git is the dspace homedir within docker
 .bash_history
+
+# Local configurations for dspace
+dspace/config/local.cfg

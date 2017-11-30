@@ -1,0 +1,23 @@
+# DSpace installation directory
+dspace.dir = /opt/tomcat/dspace/dspace-install
+
+# URL for connecting to database
+db.url = jdbc:postgresql://repository-dbdev:5432/dspacestg
+
+# Database username and password
+db.username = dspacedbastg
+db.password = dspaceD3zstg-G5tt62
+
+# Asset (bitstream) store number 0 (zero)
+assetstore.dir = /opt/tomcat/assetstore
+
+# Application URLs
+dspace.hostname = repository-stg.library.arizona.edu
+dspace.baseUrl  = https://repository-stg.library.arizona.edu
+dspace.url      = https://repository-stg.library.arizona.edu
+dspace.name     = The University of Arizona Campus Repository Staging
+
+# Email settings
+mail.server = smtpgate.email.arizona.edu
+mail.admin  = glbrimhall@email.arizona.edu
+mail.from   = noreply@email.arizona.edu
