@@ -31,7 +31,12 @@ The University of Arizona Library's Customized DSpace Installation for the UA Ca
     * **db.password**: Password of the owner of the PostgreSQL database
     * **assetstore.dir**: The directory of your assetstore directory
     
-    **Note**: These properties correspond to properties in local.cfg.EXAMPLE. All the `build_*` targets will copy `dspace/config/local.cfg.EXAMPLE` to `dspace/config/local.cfg` and place the value of those properties into `local.cfg` using a filter. This eliminates the need to manually set up `local.cfg` manually. 
+    **Note**: These properties correspond to properties in local.cfg.EXAMPLE. All the `build_*` targets will copy 
+    `dspace/config/local.cfg.EXAMPLE` to `dspace/config/local.cfg` and place the value of those properties into 
+    `local.cfg` using a filter. This eliminates the need to set up `local.cfg` manually. 
+    There are more properties available in build.properties.EXAMPLE. Feel free to leave any properties out where you 
+    want to accept the defaults from `dspace.cfg`.
+    
 * Change the owner (user and group) of `dspace-install` to who ever owns your tomcat directory
 * Run
 ```
