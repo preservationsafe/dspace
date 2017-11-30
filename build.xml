@@ -117,6 +117,15 @@
                 <filter token="MAIL_FROM" value="${mail.from}"/>
             </filterset>
         </copy>
+        <!--
+          Remove any values that were not present in build.properties. This exists to allow developers
+          to not specify properties that are needed by the test, staging, and production environments.
+          Specifically, if a developer hasn't specified a property in build.properties, the literal
+          value in the filterset (e.g., ${dspace.hostname}) above will leak into local.cfg. This line
+          blanks out any local.cfg lines that have literal token values, which will let dspace.cfg or
+          whatever other config file to take priority.
+        -->
+        <replaceregexp file="dspace/config/local.cfg" match=".*\$\{.+\}.*" flags="g" replace="" />
     </target>
 
     <!--
