@@ -14,7 +14,7 @@ assetstore.dir = /opt/tomcat/assetstore
 # Application URLs
 dspace.hostname = repository-tst.library.arizona.edu
 dspace.baseUrl  = https://repository-tst.library.arizona.edu
-dspace.url      = https://repository-tst.library.arizona.edu/jspui
+dspace.url      = https://repository-tst.library.arizona.edu
 dspace.name     = The University of Arizona Campus Repository Testing
 
 # Email settings
