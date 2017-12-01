@@ -14,10 +14,8 @@ COPY *.md               /opt/tomcat/dspace/
 COPY LICENSE            /opt/tomcat/dspace/
 COPY bin/               /opt/tomcat/dspace/bin/
 COPY docs/              /opt/tomcat/dspace/docs/
+COPY dspace/            /opt/tomcat/dspace/dspace/
 COPY dspace-install/    /opt/tomcat/dspace/dspace-install/
-
-# Remove the source code directory
-RUN rm -fr /opt/tomcat/dspace/.m2
 
 # fix dspace ownership
 RUN chown -R dspace /opt/tomcat/dspace
