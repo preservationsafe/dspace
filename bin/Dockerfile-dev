@@ -7,11 +7,11 @@ FROM dockerepo.library.arizona.edu:5000/dspace6-dev:1.1
 USER root
 WORKDIR /
 
-# Add relevant directories 
-COPY bin /opt/tomcat/dspace/bin
-COPY dspace-install /opt/tomcat/dspace/dspace-install
-COPY LICENSE* /opt/tomcat/dspace/
-COPY README.md /opt/tomcat/dspace/README.md
+# Add relevant directories. /* points to campusrepo built on build.library
+COPY /* /opt/tomcat/dspace/
+
+# Remove the source code directory
+RUN rm -fr /opt/tomcat/dspace/dspace
 
 # fix dspace ownership
 RUN chown -R dspace /opt/tomcat/dspace
