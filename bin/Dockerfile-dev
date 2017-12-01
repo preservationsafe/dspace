@@ -8,10 +8,16 @@ USER root
 WORKDIR /
 
 # Add relevant directories. /* points to campusrepo built on build.library
-COPY /* /opt/tomcat/dspace/
+COPY *.properties*      /opt/tomcat/dspace/
+COPY *.xml              /opt/tomcat/dspace/
+COPY *.md               /opt/tomcat/dspace/
+COPY LICENSE            /opt/tomcat/dspace/
+COPY bin/               /opt/tomcat/dspace/bin/
+COPY docs/              /opt/tomcat/dspace/docs/
+COPY dspace-install/    /opt/tomcat/dspace/dspace-install/
 
 # Remove the source code directory
-RUN rm -fr /opt/tomcat/dspace/dspace
+RUN rm -fr /opt/tomcat/dspace/.m2
 
 # fix dspace ownership
 RUN chown -R dspace /opt/tomcat/dspace
