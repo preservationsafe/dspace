@@ -91,6 +91,12 @@ For this project we are using the the dspace-release version of dspace. There is
 
 The script, `bin/setup-local-db.sh`, can be used to create the database and import a copy of the database from repository-tst. Addtional documentation can be found in the script. 
 
+## Other restrictions/requirements
+
+At the current time these two specific names must be used for correct SOLR usage:
+* The tomcat run configuration deployment of the solr:war exploded Application Context must be set to /solr
+* The .xml file located at {tomcatLocation}/conf/Catalina/localhost/ for solr must be named solr.xml
+
 ## Current Environments
 * **Production (Hosted by Atmire):** [arizona.openrepository.com](http://arizona.openrepository.com/arizona/)
 * **Test:** [repository-tst.library.arizona.edu](http://repository-tst.library.arizona.edu/jspui/)
