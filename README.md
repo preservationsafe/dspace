@@ -4,7 +4,7 @@ The University of Arizona Library's Customized DSpace Installation for the UA Ca
 
 ## Getting Started 
 
-### Perquisites
+### Prerequisites
 * Linux/Unix Operating System
 * Java JDK 8 
 * Apache Maven 3.0.5 or above
@@ -24,13 +24,19 @@ The University of Arizona Library's Customized DSpace Installation for the UA Ca
   psql --username=[Postgres-superuser] [db-name] -c "CREATE EXTENSION pgcrypto;"  
   ```
 
-* Update `local.cfg` for your enviroment. Some properties to pay attention to:
+* Copy `build.properties.EXAMPLE` to `build.properties` and update the following properties
     * **dspace.dir**: This is the DSpace installation directory (must be an absolute path)
-    * **dspace.baseUrl**: DSpace host url
     * **db.url**: The url of your PostgreSQL database, you may need to update the name of the database in the url
     * **db.username**: Username of the owner of the PostgreSQL database
     * **db.password**: Password of the owner of the PostgreSQL database
-* Copy `build.properties.EXAMPLE` to `build.properties` and update the **dspace_install.dir** to your DSpace installation (same as **dspace.dir** in `local.cfg`, and must also be an absolute path)
+    * **assetstore.dir**: The directory of your assetstore directory
+    
+    **Note**: These properties correspond to properties in local.cfg.EXAMPLE. All the `build_*` targets will copy 
+    `dspace/config/local.cfg.EXAMPLE` to `dspace/config/local.cfg` and place the value of those properties into 
+    `local.cfg` using a filter. This eliminates the need to set up `local.cfg` manually. 
+    There are more properties available in build.properties.EXAMPLE. Feel free to leave any properties out where you 
+    want to accept the defaults from `dspace.cfg`.
+    
 * Change the owner (user and group) of `dspace-install` to who ever owns your tomcat directory
 * Run
 ```
@@ -84,6 +90,12 @@ For this project we are using the the dspace-release version of dspace. There is
 ## Database Migrations
 
 The script, `bin/setup-local-db.sh`, can be used to create the database and import a copy of the database from repository-tst. Addtional documentation can be found in the script. 
+
+## Other restrictions/requirements
+
+At the current time these two specific names must be used for correct SOLR usage:
+* The tomcat run configuration deployment of the solr:war exploded Application Context must be set to /solr
+* The .xml file located at {tomcatLocation}/conf/Catalina/localhost/ for solr must be named solr.xml
 
 ## Current Environments
 * **Production (Hosted by Atmire):** [arizona.openrepository.com](http://arizona.openrepository.com/arizona/)

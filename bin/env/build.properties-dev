@@ -1,10 +1,8 @@
-## Any properties you don't specify will revert to defaults in dspace.cfg.
-
 # DSpace installation directory
 dspace.dir = /opt/tomcat/dspace/dspace-install
 
 # URL for connecting to database
-db.url = jdbc:postgresql://localhost:5432/dspacelocal
+db.url = jdbc:postgresql://repository-dbdev:5432/dspacedev
 
 # Database username and password
 db.username = dspace6dba
@@ -17,9 +15,9 @@ assetstore.dir = /opt/tomcat/assetstore
 dspace.hostname = localhost
 dspace.baseUrl  = http://localhost:8080
 dspace.url      = http://localhost:8080/jspui
-dspace.name     = The University of Arizona Campus Repository
+dspace.name     = University of Arizona Library TESS
 
 # Email settings
 mail.server = smtpgate.email.arizona.edu
-mail.admin  = user@email.arizona.edu
+mail.admin  = glbrimhall@email.arizona.edu
 mail.from   = noreply@email.arizona.edu

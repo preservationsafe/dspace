@@ -1,6 +1,7 @@
 #!/bin/bash
 
 STEP=${1:-build}
+ENV=${2:-dev}
 
 . "$( dirname "${BASH_SOURCE[0]}" )/get-dspace-home-dir.sh"
 
@@ -9,7 +10,8 @@ DSPACE_RUN="$DSPACE_HOME_DIR/dspace-install"
 SELENIUM_IMAGE="selenium/standalone-firefox:2.53.0";
 
 if [ "$STEP" == "reset" ]; then
-  rm -rf $DSPACE_RUN/*
+  echo -n "DELETING: " && rm -vrf $DSPACE_RUN/*
+  echo -n "DELETING: " && rm -vf "$DSPACE_HOME_DIR/build.properties"
   cd $DSPACE_HOME_DIR && bin/fix-permissions.sh
   exit
 fi
@@ -19,8 +21,19 @@ if [ "$STEP" == "clean" ]; then
   exit
 fi
 
+if [ "$STEP" == "env" ]; then
+  echo -n "COPY: " && cp -vf "$DSPACE_HOME_DIR/bin/env/build.properties-$ENV" "$DSPACE_HOME_DIR/build.properties"
+  cd $DSPACE_HOME_DIR && ant copy_local_config
+  echo -n "COPY: " && cp -vf "$DSPACE_SRC/config/local.cfg" "$DSPACE_RUN/config/local.cfg"
+  exit
+fi
+
 if [ "$STEP" == "build" ]; then
+    if [ ! -f "$DSPACE_HOME_DIR/build.properties" ]; then
+      echo -n "COPY: " && cp -vf "$DSPACE_HOME_DIR/bin/env/build.properties-$ENV" "$DSPACE_HOME_DIR/build.properties"
+    fi
   cd $DSPACE_HOME_DIR && ant build_init
+  cd $DSPACE_HOME_DIR && bin/fix-permissions.sh
 fi
   
 # Test dspace:

@@ -111,10 +111,12 @@
 	            	or conform to "FileDataLoader" interface of BTE -->
 	            <entry key="pubmed" value-ref="pubmedOnlineDataLoader"/>
 	            <entry key="crossref" value-ref="crossRefOnlineDataLoader"/>
+				<!-- Unsupported for UA Libraries -->
 	            <!-- <entry key="arxiv" value-ref="arXivOnlineDataLoader"/> -->
 	            <!-- <entry key="cinii" value-ref="ciniiOnlineDataLoader"/> -->
 	            <entry key="pubmedXML" value-ref="pubmedFileDataLoader"/>
 	            <entry key="crossRefXML" value-ref="crossRefFileDataLoader"/>
+	            <!-- Unsupported for UA Libraries -->
 	            <!-- <entry key="arXivXML" value-ref="arXivFileDataLoader"/> -->
 	            <!-- <entry key="ciniiXML" value-ref="ciniiFileDataLoader"/> -->
 	            <entry key="bibtex" value-ref="bibTeXDataLoader"/>

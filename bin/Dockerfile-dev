@@ -7,11 +7,15 @@ FROM dockerepo.library.arizona.edu:5000/dspace6-dev:1.1
 USER root
 WORKDIR /
 
-# Add relevant directories 
-COPY bin /opt/tomcat/dspace/bin
-COPY dspace-install /opt/tomcat/dspace/dspace-install
-COPY LICENSE* /opt/tomcat/dspace/
-COPY README.md /opt/tomcat/dspace/README.md
+# Add relevant directories. /* points to campusrepo built on build.library
+COPY *.properties*      /opt/tomcat/dspace/
+COPY *.xml              /opt/tomcat/dspace/
+COPY *.md               /opt/tomcat/dspace/
+COPY LICENSE            /opt/tomcat/dspace/
+COPY bin/               /opt/tomcat/dspace/bin/
+COPY docs/              /opt/tomcat/dspace/docs/
+COPY dspace/            /opt/tomcat/dspace/dspace/
+COPY dspace-install/    /opt/tomcat/dspace/dspace-install/
 
 # fix dspace ownership
 RUN chown -R dspace /opt/tomcat/dspace
@@ -23,6 +27,15 @@ RUN /opt/tomcat/dspace/bin/fix-permissions.sh
 RUN \
 rm -fr /opt/tomcat/dspace/dspace-install/log && \
 ln -s /var/log/dspace /opt/tomcat/dspace/dspace-install/log
+
+# Move all webapps into tomcat/webapps directory
+RUN mv /opt/tomcat/dspace/dspace-install/webapps/* /opt/tomcat/webapps/
+
+# Make webapps/jspui be the root URL ( needed for shibboleth )
+RUN mv /opt/tomcat/webapps/jspui /opt/tomcat/webapps/ROOT
+
+# Remove configuration having tomcat look into dspace-install for webapps
+RUN rm -fr /opt/tomcat/conf/Catalina
 
 USER dspace
 WORKDIR /opt/tomcat
