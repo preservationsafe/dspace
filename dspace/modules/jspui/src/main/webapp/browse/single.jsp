@@ -30,6 +30,8 @@
 <%
     request.setAttribute("LanguageSwitch", "hide");
 
+	String startsWith = request.getParameter("starts_with");
+
 	//First, get the browse info object
 	BrowseInfo bi = (BrowseInfo) request.getAttribute("browse.info");
 	BrowseIndex bix = bi.getBrowseIndex();
@@ -193,7 +195,7 @@
 %>
 		<br/>
 		<label for="starts_with"><fmt:message key="browse.nav.enter"/></label>
-		<input type="text" name="starts_with"/>
+		<input type="text" name="starts_with" value="<%= (startsWith==null ? "" : startsWith) %>"/>
 		<input type="submit" class="btn btn-default" value="<fmt:message key="browse.nav.go"/>" />
 <%
 	}

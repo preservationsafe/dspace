@@ -30,6 +30,10 @@
 <%
     request.setAttribute("LanguageSwitch", "hide");
 
+    String startsWith = request.getParameter("starts_with");
+    String year = request.getParameter("year");
+    String month = request.getParameter("month");
+
     String urlFragment = "browse";
     String layoutNavbar = "default";
     boolean withdrawn = false;
@@ -194,6 +198,7 @@
 <%-- OK, so here we start to develop the various components we will use in the UI --%>
 
 <%@page import="java.util.Set"%>
+<%@ page import="static java.lang.Integer.parseInt" %>
 <dspace:layout titlekey="browse.page-title" navbar="<%=layoutNavbar %>">
 
 	<%-- Build the header (careful use of spacing) --%>
@@ -227,7 +232,7 @@
 	{
 %>
 		<span><fmt:message key="browse.nav.date.jump"/></span>
-		<select name="year">
+		<select id="issue_year" name="year" data-selected="<%= (year==null ? "" : year) %>">
 	        <option selected="selected" value="-1"><fmt:message key="browse.nav.year"/></option>
 <%
 		int thisYear = DCDate.getCurrent().getYear();
@@ -245,7 +250,7 @@
             <option>1960</option>
             <option>1950</option>
         </select>
-        <select name="month">
+        <select id="issue_month" name="month" data-selected="<%= (month==null ? "" : DCDate.getMonthName(Integer.parseInt(month), UIUtil.getSessionLocale(request))) %>">
             <option selected="selected" value="-1"><fmt:message key="browse.nav.month"/></option>
 <%
 		for (int i = 1; i <= 12; i++)
@@ -259,7 +264,7 @@
         <input type="submit" class="btn btn-default" value="<fmt:message key="browse.nav.go"/>" />
         <br/>
         <label for="starts_with"><fmt:message key="browse.nav.type-year"/></label>
-        <input type="text" name="starts_with" size="4" maxlength="4"/>
+        <input type="text" name="starts_with" size="4" maxlength="4" value="<%= (startsWith==null ? "" : startsWith) %>"/>
 <%
 	}
 	
@@ -278,7 +283,8 @@
 	    }
 %><br/>
 	    					<span><fmt:message key="browse.nav.enter"/></span>
-	    					<input type="text" name="starts_with"/>&nbsp;<input type="submit" class="btn btn-default" value="<fmt:message key="browse.nav.go"/>" />
+	    					<input type="text" name="starts_with" value="<%= (startsWith==null ? "" : startsWith) %>"/>&nbsp;
+							<input type="submit" class="btn btn-default" value="<fmt:message key="browse.nav.go"/>" />
 <%
 	}
 %>

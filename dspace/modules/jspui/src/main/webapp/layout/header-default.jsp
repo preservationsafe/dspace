@@ -85,6 +85,7 @@
         <script type='text/javascript' src='<%= request.getContextPath() %>/static/js/holder.js'></script>
         <script type="text/javascript" src="<%= request.getContextPath() %>/utils.js"></script>
         <script type="text/javascript" src="<%= request.getContextPath() %>/static/js/choice-support.js"> </script>
+        <script type="text/javascript" src="<%= request.getContextPath() %>/static/js/browse.js"> </script>
         <dspace:include page="/layout/google-analytics-snippet.jsp" />
 
     <%
