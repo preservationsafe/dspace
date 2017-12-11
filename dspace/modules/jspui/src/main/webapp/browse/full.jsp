@@ -264,7 +264,7 @@
         <input type="submit" class="btn btn-default" value="<fmt:message key="browse.nav.go"/>" />
         <br/>
         <label for="starts_with"><fmt:message key="browse.nav.type-year"/></label>
-        <input type="text" name="starts_with" size="4" maxlength="4" value="<%= (startsWith==null ? "" : startsWith) %>"/>
+        <input type="text" id="starts-date" name="starts_with" size="4" maxlength="4" value="<%= (startsWith==null ? "" : startsWith) %>"/>
 <%
 	}
 	
