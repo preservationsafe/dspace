@@ -72,3 +72,13 @@ webui.resolver.3.baseurl = https://www.ncbi.nlm.nih.gov/pmc/
 
 ## Submission process settings
 webui.submit.upload.required = false
+
+## Browse Settings
+webui.browse.index.1 = title:item:title
+webui.browse.index.2 = author:metadata:dc.contributor.*\,dc.creator:text
+webui.browse.index.3 = dateissued:item:dateissued
+webui.browse.index.4 = dateaccessioned:item:dateaccessioned
+webui.browse.index.5 = subject:metadata:dc.subject.*:text
+webui.collectionhome.use.dateaccessioned = true
+webui.itemlist.dateaccessioned.columns = thumbnail, dc.date.accessioned(date), dc.title, dc.contributor.*
+webui.itemlist.dateaccessioned.widths = *, 130, 60%, 40%
