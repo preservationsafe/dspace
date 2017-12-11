@@ -18,5 +18,8 @@ $.noConflict();
     $(document).ready(function () {
         setSelected(document.getElementById("issue_year"));
         setSelected(document.getElementById("issue_month"));
+
+        $("#starts-date").datepicker({dateFormat: "yy-mm-dd" , monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] ,dayNamesMin:["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]});
+        //jQuery("#ends-date").datepicker({dateFormat: "yy-mm-dd", monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], dayNamesMin:["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]});
     });
 })(jQuery);
