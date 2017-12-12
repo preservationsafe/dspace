@@ -1,15 +1,34 @@
-#!/bin/sh
+#!/bin/bash
 
-useradd -m --shell /bin/bash -G docker -c "Build Meister" buildmeister
-useradd -m --shell /bin/bash -G docker,sudo -c "Jeff Turman" turmanj
-useradd -m --shell /bin/bash -G docker,sudo -c "Brittany Rothengatter" BrittanyRothengatter
-useradd -m --shell /bin/bash -G docker,sudo -c "Mike Hagedon" hagedonm
-useradd -m --shell /bin/bash -G docker,sudo -c "William Simpson" simpsonw
-useradd -m --shell /bin/bash -G docker,sudo -c "Elia Nazarenko" enazar
-useradd -m --shell /bin/bash -G docker,sudo -c "Andy Osborne" cao89
+if [ "${BASH_VERSINFO}" -lt 4 ]; then
+    echo "This script requires bash 4.0 or greater."
+    exit 1
+fi
 
-for USER in buildmeister turmanj BrittanyRothengatter mhagedon simpsonw enazar cao89; do
+declare -A SUDOLIST
 
-echo "asdf\nasdf" | passwd $USER
+GROUPLIST="docker,sudo"
 
+SUDOLIST=( \
+    ["rgrunloh"]="Robert Grunloh" \
+    ["turmanj"]="Jeff Turman" \
+    ["BrittanyRothengatter"]="Brittany Rothengatter" \
+    ["hagedonm"]="Mike Hagedon" \
+    ["simpsonw"]="William Simpson" \
+    ["enazar"]="Elia Nazarenko" \
+    ["cao89"]="Andy Osborne" \
+    ["inolan"]="Isaiah Nolan" \
+    ["glbrimhall"]="Geoff Brimhall" \
+    ["buildmeister"]="Build Meister" \
+    )
+
+for USER in ${!SUDOLIST[@]}; do
+  if [ "`id $USER 2>/dev/null`" = "" ]; then
+    useradd -m --shell /bin/bash -G "$GROUPLIST" -c "${SUDOLIST[$USER]}" $USER
+    echo "asdf\nasdf" | passwd $USER
+  else
+    usermod -a -G "$GROUPLIST" $USER
+  fi
 done
+
+gpasswd -d buildmeister sudo
