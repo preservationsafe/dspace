@@ -235,15 +235,15 @@
 %>
 
 			<li class="toolbar-search toolbar-search-date">
-				<input type="text" id="starts-date" name="starts_with" size="4" maxlength="4" value="<%= (startsWith==null ? "" : startsWith) %>"/>
-				<input type="text" id="ends-date" name="ends_with" size="4" maxlength="4" value="<%= (endsWith==null ? "" : endsWith) %>"/>
+				<input type="text" id="starts-date" name="starts_with" placeholder="From Date" value="<%= (startsWith==null ? "" : startsWith) %>"/>
+				<input type="text" id="ends-date" name="ends_with" placeholder="To Date" value="<%= (endsWith==null ? "" : endsWith) %>"/>
 			</li>
 <%       }
          else
          {
 %>
              <li class="toolbar-search toolbar-search-text">
-                <input type="text" name="starts_with" value="<%= (startsWith==null ? "" : startsWith) %>"/>
+                <input type="text" name="starts_with" placeholder="Starts with" value="<%= (startsWith==null ? "" : startsWith) %>"/>
              </li>
 <%
           }
@@ -281,7 +281,7 @@
 		        <label for="rpp"><fmt:message key="browse.full.rpp"/></label>
 		        <select name="rpp">
 <%
-	            for (int i = 5; i <= 100 ; i += 5)
+	            for (int i = 25; i <= 100 ; i = i*2)
 	            {
 		            String selected = (i == rpp ? "selected=\"selected\"" : "");
 %>	
