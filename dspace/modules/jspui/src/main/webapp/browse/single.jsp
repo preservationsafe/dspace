@@ -31,6 +31,7 @@
     request.setAttribute("LanguageSwitch", "hide");
 
 	String startsWith = request.getParameter("starts_with");
+	String endsWith = request.getParameter("ends_with");
 
 	//First, get the browse info object
 	BrowseInfo bi = (BrowseInfo) request.getAttribute("browse.info");
@@ -136,106 +137,51 @@
 			<input type="hidden" name="type" value="<%= bix.getName() %>"/>
 			<input type="hidden" name="order" value="<%= direction %>"/>
 			<input type="hidden" name="rpp" value="<%= rpp %>"/>
-				
-	<%-- If we are browsing by a date, or sorting by a date, render the date selection header --%>
-<%
-	if (bix.isDate())
-	{
-%>
-		<span><fmt:message key="browse.nav.date.jump"/> </span>
-		<select name="year">
-            <option selected="selected" value="-1"><fmt:message key="browse.nav.year"/></option>
-<%
-		int thisYear = DCDate.getCurrent().getYear();
-		for (int i = thisYear; i >= 1990; i--)
-		{
-%>
-            <option><%= i %></option>
-<%
-		}
-%>
-            <option>1985</option>
-            <option>1980</option>
-            <option>1975</option>
-            <option>1970</option>
-            <option>1960</option>
-            <option>1950</option>
-        </select>
-        <select name="month">
-            <option selected="selected" value="-1"><fmt:message key="browse.nav.month"/></option>
-<%
-		for (int i = 1; i <= 12; i++)
-		{
-%>
-            <option value="<%= i %>"><%= DCDate.getMonthName(i, UIUtil.getSessionLocale(request)) %></option>
-<%
-		}
-%>
-        </select>
-        <input type="submit" class="btn btn-default" value="<fmt:message key="browse.nav.go"/>" />
-		<br/>
-        <label for="starts_with"><fmt:message key="browse.nav.type-year"/></label>
-        <input type="text" name="starts_with" size="4" maxlength="4"/>
-<%
-	}
-	
-	// If we are not browsing by a date, render the string selection header //
-	else
-	{
-%>	
-		<span><fmt:message key="browse.nav.jump"/></span>
-        <a class="label label-default" href="<%= sharedLink %>&amp;starts_with=0">0-9</a>
-<%
-	    for (char c = 'A'; c <= 'Z'; c++)
-	    {
-%>
-        <a href="<%= sharedLink %>&amp;starts_with=<%= c %>"><%= c %></a>
-<%
-	    }
-%>
-		<br/>
-		<label for="starts_with"><fmt:message key="browse.nav.enter"/></label>
-		<input type="text" name="starts_with" value="<%= (startsWith==null ? "" : startsWith) %>"/>
-		<input type="submit" class="btn btn-default" value="<fmt:message key="browse.nav.go"/>" />
-<%
-	}
-%>
-	</form>
-	</div>
-	<%-- End of Navigation Headers --%>
 
-	<%-- Include a component for modifying sort by, order and results per page --%>
-	<div id="browse_controls" class="well text-center">
-	<form method="get" action="<%= formaction %>">
-		<input type="hidden" name="type" value="<%= bix.getName() %>"/>
-		
-<%-- The following code can be used to force the browse around the current focus.  Without
-      it the browse will revert to page 1 of the results each time a change is made --%>
-<%--
-		if (!bi.hasItemFocus() && bi.hasFocus())
-		{
-			%><input type="hidden" name="vfocus" value="<%= bi.getFocus() %>"/><%
-		}
---%>
-		<label for="order"><fmt:message key="browse.single.order"/></label>
-		<select name="order">
-			<option value="ASC" <%= ascSelected %>><fmt:message key="browse.order.asc" /></option>
-			<option value="DESC" <%= descSelected %>><fmt:message key="browse.order.desc" /></option>
-		</select>
-		
-		<label for="rpp"><fmt:message key="browse.single.rpp"/></label>
-		<select name="rpp">
+		<ul class="list-unstyled" id="toolbar-search">
+
+		<%-- If we are browsing by a date, or sorting by a date, render the date selection header --%>
 <%
-	for (int i = 5; i <= 100 ; i += 5)
-	{
-		String selected = (i == rpp ? "selected=\"selected\"" : "");
-%>	
-			<option value="<%= i %>" <%= selected %>><%= i %></option>
-<%
-	}
+        if (bix.isDate())
+        {
 %>
-		</select>
-		<input type="submit" class="btn btn-default" name="submit_browse" value="<fmt:message key="jsp.general.update"/>"/>
+
+			<li class="toolbar-search toolbar-search-date">
+				<input type="text" id="starts-date" name="starts_with" size="4" maxlength="4" value="<%= (startsWith==null ? "" : startsWith) %>"/>
+				<input type="text" id="ends-date" name="ends_with" size="4" maxlength="4" value="<%= (endsWith==null ? "" : endsWith) %>"/>
+			</li>
+<%      }
+        else
+        {
+%>
+			<li class="toolbar-search toolbar-search-text">
+				<input type="text" name="starts_with" value="<%= (startsWith==null ? "" : startsWith) %>"/>
+			</li>
+<%
+         }
+%>
+			<li>
+				<label for="order"><fmt:message key="browse.single.order"/></label>
+				<select name="order">
+					<option value="ASC" <%= ascSelected %>><fmt:message key="browse.order.asc" /></option>
+					<option value="DESC" <%= descSelected %>><fmt:message key="browse.order.desc" /></option>
+				</select>
+		
+				<label for="rpp"><fmt:message key="browse.single.rpp"/></label>
+				<select name="rpp">
+<%
+					for (int i = 5; i <= 100 ; i += 5)
+					{
+					    String selected = (i == rpp ? "selected=\"selected\"" : "");
+%>	
+						<option value="<%= i %>" <%= selected %><%= i %></option>
+<%
+					}
+%>
+				</select>
+				<input type="submit" class="btn btn-default" name="submit_browse" value="<fmt:message key="jsp.general.update"/>"/>
+			</li>
+		</ul>
 	</form>
 	</div>
 

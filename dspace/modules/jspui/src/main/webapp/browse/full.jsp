@@ -31,6 +31,7 @@
     request.setAttribute("LanguageSwitch", "hide");
 
     String startsWith = request.getParameter("starts_with");
+	String endsWith = request.getParameter("ends_with");
     String year = request.getParameter("year");
     String month = request.getParameter("month");
 
@@ -208,89 +209,7 @@
 
 	<%-- Include the main navigation for all the browse pages --%>
 	<%-- This first part is where we render the standard bits required by both possibly navigations --%>
-	<div id="browse_navigation" class="well text-center">
-	<form method="get" action="<%= formaction %>">
-			<input type="hidden" name="type" value="<%= bix.getName() %>"/>
-			<input type="hidden" name="sort_by" value="<%= so.getNumber() %>"/>
-			<input type="hidden" name="order" value="<%= direction %>"/>
-			<input type="hidden" name="rpp" value="<%= rpp %>"/>
-			<input type="hidden" name="etal" value="<%= bi.getEtAl() %>" />
-<%
-		if (bi.hasAuthority())
-		{
-		%><input type="hidden" name="authority" value="<%=bi.getAuthority() %>"/><%
-		}
-		else if (bi.hasValue())
-		{
-			%><input type="hidden" name="value" value="<%= bi.getValue() %>"/><%
-		}
-%>
-	
-	<%-- If we are browsing by a date, or sorting by a date, render the date selection header --%>
-<%
-	if (so.isDate() || (bix.isDate() && so.isDefault()))
-	{
-%>
-		<span><fmt:message key="browse.nav.date.jump"/></span>
-		<select id="issue_year" name="year" data-selected="<%= (year==null ? "" : year) %>">
-	        <option selected="selected" value="-1"><fmt:message key="browse.nav.year"/></option>
-<%
-		int thisYear = DCDate.getCurrent().getYear();
-		for (int i = thisYear; i >= 1990; i--)
-		{
-%>
-            <option><%= i %></option>
-<%
-		}
-%>
-            <option>1985</option>
-            <option>1980</option>
-            <option>1975</option>
-            <option>1970</option>
-            <option>1960</option>
-            <option>1950</option>
-        </select>
-        <select id="issue_month" name="month" data-selected="<%= (month==null ? "" : DCDate.getMonthName(Integer.parseInt(month), UIUtil.getSessionLocale(request))) %>">
-            <option selected="selected" value="-1"><fmt:message key="browse.nav.month"/></option>
-<%
-		for (int i = 1; i <= 12; i++)
-		{
-%>
-	         <option value="<%= i %>"><%= DCDate.getMonthName(i, UIUtil.getSessionLocale(request)) %></option>
-<%
-		}
-%>
-        </select>
-        <input type="submit" class="btn btn-default" value="<fmt:message key="browse.nav.go"/>" />
-        <br/>
-        <label for="starts_with"><fmt:message key="browse.nav.type-year"/></label>
-        <input type="text" id="starts-date" name="starts_with" size="4" maxlength="4" value="<%= (startsWith==null ? "" : startsWith) %>"/>
-<%
-	}
-	
-	// If we are not browsing by a date, render the string selection header //
-	else
-	{
-%>	
-		<span><fmt:message key="browse.nav.jump"/></span>
-	                        <a class="label label-default" href="<%= sharedLink %>&amp;starts_with=0">0-9</a>
-<%
-	    for (char c = 'A'; c <= 'Z'; c++)
-	    {
-%>
-	                        <a class="label label-default" href="<%= sharedLink %>&amp;starts_with=<%= c %>"><%= c %></a>
-<%
-	    }
-%><br/>
-	    					<span><fmt:message key="browse.nav.enter"/></span>
-	    					<input type="text" name="starts_with" value="<%= (startsWith==null ? "" : startsWith) %>"/>&nbsp;
-							<input type="submit" class="btn btn-default" value="<fmt:message key="browse.nav.go"/>" />
-<%
-	}
-%>
-	</form>
-	</div>
-	<%-- End of Navigation Headers --%>
+
 
 	<%-- Include a component for modifying sort by, order, results per page, and et-al limit --%>
 	<div id="browse_controls" class="well text-center">
@@ -306,125 +225,86 @@
 			%><input type="hidden" name="value" value="<%= bi.getValue() %>"/><%
 		}
 %>
-<%-- The following code can be used to force the browse around the current focus.  Without
-      it the browse will revert to page 1 of the results each time a change is made --%>
-<%--
-		if (!bi.hasItemFocus() && bi.hasFocus())
-		{
-			%><input type="hidden" name="vfocus" value="<%= bi.getFocus() %>"/><%
-		}
---%>
 
-<%--
-		if (bi.hasItemFocus())
-		{
-			%><input type="hidden" name="focus" value="<%= bi.getFocusItem() %>"/><%
-		}
---%>
+		<ul class="list-unstyled" id="toolbar-search">
+
+        <%-- If we are browsing by a date, or sorting by a date, render the date selection header --%>
 <%
-	Set<SortOption> sortOptions = SortOption.getSortOptions();
-	if (sortOptions.size() > 1) // && bi.getBrowseLevel() > 0
-	{
+        if (so.isDate() || (bix.isDate() && so.isDefault()))
+        {
 %>
-		<label for="sort_by"><fmt:message key="browse.full.sort-by"/></label>
-		<select name="sort_by">
+
+			<li class="toolbar-search toolbar-search-date">
+				<input type="text" id="starts-date" name="starts_with" size="4" maxlength="4" value="<%= (startsWith==null ? "" : startsWith) %>"/>
+				<input type="text" id="ends-date" name="ends_with" size="4" maxlength="4" value="<%= (endsWith==null ? "" : endsWith) %>"/>
+			</li>
+<%       }
+         else
+         {
+%>
+             <li class="toolbar-search toolbar-search-text">
+                <input type="text" name="starts_with" value="<%= (startsWith==null ? "" : startsWith) %>"/>
+             </li>
 <%
-		for (SortOption sortBy : sortOptions)
-		{
-            if (sortBy.isVisible())
-            {
-                String selected = (sortBy.getName().equals(sortedBy) ? "selected=\"selected\"" : "");
-                String mKey = "browse.sort-by." + sortBy.getName();
-                %> <option value="<%= sortBy.getNumber() %>" <%= selected %>><fmt:message key="<%= mKey %>"/></option><%
-            }
+          }
+%>
+			<li>
+<%
+	        Set<SortOption> sortOptions = SortOption.getSortOptions();
+	        if (sortOptions.size() > 1) // && bi.getBrowseLevel() > 0
+	        {
+%>
+		        <label for="sort_by"><fmt:message key="browse.full.sort-by"/></label>
+		        <select name="sort_by">
+<%
+		        for (SortOption sortBy : sortOptions)
+		        {
+                    if (sortBy.isVisible())
+                    {
+                        String selected = (sortBy.getName().equals(sortedBy) ? "selected=\"selected\"" : "");
+                        String mKey = "browse.sort-by." + sortBy.getName();
+%>
+                        <option value="<%= sortBy.getNumber() %>" <%= selected %>><fmt:message key="<%= mKey %>"/></option>
+<%
+                    }
+                }
+%>
+		        </select>
+<%
+	        }
+%>
+		        <select name="order">
+			        <option value="ASC" <%= ascSelected %>><fmt:message key="browse.order.asc" /></option>
+			        <option value="DESC" <%= descSelected %>><fmt:message key="browse.order.desc" /></option>
+		        </select>
+
+		        <label for="rpp"><fmt:message key="browse.full.rpp"/></label>
+		        <select name="rpp">
+<%
+	            for (int i = 5; i <= 100 ; i += 5)
+	            {
+		            String selected = (i == rpp ? "selected=\"selected\"" : "");
+%>	
+			        <option value="<%= i %>" <%= selected %>><%= i %></option>
+<%
+	            }
+%>
+		        </select>
+
+		        <input type="submit" class="btn btn-default" name="submit_browse" value="<fmt:message key="jsp.general.update"/>"/>
+		    </li>
+        </ul>
+
+<%
+        if (admin_button && !withdrawn && !privateitems)
+        {
+%>
+            <input type="submit" class="btn btn-default" name="submit_export_metadata" value="<fmt:message key="jsp.general.metadataexport.button"/>" />
+<%
         }
 %>
-		</select>
-<%
-	}
-%>
-		<label for="order"><fmt:message key="browse.full.order"/></label>
-		<select name="order">
-			<option value="ASC" <%= ascSelected %>><fmt:message key="browse.order.asc" /></option>
-			<option value="DESC" <%= descSelected %>><fmt:message key="browse.order.desc" /></option>
-		</select>
 
-		<label for="rpp"><fmt:message key="browse.full.rpp"/></label>
-		<select name="rpp">
-<%
-	for (int i = 5; i <= 100 ; i += 5)
-	{
-		String selected = (i == rpp ? "selected=\"selected\"" : "");
-%>	
-			<option value="<%= i %>" <%= selected %>><%= i %></option>
-<%
-	}
-%>
-		</select>
-
-		<label for="etal"><fmt:message key="browse.full.etal" /></label>
-		<select name="etal">
-<%
-	String unlimitedSelect = "";
-	if (bi.getEtAl() == -1)
-	{
-		unlimitedSelect = "selected=\"selected\"";
-	}
-%>
-			<option value="0" <%= unlimitedSelect %>><fmt:message key="browse.full.etal.unlimited"/></option>
-<%
-	int cfgd = ConfigurationManager.getIntProperty("webui.browse.author-limit");
-	boolean insertedCurrent = false;
-	boolean insertedDefault = false;
-	for (int i = 0; i <= 50 ; i += 5)
-	{
-		// for the first one, we want 1 author, not 0
-		if (i == 0)
-		{
-			String sel = (i + 1 == bi.getEtAl() ? "selected=\"selected\"" : "");
-			%><option value="1" <%= sel %>>1</option><%
-		}
-		
-		// if the current i is greated than that configured by the user,
-		// insert the one specified in the right place in the list
-		if (i > bi.getEtAl() && !insertedCurrent && bi.getEtAl() != -1 && bi.getEtAl() != 0 && bi.getEtAl() != 1)
-		{
-			%><option value="<%= bi.getEtAl() %>" selected="selected"><%= bi.getEtAl() %></option><%
-			insertedCurrent = true;
-		}
-		
-		// if the current i is greated than that configured by the administrator (dspace.cfg)
-		// insert the one specified in the right place in the list
-		if (i > cfgd && !insertedDefault && cfgd != -1 && cfgd != 0 && cfgd != 1 && bi.getEtAl() != cfgd)
-		{
-			%><option value="<%= cfgd %>"><%= cfgd %></option><%
-			insertedDefault = true;
-		}
-		
-		// determine if the current not-special case is selected
-		String selected = (i == bi.getEtAl() ? "selected=\"selected\"" : "");
-		
-		// do this for all other cases than the first and the current
-		if (i != 0 && i != bi.getEtAl())
-		{
-%>	
-			<option value="<%= i %>" <%= selected %>><%= i %></option>
-<%
-		}
-	}
-%>
-		</select>
-
-		<input type="submit" class="btn btn-default" name="submit_browse" value="<fmt:message key="jsp.general.update"/>"/>
-
-<%
-    if (admin_button && !withdrawn && !privateitems)
-    {
-        %><input type="submit" class="btn btn-default" name="submit_export_metadata" value="<fmt:message key="jsp.general.metadataexport.button"/>" /><%
-    }
-%>
-
-	</form>
+    </form>
 	</div>
 <div class="panel panel-primary">
 	<%-- give us the top report on what we are looking at --%>
