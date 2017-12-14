@@ -57,6 +57,7 @@ webui.itemdisplay.default = \
   dc.identifier.eisbn, \
   dc.subject, \
   dc.relation.ispartofseries, \
+  dc.relation.embedded, \
   dc.type, \
   dc.eprint.version, \
   dc.description.sponsorship, \
