@@ -455,6 +455,7 @@ public class ItemTag extends TagSupport
             boolean isResolver = false;
             boolean isNoBreakLine = false;
             boolean isDisplay = false;
+            boolean isEmbeddedContent = false;
 
             String style = null;
             Matcher fieldStyleMatcher = fieldStylePatter.matcher(field);
@@ -482,6 +483,7 @@ public class ItemTag extends TagSupport
 				isNoBreakLine = style.contains("nobreakline");
 				isDisplay = style.equals("inputform");
                 isResolver = style.contains("resolver") || urn2baseurl.keySet().contains(style);
+                isEmbeddedContent = style.contains("embedded");
                 field = field.replaceAll("\\("+style+"\\)", "");
             } 
 
@@ -670,6 +672,10 @@ public class ItemTag extends TagSupport
 	                    				+ URLEncoder.encode(value, "UTF-8") + "\">" + Utils.addEntities(val.getValue())
 	                    				+ "</a>");
 	                    }
+                        else if (isEmbeddedContent)
+                        {
+                            out.print(val.getValue());
+                        }
                         else
                         {
                             out.print(Utils.addEntities(val.getValue()));
