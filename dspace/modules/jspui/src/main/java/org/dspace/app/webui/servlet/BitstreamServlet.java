@@ -27,6 +27,8 @@ import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
 import org.dspace.content.factory.ContentServiceFactory;
 import org.dspace.content.service.BitstreamService;
+import org.dspace.disseminate.factory.DisseminateServiceFactory;
+import org.dspace.disseminate.service.CitationDocumentService;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
@@ -56,13 +58,23 @@ public class BitstreamServlet extends DSpaceServlet
      * Threshold on Bitstream size before content-disposition will be set.
      */
     private int threshold;
-    
+
+    /**
+     * Temp file for citation cover page
+     */
+    private File tempFile;
+
     // services API
     private final transient HandleService handleService
              = HandleServiceFactory.getInstance().getHandleService();
     
     private final transient BitstreamService bitstreamService
              = ContentServiceFactory.getInstance().getBitstreamService();
+
+    /**
+     * Citation cover page service
+     */
+    protected CitationDocumentService citationDocumentService = DisseminateServiceFactory.getInstance().getCitationDocumentService();
     
     @Override
 	public void init(ServletConfig arg0) throws ServletException {
@@ -213,8 +225,42 @@ public class BitstreamServlet extends DSpaceServlet
             }
         }
         
-        // Pipe the bits
-        InputStream is = bitstreamService.retrieve(context, bitstream);
+//        // Pipe the bits
+//        InputStream is = bitstreamService.retrieve(context, bitstream);
+        InputStream is = null;
+
+        if (citationDocumentService.isCitationEnabledForBitstream(bitstream, context)) {
+            // on-the-fly citation generator
+            log.info(item.getHandle() + " - " + bitstream.getName() + " is citable.");
+
+            FileInputStream fileInputStream = null;
+
+            try {
+                //Create the cited document
+                tempFile = citationDocumentService.makeCitedDocument(context, bitstream);
+                if(tempFile == null) {
+                    log.error("CitedDocument was null");
+                } else {
+                    log.info("CitedDocument was ok," + tempFile.getAbsolutePath());
+                }
+
+
+                fileInputStream = new FileInputStream(tempFile);
+                if(fileInputStream == null) {
+                    log.error("Error opening fileInputStream: ");
+                }
+
+                is = fileInputStream;
+                bitstream.setSizeBytes(tempFile.length());
+
+            } catch (Exception e) {
+                log.error("Caught an error with intercepting the citation document:" + e.getMessage());
+            }
+
+            //End of CitationDocument
+        } else {
+            is = bitstreamService.retrieve(context, bitstream);
+        }
      
 		// Set the response MIME type
         response.setContentType(bitstream.getFormat(context).getMIMEType());
