@@ -8,7 +8,7 @@
 
 --%>
 <%--
-  - 
+  -
   --%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
@@ -30,247 +30,272 @@
 <%
     request.setAttribute("LanguageSwitch", "hide");
 
-	String startsWith = request.getParameter("starts_with");
-	String endsWith = request.getParameter("ends_with");
+    String startsWith = request.getParameter("starts_with");
+    String startsDate = request.getParameter("starts_date");
+    String endsDate = request.getParameter("ends_date");
 
-	//First, get the browse info object
-	BrowseInfo bi = (BrowseInfo) request.getAttribute("browse.info");
-	BrowseIndex bix = bi.getBrowseIndex();
+    //First, get the browse info object
+    BrowseInfo bi = (BrowseInfo) request.getAttribute("browse.info");
+    BrowseIndex bix = bi.getBrowseIndex();
 
-	//values used by the header
-	String scope = "";
-	String type = "";
+    //values used by the header
+    String scope = "";
+    String type = "";
 
-	Community community = null;
-	Collection collection = null;
-	if (bi.inCommunity())
-	{
-		community = (Community) bi.getBrowseContainer();
-	}
-	if (bi.inCollection())
-	{
-		collection = (Collection) bi.getBrowseContainer();
-	}
+    Community community = null;
+    Collection collection = null;
+    if (bi.inCommunity())
+    {
+        community = (Community) bi.getBrowseContainer();
+    }
+    if (bi.inCollection())
+    {
+        collection = (Collection) bi.getBrowseContainer();
+    }
 
-	if (community != null)
-	{
-		scope = "\"" + community.getName() + "\"";
-	}
-	if (collection != null)
-	{
-		scope = "\"" + collection.getName() + "\"";
-	}
-	
-	type = bix.getName();
-	
-	//FIXME: so this can probably be placed into the Messages.properties file at some point
-	// String header = "Browsing " + scope + " by " + type;
-	
-	// get the values together for reporting on the browse values
-	// String range = "Showing results " + bi.getStart() + " to " + bi.getFinish() + " of " + bi.getTotal();
-	
-	// prepare the next and previous links
-	String linkBase = request.getContextPath() + "/";
-	if (collection != null)
-	{
-		linkBase = linkBase + "handle/" + collection.getHandle() + "/";
-	}
-	if (community != null)
-	{
-		linkBase = linkBase + "handle/" + community.getHandle() + "/";
-	}
-	
-	String direction = (bi.isAscending() ? "ASC" : "DESC");
-	String sharedLink = linkBase + "browse?type=" + URLEncoder.encode(bix.getName(), "UTF-8") +
-						"&amp;order=" + URLEncoder.encode(direction, "UTF-8") +
-						"&amp;rpp=" + URLEncoder.encode(Integer.toString(bi.getResultsPerPage()), "UTF-8");
-	
-	// prepare the next and previous links
-	String next = sharedLink;
-	String prev = sharedLink;
-	
-	if (bi.hasNextPage())
+    if (community != null)
+    {
+        scope = "\"" + community.getName() + "\"";
+    }
+    if (collection != null)
+    {
+        scope = "\"" + collection.getName() + "\"";
+    }
+
+    type = bix.getName();
+
+    //FIXME: so this can probably be placed into the Messages.properties file at some point
+    // String header = "Browsing " + scope + " by " + type;
+
+    // get the values together for reporting on the browse values
+    // String range = "Showing results " + bi.getStart() + " to " + bi.getFinish() + " of " + bi.getTotal();
+
+    // prepare the next and previous links
+    String linkBase = request.getContextPath() + "/";
+    if (collection != null)
+    {
+        linkBase = linkBase + "handle/" + collection.getHandle() + "/";
+    }
+    if (community != null)
+    {
+        linkBase = linkBase + "handle/" + community.getHandle() + "/";
+    }
+
+    String direction = (bi.isAscending() ? "ASC" : "DESC");
+    String sharedLink = linkBase + "browse?type=" + URLEncoder.encode(bix.getName(), "UTF-8") +
+            "&amp;order=" + URLEncoder.encode(direction, "UTF-8") +
+            "&amp;rpp=" + URLEncoder.encode(Integer.toString(bi.getResultsPerPage()), "UTF-8");
+
+    // prepare the next and previous links
+    String next = sharedLink;
+    String prev = sharedLink;
+
+    if (bi.hasNextPage())
     {
         next = next + "&amp;offset=" + bi.getNextOffset();
     }
 
-	if (bi.hasPrevPage())
+    if (bi.hasPrevPage())
     {
         prev = prev + "&amp;offset=" + bi.getPrevOffset();
     }
 
-	// prepare a url for use by form actions
-	String formaction = request.getContextPath() + "/";
-	if (collection != null)
-	{
-		formaction = formaction + "handle/" + collection.getHandle() + "/";
-	}
-	if (community != null)
-	{
-		formaction = formaction + "handle/" + community.getHandle() + "/";
-	}
-	formaction = formaction + "browse";
-	
-	String ascSelected = (bi.isAscending() ? "selected=\"selected\"" : "");
-	String descSelected = (bi.isAscending() ? "" : "selected=\"selected\"");
-	int rpp = bi.getResultsPerPage();
-	
+    // prepare a url for use by form actions
+    String formaction = request.getContextPath() + "/";
+    if (collection != null)
+    {
+        formaction = formaction + "handle/" + collection.getHandle() + "/";
+    }
+    if (community != null)
+    {
+        formaction = formaction + "handle/" + community.getHandle() + "/";
+    }
+    formaction = formaction + "browse";
+
+    String ascSelected = (bi.isAscending() ? "selected=\"selected\"" : "");
+    String descSelected = (bi.isAscending() ? "" : "selected=\"selected\"");
+    int rpp = bi.getResultsPerPage();
+
 //	 the message key for the type
-	String typeKey = "browse.type.metadata." + bix.getName();
+    String typeKey = "browse.type.metadata." + bix.getName();
 %>
 
 <dspace:layout titlekey="browse.page-title">
 
-	<%-- Build the header (careful use of spacing) --%>
-	<h2>
-		<fmt:message key="browse.single.header"><fmt:param value="<%= scope %>"/></fmt:message> <fmt:message key="<%= typeKey %>"/>
-	</h2>
-	
-<%
-	if (!bix.isTagCloudEnabled())
-	{
-%>
-	<%-- Include the main navigation for all the browse pages --%>
-	<%-- This first part is where we render the standard bits required by both possibly navigations --%>
-	<div id="browse_navigation" class="well text-center">
-	<form method="get" action="<%= formaction %>">
-			<input type="hidden" name="type" value="<%= bix.getName() %>"/>
-			<input type="hidden" name="order" value="<%= direction %>"/>
-			<input type="hidden" name="rpp" value="<%= rpp %>"/>
+    <%-- Build the header (careful use of spacing) --%>
+    <h2>
+        <fmt:message key="browse.single.header"><fmt:param value="<%= scope %>"/></fmt:message> <fmt:message key="<%= typeKey %>"/>
+    </h2>
 
-		<ul class="list-unstyled" id="toolbar-search">
-
-		<%-- If we are browsing by a date, or sorting by a date, render the date selection header --%>
-<%
-        if (bix.isDate())
+    <%
+        if (!bix.isTagCloudEnabled())
         {
-%>
-			<li class="toolbar-search toolbar-search-date">
-				<input type="text" id="starts-date" name="starts_with" placeholder="From Date" value="<%= (startsWith==null ? "" : startsWith) %>"/>
-				<input type="text" id="ends-date" name="ends_with" placeholder="To Date" value="<%= (endsWith==null ? "" : endsWith) %>"/>
-			</li>
-			<%       }
-			else
-			{
-			%>
-			<li class="toolbar-search toolbar-search-text">
-				<input type="text" name="starts_with" placeholder="Starts with" value="<%= (startsWith==null ? "" : startsWith) %>"/>
-			</li>
-<%
-         }
-%>
-			<li>
-				<label for="order"><fmt:message key="browse.single.order"/></label>
-				<select name="order">
-					<option value="ASC" <%= ascSelected %>><fmt:message key="browse.order.asc" /></option>
-					<option value="DESC" <%= descSelected %>><fmt:message key="browse.order.desc" /></option>
-				</select>
-		
-				<label for="rpp"><fmt:message key="browse.single.rpp"/></label>
-				<select name="rpp">
-<%
-					for (int i = 25; i <= 100 ; i = i*2)
-					{
-					    String selected = (i == rpp ? "selected=\"selected\"" : "");
-%>	
-						<option value="<%= i %>" <%= selected %>><%= i %></option>
-<%
-					}
-%>
-				</select>
-				<input type="submit" class="btn btn-default" name="submit_browse" value="<fmt:message key="jsp.general.update"/>"/>
-			</li>
-		</ul>
-	</form>
-	</div>
+    %>
+    <%-- Include the main navigation for all the browse pages --%>
+    <%-- This first part is where we render the standard bits required by both possibly navigations --%>
+    <div id="browse_navigation" class="well text-center">
+        <form method="get" action="<%= formaction %>">
+            <input type="hidden" name="type" value="<%= bix.getName() %>"/>
+            <input type="hidden" name="order" value="<%= direction %>"/>
+            <input type="hidden" name="rpp" value="<%= rpp %>"/>
 
-<div class="row col-md-offset-3 col-md-6">
-	<%-- give us the top report on what we are looking at --%>
-	<div class="panel panel-primary">
-	<div class="panel-heading text-center">
-		<fmt:message key="browse.single.range">
-			<fmt:param value="<%= Integer.toString(bi.getStart()) %>"/>
-			<fmt:param value="<%= Integer.toString(bi.getFinish()) %>"/>
-			<fmt:param value="<%= Integer.toString(bi.getTotal()) %>"/>
-		</fmt:message>
-	
-	<%--  do the top previous and next page links --%>
-<% 
-	if (bi.hasPrevPage())
-	{
-%>
-	<a class="pull-left" href="<%= prev %>"><fmt:message key="browse.single.prev"/></a>&nbsp;
-<%
-	}
-%>
+                <%-- If we are browsing by a date, or sorting by a date, render the date selection header --%>
+            <%
+                if (bix.isDate())
+                {
+            %>
+            <input type="text" id="starts-date" name="starts_date" placeholder="From Date" value="<%= (startsDate==null ? "" : startsDate) %>"/>
+            <input type="text" id="ends-date" name="ends_date" placeholder="To Date" value="<%= (endsDate==null ? "" : endsDate) %>"/>
+            <input type="submit" class="btn btn-default" value="<fmt:message key="browse.nav.go"/>" />
+            <%
+            }
+            // If we are not browsing by a date, render the string selection header //
+            else
+            {
+            %>
+            <span><fmt:message key="browse.nav.jump"/></span>
+            <a class="label label-default" href="<%= sharedLink %>&amp;starts_with=0">0-9</a>
+            <%
+                for (char c = 'A'; c <= 'Z'; c++)
+                {
+            %>
+            <a class="label label-default" href="<%= sharedLink %>&amp;starts_with=<%= c %>"><%= c %></a>
+            <%
+                }
+            %>
+            <br/>
+            <span><fmt:message key="browse.nav.enter"/></span>
+            <input type="text" name="starts_with"/>&nbsp;<input type="submit" class="btn btn-default" value="<fmt:message key="browse.nav.go"/>" />
+            <%
+                }
+            %>
+        </form>
+    </div>
+    <%-- End of Navigation Headers --%>
 
-<%
-	if (bi.hasNextPage())
-	{
-%>
-	&nbsp;<a class="pull-right" href="<%= next %>"><fmt:message key="browse.single.next"/></a>
-<%
-	}
-%>
-	</div>
+    <%-- Include a component for modifying sort by, order and results per page --%>
+    <div id="browse_controls" class="well text-center">
+        <form method="get" action="<%= formaction %>">
+            <input type="hidden" name="type" value="<%= bix.getName() %>"/>
 
-<ul class="list-group">
-<%
-    String[][] results = bi.getStringResults();
+                <%-- The following code can be used to force the browse around the current focus.  Without
+                      it the browse will revert to page 1 of the results each time a change is made --%>
+                <%--
+                        if (!bi.hasItemFocus() && bi.hasFocus())
+                        {
+                            %><input type="hidden" name="vfocus" value="<%= bi.getFocus() %>"/><%
+                        }
+                --%>
+            <label for="order"><fmt:message key="browse.single.order"/></label>
+            <select name="order">
+                <option value="ASC" <%= ascSelected %>><fmt:message key="browse.order.asc" /></option>
+                <option value="DESC" <%= descSelected %>><fmt:message key="browse.order.desc" /></option>
+            </select>
 
-    for (int i = 0; i < results.length; i++)
-    {
-%>
+            <label for="rpp"><fmt:message key="browse.single.rpp"/></label>
+            <select name="rpp">
+                <%
+                    for (int i = 5; i <= 100 ; i += 5)
+                    {
+                        String selected = (i == rpp ? "selected=\"selected\"" : "");
+                %>
+                <option value="<%= i %>" <%= selected %>><%= i %></option>
+                <%
+                    }
+                %>
+            </select>
+            <input type="submit" class="btn btn-default" name="submit_browse" value="<fmt:message key="jsp.general.update"/>"/>
+        </form>
+    </div>
+
+
+    <div class="row col-md-offset-3 col-md-6">
+            <%-- give us the top report on what we are looking at --%>
+        <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+                <fmt:message key="browse.single.range">
+                    <fmt:param value="<%= Integer.toString(bi.getStart()) %>"/>
+                    <fmt:param value="<%= Integer.toString(bi.getFinish()) %>"/>
+                    <fmt:param value="<%= Integer.toString(bi.getTotal()) %>"/>
+                </fmt:message>
+
+                    <%--  do the top previous and next page links --%>
+                <%
+                    if (bi.hasPrevPage())
+                    {
+                %>
+                <a class="pull-left" href="<%= prev %>"><fmt:message key="browse.single.prev"/></a>&nbsp;
+                <%
+                    }
+                %>
+
+                <%
+                    if (bi.hasNextPage())
+                    {
+                %>
+                &nbsp;<a class="pull-right" href="<%= next %>"><fmt:message key="browse.single.next"/></a>
+                <%
+                    }
+                %>
+            </div>
+
+            <ul class="list-group">
+                <%
+                    String[][] results = bi.getStringResults();
+
+                    for (int i = 0; i < results.length; i++)
+                    {
+                %>
                 <li class="list-group-item">
                     <a href="<%= sharedLink %><% if (results[i][1] != null) { %>&amp;authority=<%= URLEncoder.encode(results[i][1], "UTF-8") %>" class="authority <%= bix.getName() %>"><%= Utils.addEntities(results[i][0]) %></a> <% } else { %>&amp;value=<%= URLEncoder.encode(results[i][0], "UTF-8") %>"><%= Utils.addEntities(results[i][0]) %></a> <% } %>
-					<%= StringUtils.isNotBlank(results[i][2])?" <span class=\"badge\">"+results[i][2]+"</span>":""%>
+                    <%= StringUtils.isNotBlank(results[i][2])?" <span class=\"badge\">"+results[i][2]+"</span>":""%>
                 </li>
-<%
-    }
-%>
-        </ul>
-	<%-- give us the bottom report on what we are looking at --%>
-	<div class="panel-footer text-center">
-		<fmt:message key="browse.single.range">
-			<fmt:param value="<%= Integer.toString(bi.getStart()) %>"/>
-			<fmt:param value="<%= Integer.toString(bi.getFinish()) %>"/>
-			<fmt:param value="<%= Integer.toString(bi.getTotal()) %>"/>
-		</fmt:message>
+                <%
+                    }
+                %>
+            </ul>
+                <%-- give us the bottom report on what we are looking at --%>
+            <div class="panel-footer text-center">
+                <fmt:message key="browse.single.range">
+                    <fmt:param value="<%= Integer.toString(bi.getStart()) %>"/>
+                    <fmt:param value="<%= Integer.toString(bi.getFinish()) %>"/>
+                    <fmt:param value="<%= Integer.toString(bi.getTotal()) %>"/>
+                </fmt:message>
 
-	<%--  do the bottom previous and next page links --%>
-<% 
-	if (bi.hasPrevPage())
-	{
-%>
-	<a class="pull-left" href="<%= prev %>"><fmt:message key="browse.single.prev"/></a>&nbsp;
-<%
-	}
-%>
+                    <%--  do the bottom previous and next page links --%>
+                <%
+                    if (bi.hasPrevPage())
+                    {
+                %>
+                <a class="pull-left" href="<%= prev %>"><fmt:message key="browse.single.prev"/></a>&nbsp;
+                <%
+                    }
+                %>
 
-<%
-	if (bi.hasNextPage())
-	{
-%>
-	&nbsp;<a class="pull-right" href="<%= next %>"><fmt:message key="browse.single.next"/></a>
-<%
-	}
-%>
-	</div>
-</div>
-</div>
-	<%-- dump the results for debug (uncomment to enable) --%>
-	<%-- 
-	<!-- <%= bi.toString() %> -->
+                <%
+                    if (bi.hasNextPage())
+                    {
+                %>
+                &nbsp;<a class="pull-right" href="<%= next %>"><fmt:message key="browse.single.next"/></a>
+                <%
+                    }
+                %>
+            </div>
+        </div>
+    </div>
+    <%-- dump the results for debug (uncomment to enable) --%>
+    <%--
+    <!-- <%= bi.toString() %> -->
     --%>
-<%
-	}
-	else {
-	
-%>
-<div class="row" style="overflow:hidden">
-	<%@ include file="static-tagcloud-browse.jsp" %>
-</div>
-<%
-	}
-%>
+    <%
+    }
+    else {
+
+    %>
+    <div class="row" style="overflow:hidden">
+        <%@ include file="static-tagcloud-browse.jsp" %>
+    </div>
+    <%
+        }
+    %>
 </dspace:layout>
