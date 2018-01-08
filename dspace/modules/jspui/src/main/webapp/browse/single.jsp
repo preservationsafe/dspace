@@ -144,8 +144,10 @@
                 if (bix.isDate())
                 {
             %>
+            <label for="starts-date"><fmt:message key="browse.full.dateRangeStart"/></label>
             <input type="text" id="starts-date" name="starts_date" placeholder="From Date" value="<%= (startsDate==null ? "" : startsDate) %>"/>
-            <input type="text" id="ends-date" name="ends_date" placeholder="To Date" value="<%= (endsDate==null ? "" : endsDate) %>"/>
+                <%-- Commented out end date range selector as still in progress --%>
+                <%--<input type="text" id="ends-date" name="ends_date" placeholder="To Date" value="<%= (endsDate==null ? "" : endsDate) %>"/> --%>
             <input type="submit" class="btn btn-default" value="<fmt:message key="browse.nav.go"/>" />
             <%
             }
