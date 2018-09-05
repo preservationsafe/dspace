@@ -1,14 +1,14 @@
-SRC_TAG=1.0-$BUILD_ID
+SRC_TAG=1.1-$BUILD_ID
 
-echo "BUILDING $JOB_BASE_NAME"
+echo "BUILDING $JOB_BASE_NAME $SRC_TAG"
 
 git tag $SRC_TAG
 git checkout $SRC_TAG
 
-bin/build-dspace.sh clean
-
 docker start "build-dspace6-dev" || echo "container started"
 
-docker exec "build-dspace6-dev" bash -i "/opt/tomcat/dspace/bin/build-dspace.sh"
+docker exec "build-dspace6-dev" bash -c -i "/opt/tomcat/dspace/bin/build-dspace.sh reset"
 
-echo "export SRC_TAG=$SRC_TAG" > run/build-tag.sh
+docker exec "build-dspace6-dev" bash -c -i "/opt/tomcat/dspace/bin/build-dspace.sh build dev"
+
+echo "export SRC_TAG=$SRC_TAG" > dspace-install/build-tag.sh

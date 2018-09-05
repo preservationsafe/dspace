@@ -1,0 +1,19 @@
+buildmeister@vitae:/data1/vitae/repos/campusrepo.git
+
+Credentials: buildmeister
+Branch: */develop
+Repository: redmineweb
+URL: http://redmine.library.arizona.edu/projects/dspace/repository
+
+
+Build Triggers:
+Poll SCM
+Schedule: H/10 * * * *
+
+
+Build Environment:
+
+Color ANSI Console Output (xterm)
+
+Set jenkins user build variables
+
