@@ -1,0 +1,7 @@
+BUILD_STARTED_BY=$BUILD_USER_ID
+if [ "$ROOT_BUILD_CAUSE" = "SCMTRIGGER" ]; then
+BUILD_STARTED_BY="A source code change"
+elif [ "$ROOT_BUILD_CAUSE" = "TIMERTRIGGER" ]; then
+BUILD_STARTED_BY="A timer"
+fi
+echo BUILD_STARTED_BY=$BUILD_STARTED_BY > env.properties

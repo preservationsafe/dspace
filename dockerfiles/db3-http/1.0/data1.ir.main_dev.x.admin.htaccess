@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+   RewriteEngine on
+
+   # Redirect all non-SSL requests to HTTPS
+   RewriteCond %{SERVER_PORT} !^80$
+   RewriteRule (.*) http://%{SERVER_NAME}%{REQUEST_URI} [L]
+
+   RewriteRule !\.(js|ico|gif|jpg|png|css)$ index.php
+</IfModule>
